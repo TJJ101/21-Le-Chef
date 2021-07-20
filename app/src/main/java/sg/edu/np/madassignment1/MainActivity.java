@@ -15,12 +15,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
-
-    ListView listView;
-    String[] name = {"Chicken Sandwich", "French Fries", "Chicken Soup", "Fish n Chips", "Eggs Benedict", "Ceasar Salad", "Beef Stew", "Salmon Shushi", "Ramen"};
-
-    ArrayAdapter<String> arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()){
                 case R.id.nav_home:
                     selectedFragment = new HomeFragment();
+                    break;
+                case R.id.nav_account:
+                    selectedFragment = new AccountFragment();
                     break;
                 case R.id.nav_add:
                     selectedFragment = new AddFragment();
