@@ -1,6 +1,6 @@
 package sg.edu.np.madassignment1;
 
-public class myRecipe {
+public class recipe {
     private String name;
     public String getName() {
         return name;
@@ -25,7 +25,7 @@ public class myRecipe {
         this.rating = r;
     }
 
-    public myRecipe(String n, String r, String c) {
+    public recipe(String n, String r, String c) {
         this.name = n;
         this.cuisine = c;
         this.rating = r;

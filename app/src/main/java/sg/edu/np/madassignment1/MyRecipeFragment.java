@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,8 +21,8 @@ import java.util.Random;
  */
 public class MyRecipeFragment extends Fragment {
 
-    myRecipe mRecipe;
-    ArrayList<myRecipe> recipeList = new ArrayList<>();
+    recipe mRecipe;
+    ArrayList<recipe> recipeList = new ArrayList<>();
     private RecyclerView recyclerView;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -71,7 +70,7 @@ public class MyRecipeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_recipe, container, false);
 
         for (int i = 0 ; i < 10; i++){
-            mRecipe = new myRecipe(
+            mRecipe = new recipe(
                     "Name",
                     "Cuisine",
                     "Rating"
@@ -80,7 +79,7 @@ public class MyRecipeFragment extends Fragment {
         }
 
         recyclerView = view.findViewById(R.id.myRecipeRecycler);
-        MyRecipeAdapter mAdapter = new MyRecipeAdapter(recipeList);
+        RecipeAdapter mAdapter = new RecipeAdapter(recipeList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

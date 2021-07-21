@@ -11,24 +11,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.MyViewHolder>{
+public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder>{
 
-    ArrayList<myRecipe> data;
-    public MyRecipeAdapter(ArrayList<myRecipe> input) { data = input; }
+    ArrayList<recipe> data;
+    public RecipeAdapter(ArrayList<recipe> input) { data = input; }
 
     @NonNull
     @Override
-    public MyRecipeAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecipeAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.myrecipe_viewholder,
+                R.layout.recipe_viewholder,
                 parent,
                 false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyRecipeAdapter.MyViewHolder holder, int position) {
-        myRecipe myRecipesList = data.get(position);
+    public void onBindViewHolder(@NonNull RecipeAdapter.MyViewHolder holder, int position) {
+        recipe myRecipesList = data.get(position);
         holder.myRecipeName.setText(myRecipesList.getName());
         holder.myRecipeCuisine.setText((myRecipesList.getCuisine()));
         holder.myRecipeRating.setText((myRecipesList.getRating()));
