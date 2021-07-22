@@ -18,48 +18,45 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/editTextTextPersonName2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:icon="@android:drawable/ic_menu_search"
-                android:inputType="textPersonName" />
-
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="I"
-                android:textAlignment="center" />
+                android:layout_height="wrap_content"
+                android:fontFamily="cursive"
+                android:text="ReciPee"
+                android:textAlignment="center"
+                android:textColor="#3BF87F"
+                android:textSize="50sp" />
 
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="Don't"
-                android:textAlignment="center" />
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:text="By"
+                android:textAlignment="center"
+                android:textColor="#3BF87F"
+                android:textSize="50sp" />
 
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="Even"
-                android:textAlignment="center" />
+                android:layout_height="wrap_content"
+                android:fontFamily="cursive"
+                android:text="NPee"
+                android:textAlignment="center"
+                android:textColor="#3BF87F"
+                android:textSize="50sp" />
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="Fucking"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="Know"
-                android:textAlignment="center" />
+                android:layout_height="wrap_content"
+                android:fontFamily="serif-monospace"
+                android:text="Golder Shower FTW"
+                android:textAlignment="center"
+                android:textColor="#EFFA61"
+                android:textSize="40sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/myRecipeRecycler"

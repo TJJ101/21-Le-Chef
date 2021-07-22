@@ -1,8 +1,13 @@
 package sg.edu.np.madassignment1;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -10,11 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder>{
+public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder> implements Filterable {
 
-    ArrayList<recipe> data;
-    public RecipeAdapter(ArrayList<recipe> input) { data = input; }
+    private List<Recipe> recipeList;
+    private List<Recipe> recipeListFull;
+
 
     @NonNull
     @Override
@@ -28,15 +35,28 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull RecipeAdapter.MyViewHolder holder, int position) {
-        recipe myRecipesList = data.get(position);
-        holder.myRecipeName.setText(myRecipesList.getName());
-        holder.myRecipeCuisine.setText((myRecipesList.getCuisine()));
-        holder.myRecipeRating.setText((myRecipesList.getRating()));
-    }
+        Recipe selectedRecipe = recipeList.get(position);
+        holder.myRecipeName.setText(selectedRecipe.getName());
+        holder.myRecipeCuisine.setText((selectedRecipe.getCuisine()));
+        holder.myRecipeRating.setText((selectedRecipe.getRating()));
 
-    @Override
-    public int getItemCount() {
-        return data.size();
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle extras = new Bundle();
+                extras.putString("name", selectedRecipe.getName());
+                extras.putString("cuisine", selectedRecipe.getCuisine());
+                extras.putString("rating", selectedRecipe.getRating());
+                Intent in = new Intent(holder.itemView.getContext(), DetailsActivity.class);
+                in.putExtras(extras);
+                holder.itemView.getContext().startActivity(in);
+
+                /*fragment.setArguments(extras);
+               FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+                *//*FragmentTransaction transaction = myActivity.getSupportFragmentManager().beginTransaction();*//*
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, new DetailsFragment()).commit();*/
+            }
+        });
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -50,4 +70,51 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
             myRecipeImg = itemView.findViewById(R.id.myRecipeImg);
         }
     }
+
+
+    RecipeAdapter(ArrayList<Recipe> recipeList){
+        this.recipeList = recipeList;
+        recipeListFull = new ArrayList<>(recipeList);
+    }
+
+    @Override
+    public int getItemCount() {
+        return recipeList.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return recipeFilter;
+    }
+
+    private Filter recipeFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Recipe> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0){
+                filteredList.addAll(recipeListFull);
+            }
+            else{
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Recipe r : recipeListFull){
+                    if (r.getName().toLowerCase().contains(filterPattern)){
+                        filteredList.add(r);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            recipeList.clear();
+            recipeList.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 }

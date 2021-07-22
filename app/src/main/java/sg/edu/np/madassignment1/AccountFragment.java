@@ -29,8 +29,8 @@ public class AccountFragment extends Fragment {
         adapter = new FragmentAdapter(fm, getLifecycle());
         pager2.setAdapter(adapter);
 
-        tabLayout.addTab(tabLayout.newTab().setText("My Recipe"));
-        tabLayout.addTab(tabLayout.newTab().setText("Saved Recipe"));
+        tabLayout.addTab(tabLayout.newTab().setText("My Recipes"));
+        tabLayout.addTab(tabLayout.newTab().setText("Saved"));
         tabLayout.addTab(tabLayout.newTab().setText("Profile"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

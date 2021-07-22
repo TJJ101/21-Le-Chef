@@ -16,8 +16,8 @@ import java.util.ArrayList;
 
 public class SavedFragment extends Fragment {
 
-    recipe mRecipe;
-    ArrayList<recipe> recipeList = new ArrayList<>();
+    Recipe mRecipe;
+    ArrayList<Recipe> recipeList = new ArrayList<>();
     private RecyclerView recyclerView;
 
     @Override
@@ -25,7 +25,7 @@ public class SavedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_saved, container, false);
 
         for (int i = 0 ; i < 10; i++){
-            mRecipe = new recipe(
+            mRecipe = new Recipe(
                     "Name",
                     "Cuisine",
                     "Rating"

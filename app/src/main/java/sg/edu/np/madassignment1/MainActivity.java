@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -19,8 +20,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
-    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
