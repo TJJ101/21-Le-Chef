@@ -23,27 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="cursive"
-                android:text="ReciPee"
-                android:textAlignment="center"
-                android:textColor="#3BF87F"
-                android:textSize="50sp" />
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="casual"
-                android:text="By"
-                android:textAlignment="center"
-                android:textColor="#3BF87F"
-                android:textSize="50sp" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="cursive"
-                android:text="NPee"
+                android:text="ReciP"
                 android:textAlignment="center"
                 android:textColor="#3BF87F"
                 android:textSize="50sp" />
@@ -53,10 +33,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="serif-monospace"
-                android:text="Golder Shower FTW"
+                android:text="Some fucking description IDK"
                 android:textAlignment="center"
-                android:textColor="#EFFA61"
+                android:textColor="#1534FF"
                 android:textSize="40sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cuisine: "
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/cuisineSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/myRecipeRecycler"

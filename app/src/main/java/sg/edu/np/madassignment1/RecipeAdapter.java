@@ -47,6 +47,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
                 extras.putString("name", selectedRecipe.getName());
                 extras.putString("cuisine", selectedRecipe.getCuisine());
                 extras.putString("rating", selectedRecipe.getRating());
+                extras.putString("description", selectedRecipe.getDescription());
                 Intent in = new Intent(holder.itemView.getContext(), DetailsActivity.class);
                 in.putExtras(extras);
                 holder.itemView.getContext().startActivity(in);
@@ -83,9 +84,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     }
 
     @Override
-    public Filter getFilter() {
-        return recipeFilter;
-    }
+    public Filter getFilter() { return recipeFilter; }
+
+    public Filter getCuisineFilter() {return cuisineFilter; }
 
     private Filter recipeFilter = new Filter() {
         @Override
@@ -100,6 +101,37 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
                 for (Recipe r : recipeListFull){
                     if (r.getName().toLowerCase().contains(filterPattern)){
+                        filteredList.add(r);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            recipeList.clear();
+            recipeList.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    private Filter cuisineFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Recipe> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0){
+                filteredList.addAll(recipeListFull);
+            }
+            else{
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Recipe r : recipeListFull){
+                    if (r.getCuisine().toLowerCase().contains(filterPattern)){
                         filteredList.add(r);
                     }
                 }
