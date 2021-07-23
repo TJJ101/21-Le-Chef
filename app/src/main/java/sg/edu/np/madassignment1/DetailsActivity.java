@@ -37,11 +37,33 @@ public class DetailsActivity extends AppCompatActivity {
         TextView desTxt = findViewById(R.id.descriptionTxt);
         desTxt.setText(recipe.getDescription());
 
-        Button backButton = findViewById(R.id.detailsBackBtn);
-        backButton.setOnClickListener(new View.OnClickListener() {
+
+        //button to go start cooking
+        Button startBtn = findViewById(R.id.detailsStartBtn);
+        startBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(v.getContext(), StepsActivity.class);
+                v.getContext().startActivity(in);
+            }
+        });
+
+        //button to go back
+        Button backBtn = findViewById(R.id.detailsBackBtn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        //button to go home
+        Button homeBtn = findViewById(R.id.detailsHomeBtn);
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(v.getContext(), MainActivity.class);
+                v.getContext().startActivity(in);
             }
         });
     }

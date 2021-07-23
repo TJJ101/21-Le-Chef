@@ -37,6 +37,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // putting data in to recycler view / recipe object
         int i = 1;
         for (String n : name){
             if (i > 5){i = 1;}
@@ -85,7 +86,7 @@ public class HomeFragment extends Fragment {
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
+                // I have no idea what to put here, probably noting
             }
         });
 
