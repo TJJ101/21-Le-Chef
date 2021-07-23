@@ -12,7 +12,7 @@
         android:title="Add"/>
 
     <item
-        android:id="@+id/nav_recipes"
-        android:icon="@drawable/ic_baseline_menu_book_24"
-        android:title="Recipes"/>
+        android:id="@+id/nav_account"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="Account"/>
 </menu>
