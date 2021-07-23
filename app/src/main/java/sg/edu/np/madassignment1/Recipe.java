@@ -18,16 +18,21 @@ public class Recipe {
     }
 
     private String rating;
-    public String getRating(){
-        return rating;
-    }
+    public String getRating(){ return rating; }
     public void setRating(String r){
         this.rating = r;
     }
 
-    public Recipe(String n, String r, String c) {
+    private String description;
+    public String getDescription(){ return description; }
+    public void setDescription(String d){
+        this.description = d;
+    }
+
+    public Recipe(String n, String r, String c, String d) {
         this.name = n;
         this.cuisine = c;
         this.rating = r;
+        this.description = d;
     }
 }

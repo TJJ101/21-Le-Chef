@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -26,17 +28,20 @@ public class DetailsActivity extends AppCompatActivity {
         String name = in.getStringExtra("name");
         String cuisine = in.getStringExtra("cuisine");
         String rating = in.getStringExtra("rating");
-        recipe = new Recipe(name, cuisine, rating);
+        String description = in.getStringExtra("description");
+        recipe = new Recipe(name, cuisine, rating, description);
 
         TextView nameTxt = findViewById(R.id.nameTxt);
         nameTxt.setText(recipe.getName());
+
+        TextView desTxt = findViewById(R.id.descriptionTxt);
+        desTxt.setText(recipe.getDescription());
 
         Button backButton = findViewById(R.id.detailsBackBtn);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent in = new Intent(v.getContext(), MainActivity.class);
-                v.getContext().startActivity(in);
+                finish();
             }
         });
     }

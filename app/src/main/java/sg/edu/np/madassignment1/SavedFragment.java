@@ -28,7 +28,8 @@ public class SavedFragment extends Fragment {
             mRecipe = new Recipe(
                     "Name",
                     "Cuisine",
-                    "Rating"
+                    "Rating",
+                    "This is a description"
             );
             recipeList.add(mRecipe);
         }
