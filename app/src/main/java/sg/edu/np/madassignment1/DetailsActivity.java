@@ -37,7 +37,6 @@ public class DetailsActivity extends AppCompatActivity {
         TextView desTxt = findViewById(R.id.descriptionTxt);
         desTxt.setText(recipe.getDescription());
 
-
         //button to go start cooking
         Button startBtn = findViewById(R.id.detailsStartBtn);
         startBtn.setOnClickListener(new View.OnClickListener() {
