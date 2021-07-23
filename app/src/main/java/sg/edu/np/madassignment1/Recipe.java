@@ -18,13 +18,10 @@ public class Recipe {
     }
 
     private String rating;
-    public String getRating(){
-        return rating;
-    }
+    public String getRating(){ return rating; }
     public void setRating(String r){
         this.rating = r;
     }
-
 
     private String description;
     public String getDescription(){ return description; }
