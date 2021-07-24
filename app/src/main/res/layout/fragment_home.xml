@@ -18,6 +18,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchTxt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:queryHint="Search" />
+
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
