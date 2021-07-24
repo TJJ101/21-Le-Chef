@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
@@ -90,8 +91,21 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //for showing the search bar
-        setHasOptionsMenu(true);
+        //for enabling the search bar
+        SearchView searchView = view.findViewById(R.id.searchTxt);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        /*setHasOptionsMenu(true);*/
 
         //everything for recycler
         recyclerView = view.findViewById(R.id.myRecipeRecycler);
@@ -103,10 +117,7 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
-
-
-
-    @Override
+/*    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu, menu);
         super.onCreateOptionsMenu(menu,inflater);
@@ -126,5 +137,5 @@ public class HomeFragment extends Fragment {
                 return false;
             }
         });
-    }
+    }*/
 }
