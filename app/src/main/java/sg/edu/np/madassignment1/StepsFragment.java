@@ -29,6 +29,16 @@ public class StepsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_steps, container, false);
 
+        TextView stepNumTxt = view.findViewById(R.id.stepNumTxt);
+        // get the current step information
+        if (getArguments() != null){
+            Integer stepNum = getArguments().getInt("stepNum");
+            stepNumTxt.setText("Step: " + stepNum);
+        }
+        else{
+            stepNumTxt.setText("Step: 1");
+        }
+
         //populate arrays
         int i = 0;
         while(i < 24){
