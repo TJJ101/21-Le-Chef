@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -72,10 +73,9 @@ public class SignUpActivity extends AppCompatActivity {
         emailTxt = findViewById(R.id.newEmailTxt);
         passwordTxt = findViewById(R.id.newPasswordTxt);
         cfmPasswordTxt = findViewById(R.id.cfmPasswordTxt);
-
-        Button signUpBtn = findViewById(R.id.signUpBtn);
+//      Validates input fields
         Validation(usernameTxt, emailTxt, passwordTxt, cfmPasswordTxt);
-
+        Button signUpBtn = findViewById(R.id.signUpBtn);
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,16 +84,58 @@ public class SignUpActivity extends AppCompatActivity {
                 EmptyFieldValidation(usernameTxt, emailTxt, passwordTxt, cfmPasswordTxt);
                 if(validInput){
                     Log.d("THANK GOD", "GO SLEEEP");
-//                    SignUp(usernameTxt.getText().toString(), emailTxt.getText().toString(), passwordTxt.getText().toString());
-                    Intent i = new Intent(SignUpActivity.this, MainActivity.class);
-                    SignUpActivity.this.startActivity(i);
+                    SignUp(usernameTxt.getText().toString(), emailTxt.getText().toString(), passwordTxt.getText().toString());
                 }
+            }
+        });
+
+        TextView toLoginBtn = findViewById(R.id.toLogin);
+//      Make specific text bold
+        String sourceString = "Already have an account? <b>Login</b>" ;
+        toLoginBtn.setText(Html.fromHtml(sourceString));
+//      Add onclick listener to navigate to Login page
+        toLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
             }
         });
     }
 
+    //  Sign Up using firebase authentication
+    private void SignUp(String username, String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+//                          Sign up success, bring user to log in page
+                            Log.d("Create", "createUserWithEmail:success");
+//                          Get current user
+                            FirebaseUser user = mAuth.getCurrentUser();
+//                          loadingBar.setVisibility(View.GONE);
+                            newUser.setUsername(username);
+                            newUser.setEmail(email);
+                            newUser.setPassword(password);
+                            newUser.setId(user.getUid());
+
+                            //set username and save it to firebase
+                            mDatabase.child("Users").child(user.getUid()).setValue(newUser);
+
+                            Intent i = new Intent(SignUpActivity.this, MainActivity.class);
+                            SignUpActivity.this.startActivity(i);
+                        }
+                        else {
+                            // If sign up fails, display a message to the user.
+                            Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                      loadingBar.setVisibility(View.GONE);
+                        }
+                    }
+                });
+    }
+
 //  Clear all EditText focus
-    public void clearAllFocus(){
+    private void clearAllFocus(){
         usernameTxt.clearFocus();
         emailTxt.clearFocus();
         passwordTxt.clearFocus();
@@ -214,34 +256,6 @@ public class SignUpActivity extends AppCompatActivity {
                 cfmPasswordError.setLayoutParams(params);
             }
         });
-    }
-//  Sign Up using firebase authentication
-    private void SignUp(String username, String email, String password) {
-    mAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-//                      Sign up success, bring user to log in page
-                        Log.d("Create", "createUserWithEmail:success");
-//                      Get current user
-                        FirebaseUser user = mAuth.getCurrentUser();
-//                      loadingBar.setVisibility(View.GONE);
-                        newUser.setUsername(username);
-                        newUser.setEmail(email);
-                        newUser.setPassword(password);
-                        newUser.setId(user.getUid());
-
-                        //set username and save it to firebase
-                        mDatabase.child("Users").child(user.getUid()).setValue(newUser);
-                    }
-                    else {
-                        // If sign up fails, display a message to the user.
-                        Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                      loadingBar.setVisibility(View.GONE);
-                    }
-                }
-            });
     }
 
 //  Check email format

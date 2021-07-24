@@ -16,12 +16,40 @@
         android:layout_height="match_parent"
         tools:context=".SignUpActivity">
 
+        <TextView
+            android:id="@+id/eError2"
+            android:layout_width="0dp"
+            android:layout_height="17dp"
+            android:layout_marginStart="54dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="54dp"
+            android:textColor="#E46F6F"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailTxt" />
+
+        <TextView
+            android:id="@+id/pError2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="54dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="54dp"
+            android:text="TextView"
+            android:textColor="#E46F6F"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordTxt" />
+
         <EditText
             android:id="@+id/passwordTxt"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="50dp"
             android:ems="10"
             android:hint="Password"
@@ -30,7 +58,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailTxt" />
+            app:layout_constraintTop_toBottomOf="@+id/eError2" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -79,15 +107,16 @@
             android:layout_width="0dp"
             android:layout_height="70dp"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="50dp"
             android:text="Login"
             android:textColor="#FFFFFF"
             app:backgroundTint="#2C2C2C"
             app:cornerRadius="0dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/passwordTxt" />
+            app:layout_constraintTop_toBottomOf="@+id/pError2" />
 
         <TextView
             android:id="@+id/toSignUp"
