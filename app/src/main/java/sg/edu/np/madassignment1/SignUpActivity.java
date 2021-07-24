@@ -80,9 +80,10 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 hideKeyboard(SignUpActivity.this);
                 clearAllFocus();
+                EmptyFieldValidation(usernameTxt, emailTxt, passwordTxt, cfmPasswordTxt);
                 if(validInput){
                     Log.d("THANK GOD", "GO SLEEEP");
-                    SignUp(usernameTxt.getText().toString(), emailTxt.getText().toString(), passwordTxt.getText().toString());
+//                    SignUp(usernameTxt.getText().toString(), emailTxt.getText().toString(), passwordTxt.getText().toString());
                     Intent i = new Intent(SignUpActivity.this, MainActivity.class);
                     SignUpActivity.this.startActivity(i);
                 }
@@ -110,6 +111,31 @@ public class SignUpActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    private void EmptyFieldValidation(TextView usernameTxt, TextView emailTxt, TextView passwordTxt, TextView cfmPasswordTxt){
+        if(usernameTxt.getText().toString().equals("")){
+            TextView usernameError = findViewById(R.id.uError);
+            usernameError.setText("Please enter a username");
+            validInput = false;
+        }
+        if(emailTxt.getText().toString().equals("")){
+            TextView emailError = findViewById(R.id.eError);
+            emailError.setText("Please enter an email address");
+            validInput = false;
+        }
+        if(passwordTxt.getText().toString().equals("")){
+            TextView passwordError = findViewById(R.id.pError);
+            passwordError.setText("Please enter a password");
+            validInput = false;
+        }
+        if(!passwordTxt.getText().toString().equals("") && cfmPasswordTxt.getText().toString().equals("")){
+            TextView cfmPasswordError = findViewById(R.id.cError);
+            ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) cfmPasswordError.getLayoutParams();
+            cfmPasswordError.setText("Please re-enter your password");
+            params.height = 50;
+            validInput = false;
+        }
+    }
+
 //  Validation for all fields after EditText lose focus (User change to different text box)
     private void Validation(TextView usernameTxt, TextView emailTxt, TextView passwordTxt, TextView cfmPasswordTxt){
         usernameTxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -118,7 +144,7 @@ public class SignUpActivity extends AppCompatActivity {
                 TextView usernameError = findViewById(R.id.uError);
                 if(!hasFocus){
                     for(User user : userList){
-                        if(user.getUsername().toLowerCase().equals(usernameTxt.getText().toString().toLowerCase())){
+                        if(!usernameTxt.getText().toString().equals("") && user.getUsername().toLowerCase().equals(usernameTxt.getText().toString().toLowerCase())){
                             usernameError.setText("This username has been taken");
                             validInput = false;
                         }
@@ -136,7 +162,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 TextView emailError = findViewById(R.id.eError);
                 if(!hasFocus){
-                    if(!isValidEmail(emailTxt.getText()))
+                    if(!emailTxt.getText().toString().equals("") && !isValidEmail(emailTxt.getText()))
                     {
                         emailError.setText("Please enter a valid email address");
                         validInput = false;
@@ -154,7 +180,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 TextView passwordError = findViewById(R.id.pError);
                 if(!hasFocus){
-                    if(passwordTxt.getText().toString().length() < 6)
+                    if(!passwordTxt.getText().toString().equals("") && passwordTxt.getText().toString().length() < 6)
                     {
                         passwordError.setText("Password must have at least 6 characters");
                         validInput = false;
@@ -170,21 +196,21 @@ public class SignUpActivity extends AppCompatActivity {
         cfmPasswordTxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                TextView usernameError = findViewById(R.id.cError);
-                ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) usernameError.getLayoutParams();
+                TextView cfmPasswordError = findViewById(R.id.cError);
+                ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) cfmPasswordError.getLayoutParams();
                 if(!hasFocus){
-                    if(!passwordTxt.getText().toString().equals(cfmPasswordTxt.getText().toString())){
-                        usernameError.setText("Password does not match");
+                    if(!cfmPasswordTxt.getText().toString().equals("") && !passwordTxt.getText().toString().equals(cfmPasswordTxt.getText().toString())){
+                        cfmPasswordError.setText("Password does not match");
                         validInput = false;
                     }
                     params.height = 50;
                 }
                 else {
-                    usernameError.setText("");
+                    cfmPasswordError.setText("");
                     validInput = true;
                     params.height = 0;
                 }
-                usernameError.setLayoutParams(params);
+                cfmPasswordError.setLayoutParams(params);
             }
         });
     }
