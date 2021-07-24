@@ -126,6 +126,11 @@ public class StepsFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
     //start timer function
     void startTimer(int duration) {
         TextView timer = getView().findViewById(R.id.timerTxt);

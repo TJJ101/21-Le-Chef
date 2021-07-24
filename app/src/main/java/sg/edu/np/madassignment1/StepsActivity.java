@@ -36,16 +36,18 @@ public class StepsActivity extends AppCompatActivity {
 
             switch (item.getItemId()){
                 case R.id.nav_back:
-                    extra.putInt("stepNum", steps --);
-                    Log.d("debug", "back" + steps);
+                    steps --;
+                    extra.putInt("stepNum", steps);
+                    Log.d("debug", "back" + extra);
                     fragment.setArguments(extra);
                     break;
                 case R.id.nav_home2:
-                    //go home
+                    finish();
                     break;
                 case R.id.nav_next:
-                    extra.putInt("stepNum", steps ++);;
-                    Log.d("debug", "next" + steps);
+                    steps ++;
+                    extra.putInt("stepNum", steps);
+                    Log.d("debug", "next" + extra);
                     fragment.setArguments(extra);
                     break;
             }
