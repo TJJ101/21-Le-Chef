@@ -11,15 +11,19 @@ public class Ingredient implements Serializable {
         this.name = n;
     }
 
-    public int quantity;
-    public int getQuantity() {return quantity;}
-    public void setQuantity(int q) {this.quantity = q;}
+    public double quantity;
+    public double getQuantity() {return quantity;}
+    public void setQuantity(double q) {this.quantity = q;}
 
     public String measurement;
     public String getMeasurement(){return measurement;}
     public void setMeasurement(String m) {this.measurement = m;}
 
-    public Ingredient(String n, int q, String m){
+    public boolean isSelected;
+    public boolean getSelected() {return isSelected;}
+    public void setSelected(boolean selected) {isSelected = selected;}
+
+    public Ingredient(String n, double q, String m){
         this.name = n;
         this.quantity = q;
         this.measurement = m;
