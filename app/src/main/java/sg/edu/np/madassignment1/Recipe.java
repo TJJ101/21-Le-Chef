@@ -1,9 +1,10 @@
 package sg.edu.np.madassignment1;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recipe {
+public class Recipe implements Serializable {
     private String name;
     public String getName() {
         return name;
@@ -48,13 +49,18 @@ public class Recipe {
         this.description = d;
     }
 
-    public Recipe(){}
+    public ArrayList<Ingredient> ingredientList;
+    public ArrayList<Ingredient> getIngredientList() {return ingredientList;}
+    public void addIngredient(Ingredient i){
+        ingredientList.add(i);
+    }
 
-    public Recipe(String n, String r, String c, String d) {
+    public Recipe(String n, String r, String c, String d, ArrayList<Ingredient> i) {
         this.name = n;
         this.cuisine = c;
         this.rating = r;
         this.description = d;
+        this.ingredientList = i;
     }
 
     public void AddSteps(int stepNum, String stepDescription){
