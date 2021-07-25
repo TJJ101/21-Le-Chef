@@ -31,14 +31,12 @@ public class AddFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add, container, false);
 
-
         //for adding new steps to steps array and list view
         listView = (ListView) view.findViewById(R.id.stepListView);
         addBtn = (Button) view.findViewById(R.id.addStepBtn);
         addTxt = (EditText) view.findViewById(R.id.addStepTxt);
 
         stepsList = new ArrayList<String>();
-        arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, stepsList);
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,9 +45,9 @@ public class AddFragment extends Fragment {
                 if (!steps.isEmpty() && !(steps.trim().length() == 0)){
                     steps = addTxt.getText().toString();
                     stepsList.add(steps);
-                    listView.setAdapter(arrayAdapter);
-                    arrayAdapter.notifyDataSetChanged();
+                    listView.setAdapter(new StepsAdapter(stepsList, getContext()));
                 }
+
                 //hide the keyboard
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
