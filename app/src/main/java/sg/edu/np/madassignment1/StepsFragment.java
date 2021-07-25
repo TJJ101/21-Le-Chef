@@ -2,12 +2,14 @@ package sg.edu.np.madassignment1;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -15,19 +17,26 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class StepsFragment extends Fragment {
 
     //Declare timer
     CountDownTimer cTimer = null;
-    ArrayList<Integer> sixtyArray = new ArrayList<Integer>();
-    ArrayList<Integer> twentyfourArray = new ArrayList<Integer>();
-    int totalMs = 0;
+    ArrayList<String> sixtyArray = new ArrayList<String>();
+    ArrayList<String> twentyfourArray = new ArrayList<String>();
+    int hours;
+    int minutes;
+    int seconds;
+    long millis;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_steps, container, false);
+
+        //for setting the timer to whatever is the default, set it to 30 for now
+        minutes = 30 * 60 * 1000;
 
         TextView stepNumTxt = view.findViewById(R.id.stepNumTxt);
         // get the current step information
@@ -41,77 +50,83 @@ public class StepsFragment extends Fragment {
 
         //populate arrays
         int i = 0;
-        while(i < 24){
-            twentyfourArray.add(i);
+        while(i < 25){
+            twentyfourArray.add(String.valueOf(i));
             i++;
         }
         i = 0;
         while(i < 61){
-            sixtyArray.add(i);
+            sixtyArray.add(String.valueOf(i));
             i++;
         }
 
         //for the hour spinner
-        Spinner hourSpinner = (Spinner) view.findViewById(R.id.hourSpinner);
-        ArrayAdapter<Integer> spinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, twentyfourArray);
-        hourSpinner.setAdapter(spinnerAdapter);
-        //Setting up for what the cuisine filter does
-        hourSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        NumberPicker hourPicker = (NumberPicker) view.findViewById(R.id.hoursPicker);
+        hourPicker.setMaxValue(24);
+        hourPicker.setMinValue(0);
+        String[] twentyfourArray2 = new String[twentyfourArray.size()];
+        twentyfourArray2 = twentyfourArray.toArray(twentyfourArray2);
+        hourPicker.setDisplayedValues(twentyfourArray2);
+        hourPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                /*Log.v("item", (String) parent.getItemAtPosition(position));*/
-                totalMs = (totalMs + (int) parent.getItemAtPosition(position)) * 60 * 60 * 1000;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // I have no idea what to put here, probably noting
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                millis = 0;
+                hours = hourPicker.getValue() * 60 * 60 * 1000;
+                Log.d("hours", hours + "");
             }
         });
 
         //for the minute spinner
-        Spinner minuteSpinner = (Spinner) view.findViewById(R.id.minuteSpinner);
-        ArrayAdapter<Integer> spinnerAdapter2 = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, sixtyArray);
-        minuteSpinner.setAdapter(spinnerAdapter2);
-        //Setting up for what the cuisine filter does
-        minuteSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        NumberPicker minutePicker = (NumberPicker) view.findViewById(R.id.minutePicker);
+        minutePicker.setMaxValue(60);
+        minutePicker.setMinValue(0);
+        //for setting the timer to whatever is the default, set it to 30 for now
+        minutePicker.setValue(30);
+        String[] sixtyArray2 = new String[sixtyArray.size()];
+        sixtyArray2 = sixtyArray.toArray(sixtyArray2);
+        minutePicker.setDisplayedValues(sixtyArray2);
+        minutePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                /*Log.v("item", (String) parent.getItemAtPosition(position));*/
-                totalMs = (totalMs + (int) parent.getItemAtPosition(position)) * 60 * 1000;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // I have no idea what to put here, probably noting
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                millis = 0;
+                minutes = minutePicker.getValue() * 60 * 1000;
+                Log.d("minutes", minutes + "");
             }
         });
 
         //for the seconds spinner
-        Spinner secondsSpinner = (Spinner) view.findViewById(R.id.secondsSpinner);
-        secondsSpinner.setAdapter(spinnerAdapter2);
-        //Setting up for what the cuisine filter does
-        secondsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        NumberPicker secondsPicker = (NumberPicker) view.findViewById(R.id.secondsPicker);
+        secondsPicker.setMaxValue(60);
+        secondsPicker.setMinValue(0);
+        secondsPicker.setDisplayedValues(sixtyArray2);
+        secondsPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                /*Log.v("item", (String) parent.getItemAtPosition(position));*/
-                totalMs = (totalMs + (int) parent.getItemAtPosition(position)) * 1000;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // I have no idea what to put here, probably noting
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                millis = 0;
+                seconds = secondsPicker.getValue() * 1000;
+                Log.d("seconds", seconds + "");
             }
         });
 
+        // start and stop button listeners
         Button startBtn = view.findViewById(R.id.stepsStartBtn);
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startTimer(totalMs);
+                if (startBtn.getText().equals("Start")){
+                    if (millis != 0){
+                        startTimer((int) millis);
+                    }
+                    else{
+                        startTimer(hours + minutes + seconds);
+                    }
+                    startBtn.setText("Pause");
+                }
+                else if (startBtn.getText().equals("Pause")){
+                    pauseTimer();
+                    startBtn.setText("Start");
+                }
+
             }
         });
         Button stopBtn = view.findViewById(R.id.stepsStopBtn);
@@ -119,6 +134,7 @@ public class StepsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 cancelTimer();
+                startBtn.setText("Start");
             }
         });
 
@@ -126,31 +142,36 @@ public class StepsFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
     //start timer function
-    void startTimer(int duration) {
-        TextView timer = getView().findViewById(R.id.timerTxt);
+    public void startTimer(int duration) {
+        TextView timer = getActivity().findViewById(R.id.timerTxt);
         cTimer = new CountDownTimer(duration, 1000) {
+            @Override
             public void onTick(long millisUntilFinished) {
-                timer.setText("Remaining: " + millisUntilFinished / 1000 + "s");
+                millis = millisUntilFinished;
+                String hms = String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(millis),
+                (TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))),
+                (TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))));
+                timer.setText(hms);//set text
             }
+            @Override
             public void onFinish() {
-                totalMs = 0;
-                timer.setText("Done!");
+                timer.setText("00:00:00");
             }
         };
         cTimer.start();
     }
     //cancel timer
-    void cancelTimer() {
-        TextView timer = getView().findViewById(R.id.timerTxt);
+    public void cancelTimer() {
+        TextView timer = getActivity().findViewById(R.id.timerTxt);
         if(cTimer!=null){
-            timer.setText("Done");
-            totalMs = 0;
+            millis = 0;
+            timer.setText("00:00:00");
             cTimer.cancel();}
+    }
+
+    public void pauseTimer(){
+        cTimer.cancel();
     }
 }
