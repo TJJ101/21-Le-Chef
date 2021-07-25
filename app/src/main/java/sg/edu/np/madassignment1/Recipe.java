@@ -55,7 +55,7 @@ public class Recipe implements Serializable {
         ingredientList.add(i);
     }
 
-    public Recipe(String n, String r, String c, String d) {
+    public Recipe(String n, String r, String c, String d, ArrayList<Ingredient> i) {
         this.name = n;
         this.cuisine = c;
         this.rating = r;
