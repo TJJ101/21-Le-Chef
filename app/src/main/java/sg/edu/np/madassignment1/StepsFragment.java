@@ -28,11 +28,15 @@ public class StepsFragment extends Fragment {
     int hours;
     int minutes;
     int seconds;
+    long millis;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_steps, container, false);
+
+        //for setting the timer to whatever is the default, set it to 30 for now
+        minutes = 30 * 60 * 1000;
 
         TextView stepNumTxt = view.findViewById(R.id.stepNumTxt);
         // get the current step information
@@ -66,6 +70,7 @@ public class StepsFragment extends Fragment {
         hourPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                millis = 0;
                 hours = hourPicker.getValue() * 60 * 60 * 1000;
                 Log.d("hours", hours + "");
             }
@@ -75,12 +80,15 @@ public class StepsFragment extends Fragment {
         NumberPicker minutePicker = (NumberPicker) view.findViewById(R.id.minutePicker);
         minutePicker.setMaxValue(60);
         minutePicker.setMinValue(0);
+        //for setting the timer to whatever is the default, set it to 30 for now
+        minutePicker.setValue(30);
         String[] sixtyArray2 = new String[sixtyArray.size()];
         sixtyArray2 = sixtyArray.toArray(sixtyArray2);
         minutePicker.setDisplayedValues(sixtyArray2);
         minutePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                millis = 0;
                 minutes = minutePicker.getValue() * 60 * 1000;
                 Log.d("minutes", minutes + "");
             }
@@ -94,6 +102,7 @@ public class StepsFragment extends Fragment {
         secondsPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                millis = 0;
                 seconds = secondsPicker.getValue() * 1000;
                 Log.d("seconds", seconds + "");
             }
@@ -104,7 +113,20 @@ public class StepsFragment extends Fragment {
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startTimer(hours + minutes + seconds);
+                if (startBtn.getText().equals("Start")){
+                    if (millis != 0){
+                        startTimer((int) millis);
+                    }
+                    else{
+                        startTimer(hours + minutes + seconds);
+                    }
+                    startBtn.setText("Pause");
+                }
+                else if (startBtn.getText().equals("Pause")){
+                    pauseTimer();
+                    startBtn.setText("Start");
+                }
+
             }
         });
         Button stopBtn = view.findViewById(R.id.stepsStopBtn);
@@ -112,6 +134,7 @@ public class StepsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 cancelTimer();
+                startBtn.setText("Start");
             }
         });
 
@@ -120,12 +143,12 @@ public class StepsFragment extends Fragment {
     }
 
     //start timer function
-    void startTimer(int duration) {
-        TextView timer = getView().findViewById(R.id.timerTxt);
+    public void startTimer(int duration) {
+        TextView timer = getActivity().findViewById(R.id.timerTxt);
         cTimer = new CountDownTimer(duration, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                long millis = millisUntilFinished;
+                millis = millisUntilFinished;
                 String hms = String.format("%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(millis),
                 (TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))),
@@ -140,10 +163,15 @@ public class StepsFragment extends Fragment {
         cTimer.start();
     }
     //cancel timer
-    void cancelTimer() {
-        TextView timer = getView().findViewById(R.id.timerTxt);
+    public void cancelTimer() {
+        TextView timer = getActivity().findViewById(R.id.timerTxt);
         if(cTimer!=null){
+            millis = 0;
             timer.setText("00:00:00");
             cTimer.cancel();}
+    }
+
+    public void pauseTimer(){
+        cTimer.cancel();
     }
 }
