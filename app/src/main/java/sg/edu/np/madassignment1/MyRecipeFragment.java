@@ -23,13 +23,16 @@ public class MyRecipeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_recipe, container, false);
-
+        ArrayList<Ingredient> iList = new ArrayList<>();
+        iList.add(new Ingredient("Olive oil", 1, "Teaspoon"));
+        iList.add(new Ingredient("Butter", 2, "Teaspoon"));
         for (int i = 0 ; i < 10; i++){
             mRecipe = new Recipe(
                     "Name",
                     "Cuisine",
                     "Rating",
-                    "This is a description"
+                    "This is a description",
+                    iList
             );
             recipeList.add(mRecipe);
         }
