@@ -101,13 +101,13 @@ public class LoginActivity extends AppCompatActivity {
     private void EmptyFieldValidation(TextView emailTxt, TextView passwordTxt){
         if(emailTxt.getText().toString().equals("")){
             TextView emailError = findViewById(R.id.eError2);
-            emailError.setText("Please enter an email address");
+            emailError.setText("Please enter your    email address");
             validInput = false;
         }
         if(passwordTxt.getText().toString().equals("")){
             TextView passwordError = findViewById(R.id.pError2);
             ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) passwordError.getLayoutParams();
-            passwordError.setText("Please re-enter your password");
+            passwordError.setText("Please enter your password");
             params.height = 50;
             passwordError.setLayoutParams(params);
             validInput = false;
