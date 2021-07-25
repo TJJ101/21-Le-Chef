@@ -17,6 +17,14 @@ public class Steps {
         this.stepDescription = stepDescription;
     }
 
+    private String time;
+    public String getTime() {
+        return time;
+    }
+    public void setTime(String time) {
+        this.time = time;
+    }
+
     public Steps(){}
 
     public Steps(int stepNum, String stepDescription) {
