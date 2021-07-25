@@ -16,6 +16,9 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 public class DetailsActivity extends AppCompatActivity {
 
     Recipe recipe;
@@ -33,13 +36,37 @@ public class DetailsActivity extends AppCompatActivity {
         String cuisine = in.getStringExtra("cuisine");
         String rating = in.getStringExtra("rating");
         String description = in.getStringExtra("description");
-        recipe = new Recipe(name, cuisine, rating, description);
+        ArrayList<Ingredient> ingredientList = (ArrayList<Ingredient>) in.getSerializableExtra("IngredientList");
+        recipe = new Recipe(name, cuisine, rating, description, ingredientList);
 
         TextView nameTxt = findViewById(R.id.nameTxt);
         nameTxt.setText(recipe.getName());
 
         TextView desTxt = findViewById(R.id.descriptionTxt);
         desTxt.setText(recipe.getDescription());
+
+        TextView ingredientTxt = findViewById(R.id.ingredientTxt);
+        String ingredients = "";
+        for(Ingredient i : recipe.getIngredientList()){
+            ingredients += i.getQuantity() + " " +  i.getMeasurement() + " of " + i.getName() + "\n:";
+        };
+        ingredientTxt.setText(ingredients);
+        
+
+        //button to go ingredient checklist
+        Button checklistBtn = findViewById(R.id.detailsChecklistBtn);
+        checklistBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(DetailsActivity.this, ChecklistActivity.class);
+                intent.putExtra("Name", recipe.getName());
+                intent.putExtra("Cuisine", recipe.getCuisine());
+                intent.putExtra("Rating", recipe.getRating());
+                intent.putExtra("Description", recipe.getDescription());
+                intent.putExtra("IngredientList", (Serializable)recipe.getIngredientList());
+                startActivity(intent);
+            }
+        });
 
         //button to go start cooking
         Button startBtn = findViewById(R.id.detailsStartBtn);

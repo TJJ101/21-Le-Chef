@@ -39,6 +39,10 @@ public class HomeFragment extends Fragment {
 
         // putting data in to recycler view / recipe object
         int i = 1;
+        ArrayList<Ingredient> iList = new ArrayList<>();
+        iList.add(new Ingredient("Olive oil", 1, "Teaspoon"));
+        iList.add(new Ingredient("Butter", 2, "Teaspoon"));
+
         for (String n : name){
             if (i > 5){i = 1;}
 
@@ -46,7 +50,8 @@ public class HomeFragment extends Fragment {
                     n,
                     "Rating",
                     cuisine[i],
-                    "This is a description"
+                    "This is a description",
+                    iList
             );
             recipeList.add(mRecipe);
             i ++;

@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MADAssignment1">
-        <!--this was signup-->
+        <activity android:name=".ChecklistActivity"></activity>
+        <!-- this was signup -->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,11 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity"></activity>
-        <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".DetailsActivity"></activity>
-        <activity android:name=".StepsActivity"></activity>
-        <!--this was main-->
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".DetailsActivity" />
+        <activity android:name=".StepsActivity" />
     </application>
 
 </manifest>
