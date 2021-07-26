@@ -11,6 +11,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -69,6 +70,24 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+            }
+        });
+
+//      Perform Login when user click enter on keyboard
+        passwordTxt.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    // Perform action on key press
+                    hideKeyboard(LoginActivity.this);
+                    clearAllFocus();
+                    EmptyFieldValidation(emailTxt, passwordTxt);
+                    if(validInput) {
+                        Login(emailTxt.getText().toString(), passwordTxt.getText().toString());
+                    }
+                    return true;
+                }
+                return false;
             }
         });
     }

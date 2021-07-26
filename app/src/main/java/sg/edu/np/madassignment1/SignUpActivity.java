@@ -10,6 +10,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -79,11 +80,29 @@ public class SignUpActivity extends AppCompatActivity {
                 clearAllFocus();
                 EmptyFieldValidation(usernameTxt, emailTxt, passwordTxt, cfmPasswordTxt);
                 if(validInput){
-                    Log.d("THANK GOD", "GO SLEEEP");
                     SignUp(usernameTxt.getText().toString(), emailTxt.getText().toString(), passwordTxt.getText().toString());
                 }
             }
         });
+
+//      Perform Login when user click enter on keyboard
+        cfmPasswordTxt.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    // Perform action on key press
+                    hideKeyboard(SignUpActivity.this);
+                    clearAllFocus();
+                    EmptyFieldValidation(usernameTxt, emailTxt, passwordTxt, cfmPasswordTxt);
+                    if(validInput){
+                        SignUp(usernameTxt.getText().toString(), emailTxt.getText().toString(), passwordTxt.getText().toString());
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
 
         TextView toLoginBtn = findViewById(R.id.toLogin);
 //      Make specific text bold

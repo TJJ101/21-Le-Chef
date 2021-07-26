@@ -59,7 +59,6 @@ public class StepsFragment extends Fragment {
             sixtyArray.add(String.valueOf(i));
             i++;
         }
-
         //for the hour spinner
         NumberPicker hourPicker = (NumberPicker) view.findViewById(R.id.hoursPicker);
         hourPicker.setMaxValue(24);
