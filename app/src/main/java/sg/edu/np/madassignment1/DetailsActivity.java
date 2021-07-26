@@ -1,20 +1,13 @@
 package sg.edu.np.madassignment1;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -58,7 +51,7 @@ public class DetailsActivity extends AppCompatActivity {
         checklistBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(DetailsActivity.this, ChecklistActivity.class);
+                Intent intent = new Intent(DetailsActivity.this, GrocerylistActivity.class);
                 intent.putExtra("Name", recipe.getName());
                 intent.putExtra("Cuisine", recipe.getCuisine());
                 intent.putExtra("Rating", recipe.getRating());

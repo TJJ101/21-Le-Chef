@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChecklistActivity">
+    tools:context=".GrocerylistActivity">
 
     <TextView
         android:id="@+id/heading"
@@ -25,7 +25,7 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <Button
-        android:id="@+id/checkListBtn"
+        android:id="@+id/groceryListBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="45dp"

@@ -49,7 +49,7 @@ public class Recipe implements Serializable {
         this.description = d;
     }
 
-    public ArrayList<Ingredient> ingredientList;
+    public ArrayList<Ingredient> ingredientList = new ArrayList<>();
     public ArrayList<Ingredient> getIngredientList() {return ingredientList;}
     public void addIngredient(Ingredient i){
         ingredientList.add(i);

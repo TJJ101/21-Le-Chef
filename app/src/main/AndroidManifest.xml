@@ -9,7 +9,7 @@
         android:roundIcon="@drawable/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.MADAssignment1">
-        <activity android:name=".ChecklistActivity"></activity>
+        <activity android:name=".GrocerylistActivity"></activity>
         <!-- this was signup -->
         <activity android:name=".LoginActivity"></activity>
         <activity android:name=".SignUpActivity"></activity>

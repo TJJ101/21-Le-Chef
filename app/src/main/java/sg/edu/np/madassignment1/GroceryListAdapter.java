@@ -1,42 +1,34 @@
 package sg.edu.np.madassignment1;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.text.InputType;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
-public class CheckListAdapter extends RecyclerView.Adapter<CheckListViewHolder> {
+public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHolder> {
     Context context;
     ArrayList<Ingredient> ingredientList;
 
     @NonNull
     @Override
-    public CheckListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public GroceryListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.checklist_viewholder,
+                R.layout.grocerylist_viewholder,
                 parent,
                 false);
-        return new CheckListViewHolder(view);
+        return new GroceryListViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CheckListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull GroceryListViewHolder holder, int position) {
         Ingredient ingredient = ingredientList.get(position);
         holder.ingredientName.setText(ingredient.getName());
         holder.editQty.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -81,7 +73,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListViewHolder> 
         });
     }
 
-    public CheckListAdapter (ArrayList<Ingredient> iList){
+    public GroceryListAdapter(ArrayList<Ingredient> iList){
         this.ingredientList = iList;
     }
 
