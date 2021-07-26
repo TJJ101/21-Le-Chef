@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -29,9 +31,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     public ArrayList<Recipe> recipeList = new ArrayList<>();
     String[] name = {"Chicken Sandwich", "French Fries", "Chicken Soup", "Fish n Chips", "Eggs Benedict", "Ceasar Salad", "Beef Stew", "Salmon Shushi", "Ramen"};
-    String[] cuisine = {"- None -", "Turkish", "Thai", "Japanese", "Indian", "French"};
-
-
+    String[] cuisine = {"-None-", "Turkish", "Thai", "Japanese", "Indian", "French"};
 
     @Nullable
     @Override
@@ -112,11 +112,25 @@ public class HomeFragment extends Fragment {
         });
         /*setHasOptionsMenu(true);*/
 
+        //gird layout switcher
+        Switch gridSwitch = (Switch) view.findViewById(R.id.gridSwitch);
+        gridSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
+                }
+                else{
+                    recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
+                }
+            }
+        });
+
         //everything for recycler
         recyclerView = view.findViewById(R.id.myRecipeRecycler);
         adapter = new RecipeAdapter(recipeList);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 

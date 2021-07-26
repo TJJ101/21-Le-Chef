@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2"
+            android:gravity="center|start"
             android:inputType="textLongMessage"
             android:text="TextView"
             android:textSize="14sp"

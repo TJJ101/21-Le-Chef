@@ -14,7 +14,9 @@
         app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/food" />
+        app:srcCompat="@drawable/food"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp" />
 
     <TextView
         android:id="@+id/myRecipeName"
