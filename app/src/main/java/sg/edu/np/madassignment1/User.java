@@ -1,6 +1,7 @@
 package sg.edu.np.madassignment1;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class User {
     private String id;
@@ -37,9 +38,12 @@ public class User {
     public User() {
     }
 
-    private ArrayList<Ingredient> groceryList;
+    private ArrayList<Ingredient> groceryList = new ArrayList<>();
     public ArrayList<Ingredient> getGroceryList() {return groceryList;}
-    public void setGroceryList(ArrayList<Ingredient> iList){
+    public void setGroceryList(List<Ingredient> groceryList){
+        this.groceryList = (ArrayList<Ingredient>) groceryList;
+    }
+    public void addGroceryList(ArrayList<Ingredient> iList){
         for(Ingredient i : iList){
             groceryList.add(i);
         }

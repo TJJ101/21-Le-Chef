@@ -9,14 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.w3c.dom.Text;
 
-public class CheckListViewHolder extends RecyclerView.ViewHolder {
+public class GroceryListViewHolder extends RecyclerView.ViewHolder {
     public TextView ingredientName;
     public EditText editQty;
     public CheckBox checkBox;
     public TextView measurement;
     public View view;
 
-    public CheckListViewHolder(View itemView){
+    public GroceryListViewHolder(View itemView){
         super(itemView);
         ingredientName = itemView.findViewById(R.id.ingredientName);
         editQty = itemView.findViewById(R.id.editQty);
