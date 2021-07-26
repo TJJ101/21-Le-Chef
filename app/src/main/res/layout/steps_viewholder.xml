@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -16,19 +17,18 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:gravity="center|start"
-            android:inputType="textLongMessage"
+            android:inputType="text"
             android:text="TextView"
-            android:textSize="14sp"
-            tools:layout_editor_absoluteX="46dp"
-            tools:layout_editor_absoluteY="43dp" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/stepDeleteBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="40sp"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:drawableEnd="@drawable/ic_baseline_close_24"
-            android:paddingRight="30dp" />
+            android:paddingRight="7.5sp"
+            app:backgroundTint="#FF7676" />
     </LinearLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>
