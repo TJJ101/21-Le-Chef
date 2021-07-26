@@ -18,13 +18,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchTxt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layoutDirection="rtl"
-                app:queryHint="Search" />
-
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
@@ -33,22 +26,31 @@
                 android:text="Le Chef"
                 android:textAlignment="center"
                 android:textColor="#3BF87F"
-                android:textSize="50sp" />
+                android:textSize="50sp"
+                android:paddingTop="10sp"/>
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="serif-monospace"
-                android:text="Some description"
+                android:fontFamily="sans-serif-thin"
+                android:text="Welcome"
                 android:textAlignment="center"
-                android:textColor="#1534FF"
+                android:textColor="#000000"
                 android:textSize="40sp" />
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchTxt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layoutDirection="ltr"
+                app:queryHint="Search" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5sp">
 
                 <TextView
                     android:id="@+id/textView3"
@@ -62,13 +64,25 @@
                     android:id="@+id/cuisineSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
+                <Switch
+                    android:id="@+id/gridSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Grid" />
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/myRecipeRecycler"
                 android:layout_width="match_parent"
-                android:layout_height="600sp" />
+                android:layout_height="655sp"
+                android:paddingLeft="3sp"
+                android:paddingRight="3sp"/>
+
         </LinearLayout>
+
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

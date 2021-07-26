@@ -1,5 +1,7 @@
 package sg.edu.np.madassignment1;
 
+import java.util.ArrayList;
+
 public class User {
     private String id;
     public String getId() {
@@ -33,6 +35,14 @@ public class User {
         this.password = password;
     }
     public User() {
+    }
+
+    private ArrayList<Ingredient> groceryList;
+    public ArrayList<Ingredient> getGroceryList() {return groceryList;}
+    public void setGroceryList(ArrayList<Ingredient> iList){
+        for(Ingredient i : iList){
+            groceryList.add(i);
+        }
     }
 
     public User(String i, String u, String e, String p){

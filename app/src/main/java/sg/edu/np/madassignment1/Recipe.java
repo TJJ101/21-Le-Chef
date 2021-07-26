@@ -35,7 +35,7 @@ public class Recipe implements Serializable {
         this.recipeId = recipeId;
     }
 
-    private List<Steps> stepsList = new ArrayList<Steps>();
+    private List<Steps> stepsList = new ArrayList<  Steps>();
     public List<Steps> getStepsList() {
         return stepsList;
     }

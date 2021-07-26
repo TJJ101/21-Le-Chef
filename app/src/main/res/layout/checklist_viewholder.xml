@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linearlayout"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -23,8 +24,8 @@
         android:layout_weight="1"
         android:ems="10"
         android:gravity="right"
-        android:inputType="textPersonName"
-        android:text="1" />
+        android:inputType="numberDecimal"
+        />
 
     <TextView
         android:id="@+id/measurement"
@@ -39,3 +40,5 @@
         android:layout_height="32dp"
         android:layout_weight="1" />
 </LinearLayout>
+
+
