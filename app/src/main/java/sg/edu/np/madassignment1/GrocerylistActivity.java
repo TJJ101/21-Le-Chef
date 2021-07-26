@@ -62,7 +62,8 @@ public class GrocerylistActivity extends AppCompatActivity {
                 Toast addedToGroceryList = Toast.makeText(getApplicationContext(), "Added to Grocery List", Toast.LENGTH_LONG);
                 addedToGroceryList.show();
                 FirebaseUser user = mAuth.getCurrentUser();
-                mDatabase.child("Users").child(user.getUid()).child("Grocery List").setValue(groceryList);                Integer listSize = groceryList.size();
+                mDatabase.child("Users").child(user.getUid()).child("Grocery List").setValue(groceryList);
+                Integer listSize = groceryList.size();
                 Integer count = 0;
                 while(count < listSize){
                     Log.d("Grocery List Data", groceryList.get(count).getName());
