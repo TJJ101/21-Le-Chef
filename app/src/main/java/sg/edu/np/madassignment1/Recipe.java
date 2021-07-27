@@ -1,8 +1,12 @@
 package sg.edu.np.madassignment1;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Recipe implements Serializable {
     private String name;
@@ -51,9 +55,14 @@ public class Recipe implements Serializable {
 
     public ArrayList<Ingredient> ingredientList = new ArrayList<>();
     public ArrayList<Ingredient> getIngredientList() {return ingredientList;}
+    public void setIngredientList(ArrayList<Ingredient> ingredientList) {
+        this.ingredientList = ingredientList;
+    }
     public void addIngredient(Ingredient i){
         ingredientList.add(i);
     }
+
+    public Recipe(){};
 
     public Recipe(String n, String r, String c, String d, ArrayList<Ingredient> i) {
         this.name = n;
@@ -63,7 +72,21 @@ public class Recipe implements Serializable {
         this.ingredientList = i;
     }
 
-    public void AddSteps(int stepNum, String stepDescription){
-        stepsList.add(new Steps(stepNum, stepDescription));
+    public void addSteps(String stepDescription){
+        stepsList.add(new Steps(stepsList.size()+1, stepDescription));
+    }
+
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("recipeId", recipeId);
+        result.put("name", name);
+        result.put("cuisine", cuisine);
+        result.put("description", description);
+        result.put("ingredientList", ingredientList);
+        result.put("stepsList", stepsList);
+
+        return result;
     }
 }
