@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,6 +36,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -45,12 +47,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddFragment extends Fragment {
-    TextView titleTxt;
+    TextInputLayout nameTxt, descTxt;
     Button uploadBtn;
     ImageView recipeImg;
     LinearLayout titleSection;
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    private Uri filePath;
+    Uri filePath;
 
     @Nullable
     @Override
@@ -76,16 +78,22 @@ public class AddFragment extends Fragment {
             }
         });
 
-        // Click on section title to show
         titleSection = view.findViewById(R.id.titleSection);
+        recipeImg = view.findViewById(R.id.recipeImg);
+        nameTxt = view.findViewById(R.id.textInputNameLayout);
+        descTxt = view.findViewById(R.id.textInputDescriptionLayout);
+
+//        nameTxt.setVisibility(View.GONE);
+//        descTxt.setVisibility(View.GONE);
+//        Click on section title to show
         TextView titleLabel = view.findViewById(R.id.recipeTitle);
         titleLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(recipeImg.getVisibility() == View.VISIBLE){
                     titleSection.animate().translationY(DipToPixels(-300));
-                    titleTxt = view.findViewById(R.id.recipeTitleTxt);
-                    titleTxt.setVisibility(View.VISIBLE);
+                    nameTxt.setVisibility(View.VISIBLE);
+                    descTxt.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -112,7 +120,8 @@ public class AddFragment extends Fragment {
     public void ShowImgSection(){
         if(recipeImg.getVisibility() == View.VISIBLE){
             titleSection.animate().translationY(DipToPixels(0));
-            titleTxt.setVisibility(View.GONE);
+            nameTxt.setVisibility(View.GONE);
+            descTxt.setVisibility(View.GONE);
         }
     }
 
@@ -124,14 +133,12 @@ public class AddFragment extends Fragment {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         activityResultLauncher.launch(intent);
     }
-    // You can do the assignment inside onAttach or onCreate, i.e, before the activity is displayed
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-//                      There are no request codes
                         Intent data = result.getData();
 //                      Get the Uri of data
                         filePath = data.getData();
@@ -156,7 +163,6 @@ public class AddFragment extends Fragment {
                 }
             });
 
-
     private void openDialog() {
         //Finally building an AlertDialog
         final AlertDialog builder = new AlertDialog.Builder(getActivity())
@@ -174,5 +180,17 @@ public class AddFragment extends Fragment {
                 builder.dismiss();
             }
         });
+    }
+
+    //  Hide keyboard
+    public void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
