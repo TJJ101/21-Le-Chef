@@ -54,12 +54,17 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHold
                 String temp = holder.editQty.getText().toString();
                 if(!temp.isEmpty()){
                     if(holder.checkBox.isChecked()){
-                        if(getSelectedIngredientPos(selectedIngredientList, ingredientList.get(position).getName()).equals("")){
+                        if(selectedIngredientList.isEmpty() || selectedIngredientList == null){
                             ingredientList.get(position).setQuantity(Double.parseDouble(temp));
                             selectedIngredientList.add(ingredientList.get(position));
                         }
-                        else{
-                            selectedIngredientList.get(Integer.parseInt(getSelectedIngredientPos(selectedIngredientList, ingredientList.get(position).getName()))).setQuantity(Double.parseDouble(temp));
+                        else {
+                            if (getSelectedIngredientPos(selectedIngredientList, ingredientList.get(position).getName()).equals("")) {
+                                ingredientList.get(position).setQuantity(Double.parseDouble(temp));
+                                selectedIngredientList.add(ingredientList.get(position));
+                            } else {
+                                selectedIngredientList.get(Integer.parseInt(getSelectedIngredientPos(selectedIngredientList, ingredientList.get(position).getName()))).setQuantity(Double.parseDouble(temp));
+                            }
                         }
                     }
                     else{
@@ -68,12 +73,17 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHold
                 }
                 else{
                     if(holder.checkBox.isChecked()){
-                        if(getSelectedIngredientPos(selectedIngredientList, ingredientList.get(position).getName()).equals("")){
+                        if(selectedIngredientList.isEmpty() || selectedIngredientList == null) {
                             ingredientList.get(position).setQuantity(0);
                             selectedIngredientList.add(ingredientList.get(position));
                         }
-                        else{
-                            selectedIngredientList.get(Integer.parseInt(getSelectedIngredientPos(selectedIngredientList, ingredientList.get(position).getName()))).setQuantity(0);
+                        else {
+                            if (getSelectedIngredientPos(selectedIngredientList, ingredientList.get(position).getName()).equals("")) {
+                                ingredientList.get(position).setQuantity(0);
+                                selectedIngredientList.add(ingredientList.get(position));
+                            } else {
+                                selectedIngredientList.get(Integer.parseInt(getSelectedIngredientPos(selectedIngredientList, ingredientList.get(position).getName()))).setQuantity(0);
+                            }
                         }
                     }
                     else {
@@ -103,7 +113,6 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHold
                             }
                             else{
                                 selectedIngredientList.get(Integer.parseInt(getSelectedIngredientPos(selectedIngredientList, ingredientList.get(pos).getName()))).setQuantity(Double.parseDouble(temp));
-
                             }
                         }
                     }
@@ -145,11 +154,29 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHold
 
     public void selectAll(){
         for(GroceryListViewHolder vh : viewList){
-            vh.checkBox.setChecked(true);
+            String temp = vh.editQty.getText().toString();
+            if(vh.checkBox.isChecked() == false){
+                if(getSelectedIngredientPos(selectedIngredientList, String.valueOf(vh.ingredientName.getText())).equals("")){
+                    if(!temp.isEmpty()){
+                        Ingredient i = new Ingredient(String.valueOf(vh.ingredientName.getText()), Double.parseDouble(temp), String.valueOf(vh.measurement.getText()));
+                        selectedIngredientList.add(i);
+                    }
+                    else{
+                        Ingredient i = new Ingredient(String.valueOf(vh.ingredientName.getText()), 0, String.valueOf(vh.measurement.getText()));
+                        selectedIngredientList.add(i);
+                    }
+                }
+                else{
+                    selectedIngredientList.get(Integer.parseInt(getSelectedIngredientPos(selectedIngredientList, String.valueOf(vh.ingredientName.getText())))).setQuantity(Double.parseDouble(String.valueOf(vh.editQty.getText())));
+                }
+                vh.checkBox.setChecked(true);
+                Log.d("Debug 1", String.valueOf(selectedIngredientList.size()));
+            }
         }
     }
 
     public void deselectAll(){
+        selectedIngredientList.clear();
         for(GroceryListViewHolder vh : viewList){
             vh.checkBox.setChecked(false);
         }

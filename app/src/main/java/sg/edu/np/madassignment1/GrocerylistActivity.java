@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -72,15 +73,14 @@ public class GrocerylistActivity extends AppCompatActivity {
             }
         });
 
-        CheckBox selectAll = findViewById(R.id.selectAllBox);
-        selectAll.setOnClickListener(new View.OnClickListener() {
+        Switch selectAll = findViewById(R.id.selectAllSwitch);
+        selectAll.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 if (selectAll.isChecked()){
                     adapter.selectAll();
                     selectAll.setText("Deselect All");
-                }
-                else {
+                } else {
                     adapter.deselectAll();
                     selectAll.setText("Select All");
                 }
