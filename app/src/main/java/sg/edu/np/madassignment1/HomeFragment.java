@@ -1,5 +1,6 @@
 package sg.edu.np.madassignment1;
 
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,43 +23,54 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
 
 public class HomeFragment extends Fragment {
-
-    Recipe mRecipe;
-    RecipeAdapter adapter;
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
+    private DatabaseReference mDatabase = firebaseDatabase.getReference();
+    private Recipe mRecipe;
+    private RecipeAdapter adapter;
     private RecyclerView recyclerView;
-    public ArrayList<Recipe> recipeList = new ArrayList<>();
-    String[] name = {"Chicken Sandwich", "French Fries", "Chicken Soup", "Fish n Chips", "Eggs Benedict", "Ceasar Salad", "Beef Stew", "Salmon Shushi", "Ramen"};
-    String[] cuisine = {"-None-", "Turkish", "Thai", "Japanese", "Indian", "French"};
+    private ArrayList <Recipe> recipeList = new ArrayList<>();
+    private String[] cuisine = {"All", "Turkish", "Thai", "Japanese", "Indian", "French"};
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        //everything for recycler view
+        recyclerView = view.findViewById(R.id.myRecipeRecycler);
         // putting data in to recycler view / recipe object
-        int i = 1;
-        ArrayList<Ingredient> iList = new ArrayList<>();
-        iList.add(new Ingredient("Olive oil", 1, "Teaspoon"));
-        iList.add(new Ingredient("Butter", 2, "Teaspoon"));
+        mDatabase.child("Recipe").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                recipeList = new ArrayList<>();
+                for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                    recipeList.add(eventSnapshot.getValue(Recipe.class));
+                }
 
-        for (String n : name){
-            if (i > 5){i = 1;}
+                adapter = new RecipeAdapter(recipeList);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                adapter.notifyDataSetChanged();
+                Log.d("SIZE", "" + recipeList.size());
 
-            mRecipe = new Recipe(
-                    n,
-                    "Rating",
-                    cuisine[i],
-                    "This is a description",
-                    iList
-            );
-            recipeList.add(mRecipe);
-            i ++;
-        }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
-        //for the spinner activity
         Spinner spinner = (Spinner) view.findViewById(R.id.cuisineSpinner);
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, cuisine);
         spinner.setAdapter(spinnerAdapter);
@@ -70,7 +82,6 @@ public class HomeFragment extends Fragment {
                 Log.v("item", (String) parent.getItemAtPosition(position));
                 switch (position) {
                     case 0:
-                        adapter.getCuisineFilter().filter("");
                         break;
                     case 1:
                         adapter.getCuisineFilter().filter("Turkish");
@@ -92,7 +103,7 @@ public class HomeFragment extends Fragment {
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // I have no idea what to put here, probably noting
+                // nothing is selected
             }
         });
 
@@ -126,13 +137,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //everything for recycler
-        recyclerView = view.findViewById(R.id.myRecipeRecycler);
-        adapter = new RecipeAdapter(recipeList);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
 
         return view;
     }
