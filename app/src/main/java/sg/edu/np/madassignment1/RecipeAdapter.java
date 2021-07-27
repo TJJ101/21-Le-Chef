@@ -114,9 +114,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            recipeList.clear();
-            recipeList.addAll((List) results.values);
-            notifyDataSetChanged();
+            if(recipeList!=null){
+                recipeList.clear();
+                recipeList.addAll((List) results.values);
+                notifyDataSetChanged();
+            }
         }
     };
 
@@ -145,9 +147,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            recipeList.clear();
-            recipeList.addAll((List) results.values);
-            notifyDataSetChanged();
+            if(recipeList != null){
+                recipeList.clear();
+                recipeList.addAll((List) results.values);
+                notifyDataSetChanged();
+            }
         }
     };
 }

@@ -33,7 +33,6 @@ public class SavedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_saved, container, false);
 
-        recyclerView = view.findViewById(R.id.myRecipeRecycler);
         mDatabase.child("Recipe").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -42,6 +41,7 @@ public class SavedFragment extends Fragment {
                     recipeList.add(eventSnapshot.getValue(Recipe.class));
                 }
 
+                recyclerView = view.findViewById(R.id.savedRecipeRecycler);
                 adapter = new RecipeAdapter(recipeList);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));

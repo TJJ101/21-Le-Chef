@@ -48,7 +48,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         //everything for recycler view
-        recyclerView = view.findViewById(R.id.myRecipeRecycler);
         // putting data in to recycler view / recipe object
         mDatabase.child("Recipe").addValueEventListener(new ValueEventListener() {
             @Override
@@ -58,6 +57,7 @@ public class HomeFragment extends Fragment {
                     recipeList.add(eventSnapshot.getValue(Recipe.class));
                 }
 
+                recyclerView = view.findViewById(R.id.recipeRecycler);
                 adapter = new RecipeAdapter(recipeList);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
