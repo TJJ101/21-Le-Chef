@@ -52,10 +52,6 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(DetailsActivity.this, GrocerylistActivity.class);
-                intent.putExtra("Name", recipe.getName());
-                intent.putExtra("Cuisine", recipe.getCuisine());
-                intent.putExtra("Rating", recipe.getRating());
-                intent.putExtra("Description", recipe.getDescription());
                 intent.putExtra("IngredientList", (Serializable)recipe.getIngredientList());
                 startActivity(intent);
             }

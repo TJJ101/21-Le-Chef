@@ -42,12 +42,7 @@ public class GrocerylistActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         Intent in = getIntent();
-        String name = in.getStringExtra("Name");
-        String cuisine = in.getStringExtra("Cuisine");
-        String rating = in.getStringExtra("Rating");
-        String description = in.getStringExtra("Description");
         ingredientList = (ArrayList<Ingredient>) in.getSerializableExtra("IngredientList");
-        Recipe recipe = new Recipe(name, cuisine, rating, description, ingredientList);
 
         RecyclerView recyclerView = findViewById(R.id.ingredientList);
         adapter = new GroceryListAdapter(ingredientList);
