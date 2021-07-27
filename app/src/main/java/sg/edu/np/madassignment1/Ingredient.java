@@ -19,6 +19,8 @@ public class Ingredient implements Serializable {
     public String getMeasurement(){return measurement;}
     public void setMeasurement(String m) {this.measurement = m;}
 
+    Ingredient(){}
+
     public Ingredient(String n, double q, String m){
         this.name = n;
         this.quantity = q;
