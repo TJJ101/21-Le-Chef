@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,14 +63,27 @@ public class GrocerylistActivity extends AppCompatActivity {
                 Toast addedToGroceryList = Toast.makeText(getApplicationContext(), "Added to Grocery List", Toast.LENGTH_LONG);
                 addedToGroceryList.show();
                 FirebaseUser user = mAuth.getCurrentUser();
-                mDatabase.child("Users").child(user.getUid()).child("Grocery List").setValue(groceryList);                Integer listSize = groceryList.size();
-                Integer count = 0;
-                while(count < listSize){
-                    Log.d("Grocery List Data", groceryList.get(count).getName());
-                    Log.d("Grocery List Data", String.valueOf(groceryList.get(count).getQuantity()));
-                    count += 1;
+                //mDatabase.child("Users").child(user.getUid()).child("Grocery List").setValue(groceryList);                Integer listSize = groceryList.size();
+                for(int i = 0; i < groceryList.size(); i++){
+                    Log.d("Grocery Test Data", groceryList.get(i).getName());
+                    Log.d("Grocery Test Data", String.valueOf(groceryList.get(i).getQuantity()));
                 }
                 finish();
+            }
+        });
+
+        CheckBox selectAll = findViewById(R.id.selectAllBox);
+        selectAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectAll.isChecked()){
+                    adapter.selectAll();
+                    selectAll.setText("Deselect All");
+                }
+                else {
+                    adapter.deselectAll();
+                    selectAll.setText("Select All");
+                }
             }
         });
     }

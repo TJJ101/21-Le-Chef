@@ -19,10 +19,6 @@ public class Ingredient implements Serializable {
     public String getMeasurement(){return measurement;}
     public void setMeasurement(String m) {this.measurement = m;}
 
-    public boolean isSelected;
-    public boolean getSelected() {return isSelected;}
-    public void setSelected(boolean selected) {isSelected = selected;}
-
     public Ingredient(String n, double q, String m){
         this.name = n;
         this.quantity = q;
