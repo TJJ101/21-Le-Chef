@@ -55,7 +55,13 @@ public class StepsActivity extends AppCompatActivity {
                 for (Steps s : recipe.getStepsList()){
                     stepsList.add(s);
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.stepsFragment_container, new StepsFragment()).commit();
+
+                Fragment fragment = new StepsFragment();
+                extra.putInt("stepNum", steps);
+                extra.putString("stepDes", stepsList.get(steps).getStepDescription());
+                Log.d("debug", "back" + extra);
+                fragment.setArguments(extra);
+                getSupportFragmentManager().beginTransaction().replace(R.id.stepsFragment_container, fragment).commit();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
