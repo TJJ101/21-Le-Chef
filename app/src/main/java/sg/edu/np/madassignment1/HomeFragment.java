@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     public ArrayList<Recipe> recipeList = new ArrayList<>();
 /*    String[] name = {"Chicken Sandwich", "French Fries", "Chicken Soup", "Fish n Chips", "Eggs Benedict", "Ceasar Salad", "Beef Stew", "Salmon Shushi", "Ramen"};*/
-    String[] cuisine = {"-None-", "Turkish", "Thai", "Japanese", "Indian", "French"};
+    String[] cuisine = {"-None-", "Turkish", "Thai", "Japanese", "Indian", "French", "Chinese", "Western"};
 
     @Nullable
     @Override
@@ -99,6 +99,12 @@ public class HomeFragment extends Fragment {
                         break;
                     case 5:
                         adapter.getCuisineFilter().filter("French");
+                        break;
+                    case 6:
+                        adapter.getCuisineFilter().filter("Chinese");
+                        break;
+                    case 7:
+                        adapter.getCuisineFilter().filter("Western");
                         break;
 
                 }
