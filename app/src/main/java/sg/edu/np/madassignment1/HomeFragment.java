@@ -132,9 +132,11 @@ public class HomeFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
+                    gridSwitch.setText("Grid");
                 }
                 else{
                     recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
+                    gridSwitch.setText("Single");
                 }
             }
         });

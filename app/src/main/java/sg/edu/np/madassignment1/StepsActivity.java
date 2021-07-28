@@ -1,18 +1,21 @@
 package sg.edu.np.madassignment1;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +35,7 @@ public class StepsActivity extends AppCompatActivity {
     private DatabaseReference mDatabase = firebaseDatabase.getReference();
     Recipe recipe = new Recipe();
     ArrayList<Steps> stepsList = new ArrayList<>();
+    AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,9 @@ public class StepsActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
 
+        //setup alert dialog
+        builder = new AlertDialog.Builder(this);
+
         //get the recipe id
         Intent intent = getIntent();
         String recipeId = intent.getStringExtra("recipeId");
@@ -49,10 +56,10 @@ public class StepsActivity extends AppCompatActivity {
         mDatabase.child("Recipe").orderByChild("recipeId").equalTo(recipeId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     recipe = snapshot.getValue(Recipe.class);
                 }
-                for (Steps s : recipe.getStepsList()){
+                for (Steps s : recipe.getStepsList()) {
                     stepsList.add(s);
                 }
 
@@ -63,6 +70,7 @@ public class StepsActivity extends AppCompatActivity {
                 fragment.setArguments(extra);
                 getSupportFragmentManager().beginTransaction().replace(R.id.stepsFragment_container, fragment).commit();
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
@@ -77,32 +85,52 @@ public class StepsActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment fragment = new StepsFragment();
-            switch (item.getItemId()){
+            switch (item.getItemId()) {
                 case R.id.nav_back:
-                    if (steps > 0){
-                        steps --;
+                    if (steps > 0) {
+                        steps--;
                         extra.putInt("stepNum", steps);
                         extra.putString("stepDes", stepsList.get(steps).getStepDescription());
                         Log.d("debug", "back" + extra);
                         fragment.setArguments(extra);
                         getSupportFragmentManager().beginTransaction().replace(R.id.stepsFragment_container, fragment).commit();
                     }
+                    else {
+                        alertDialog("This is already the first step", "Notice");
+                    }
                     break;
                 case R.id.nav_home2:
                     finish();
                     break;
                 case R.id.nav_next:
-                    if (steps < stepsList.size() - 1){
-                        steps ++;
+                    if (steps < stepsList.size() - 1) {
+                        steps++;
                         extra.putInt("stepNum", steps);
                         extra.putString("stepDes", stepsList.get(steps).getStepDescription());
                         Log.d("debug", "next" + extra);
                         fragment.setArguments(extra);
                         getSupportFragmentManager().beginTransaction().replace(R.id.stepsFragment_container, fragment).commit();
                     }
+                    else {
+                        alertDialog("This is already the last step", "Notice");
+                    }
                     break;
             }
             return true;
         }
     };
+
+    public void alertDialog(String message, String title) {
+        //Setting message manually and performing action on button click
+        builder.setMessage(message)
+                .setCancelable(true)
+                .setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.setTitle(title);
+        alert.show();
+    }
 }
