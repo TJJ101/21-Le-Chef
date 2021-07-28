@@ -47,10 +47,6 @@ public class StepsFragment extends Fragment {
             stepNumTxt.setText("Step: " + (stepNum + 1));
             stepDesTxt.setText(stepDes);
         }
-        else{
-            Log.d("Im so this bullshit", "YES");
-            stepDesTxt.setText("I HAVE BO IDEA WHYYYYYYYYYYYY");
-        }
 
         //populate arrays
         int i = 0;

@@ -108,7 +108,7 @@
                     android:paddingLeft="20dp"
                     android:paddingTop="20dp"
                     android:paddingBottom="10dp"
-                    android:text="Recipe Name"
+                    android:text="Recipe Details"
                     android:textSize="20dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -119,8 +119,8 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="10dp"
-                    app:boxStrokeColor="#c9c9c9"
-                    app:boxBackgroundColor="#f7f7f7">
+                    app:boxBackgroundColor="#f7f7f7"
+                    app:boxStrokeColor="#c9c9c9">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/textInputNameText"
@@ -140,21 +140,21 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="20dp"
-                    app:boxStrokeColor="#c9c9c9"
-                    app:boxBackgroundColor="#f7f7f7">
+                    app:boxBackgroundColor="#f7f7f7"
+                    app:boxStrokeColor="#c9c9c9">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/textInputDescriptionText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Description"
                         android:gravity="top"
+                        android:hint="Description"
                         android:inputType="textMultiLine"
                         android:overScrollMode="always"
                         android:scrollbarStyle="insideInset"
                         android:scrollbars="vertical"
-                        android:textColorHint="#c9c9c9"
                         android:textColor="#2C2C2C"
-                        />
+                        android:textColorHint="#c9c9c9" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -171,9 +171,9 @@
                         android:id="@+id/cuisineDropdown"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Cuisine"
                         android:background="#f7f7f7"
-                        android:textSize="16sp"/>
+                        android:hint="Cuisine"
+                        android:textSize="16sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

@@ -35,8 +35,8 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    public User() {
-    }
+
+    public User() { }
 
     private ArrayList<Ingredient> groceryList = new ArrayList<>();
     public ArrayList<Ingredient> getGroceryList() {return groceryList;}
