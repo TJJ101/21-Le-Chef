@@ -137,7 +137,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cError" />
 
         <TextView
-            android:id="@+id/toLogin"
+            android:id="@+id/userIdTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="45dp"

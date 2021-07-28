@@ -104,7 +104,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
 
-        TextView toLoginBtn = findViewById(R.id.toLogin);
+        TextView toLoginBtn = findViewById(R.id.userIdTxt);
 //      Make specific text bold
         String sourceString = "Already have an account? <b>Login</b>" ;
         toLoginBtn.setText(Html.fromHtml(sourceString));
