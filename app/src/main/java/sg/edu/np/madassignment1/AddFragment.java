@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -34,18 +35,22 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.io.IOException;
 
 public class AddFragment extends Fragment {
-    TextInputLayout nameTxt, descTxt;
+    TextInputLayout nameTxt, descTxt, cuisineTxt;
     Button uploadBtn;
     ImageView recipeImg;
     LinearLayout titleSection;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     Uri filePath;
     String[] cuisine = {"Turkish", "Thai", "Japanese", "Indian", "French", "Chinese", "Western"};
+    AutoCompleteTextView autoCompleteTextView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add, container, false);
+
+        autoCompleteTextView = view.findViewById(R.id.cuisineDropdown);
+        autoCompleteTextView.setInputType(InputType.TYPE_CLASS_TEXT);
 
         uploadBtn = view.findViewById(R.id.uploadBtn);
         recipeImg = view.findViewById(R.id.recipeImg);
@@ -70,24 +75,19 @@ public class AddFragment extends Fragment {
         recipeImg = view.findViewById(R.id.recipeImg);
         nameTxt = view.findViewById(R.id.textInputNameLayout);
         descTxt = view.findViewById(R.id.textInputDescriptionLayout);
+        cuisineTxt = view.findViewById(R.id.textInputDropdownLayout);
 
-//        nameTxt.setVisibility(View.GONE);
-//        descTxt.setVisibility(View.GONE);
 //        Click on section title to show
         TextView titleLabel = view.findViewById(R.id.recipeTitle);
         titleLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(recipeImg.getVisibility() == View.VISIBLE){
-                    titleSection.animate().translationY(DipToPixels(-300));
-                    nameTxt.setVisibility(View.VISIBLE);
-                    descTxt.setVisibility(View.VISIBLE);
-                }
+                hideImgSection();
             }
         });
 
         //setup the cuisine dropdown text
-        ArrayAdapter<String> cuisineAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item, cuisine);
+        ArrayAdapter<String> cuisineAdapter = new ArrayAdapter<String>(getActivity(), R.layout.dropdown, cuisine);
         AutoCompleteTextView cuisineTxt = view.findViewById(R.id.cuisineDropdown);
         cuisineTxt.setThreshold(1);//start when u type first char
         cuisineTxt.setAdapter(cuisineAdapter);
@@ -111,11 +111,16 @@ public class AddFragment extends Fragment {
         );
     }
 
+    public void hideImgSection(){
+        if(recipeImg.getVisibility() == View.VISIBLE){
+            titleSection.animate().translationY(DipToPixels(-300));
+        }
+    }
+
     public void ShowImgSection(){
         if(recipeImg.getVisibility() == View.VISIBLE){
             titleSection.animate().translationY(DipToPixels(0));
-            nameTxt.setVisibility(View.GONE);
-            descTxt.setVisibility(View.GONE);
+            cuisineTxt.setVisibility(View.GONE);
         }
     }
 

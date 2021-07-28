@@ -64,7 +64,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
         StorageReference imageRef = storage.getReference().child("images").child(imgName);
 
-        Glide.with(context).load(imageRef).into(holder.myRecipeImg);
+        Glide.with(context).load(imageRef).diskCacheStrategy(DiskCacheStrategy.DATA).centerCrop().into(holder.myRecipeImg);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -137,10 +137,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
+                    adapter = new RecipeAdapter(getContext(),recipeList);
+                    recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
                     gridSwitch.setText("Grid");
                 }
                 else{
+                    adapter = new RecipeAdapter(getContext(),recipeList);
+                    recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
                     gridSwitch.setText("Single");
                 }
