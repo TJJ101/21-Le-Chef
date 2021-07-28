@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         //everything for recycler view
         // putting data in to recycler view / recipe object
-        adapter = new RecipeAdapter(recipeList);
+        adapter = new RecipeAdapter(getContext(), recipeList);
         mDatabase.child("Recipe").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -59,7 +59,7 @@ public class HomeFragment extends Fragment {
                 }
 
                 recyclerView = view.findViewById(R.id.recipeRecycler);
-                adapter = new RecipeAdapter(recipeList);
+                adapter = new RecipeAdapter(getContext(),recipeList);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
                 recyclerView.setItemAnimator(new DefaultItemAnimator());

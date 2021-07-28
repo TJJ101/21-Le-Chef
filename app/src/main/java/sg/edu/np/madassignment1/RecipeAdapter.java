@@ -2,7 +2,10 @@ package sg.edu.np.madassignment1;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,24 +34,37 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
     private List<Recipe> recipeList;
     private List<Recipe> recipeListFull;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    Context context;
 
+    RecipeAdapter(Context context, ArrayList<Recipe> recipeList){
+        this.recipeList = recipeList;
+        this.context = context;
+        recipeListFull = new ArrayList<>(recipeList);
+    }
 
     @NonNull
     @Override
     public RecipeAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(
+        View view = LayoutInflater.from(context).inflate(
                 R.layout.recipe_viewholder,
                 parent,
                 false);
+
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecipeAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Recipe selectedRecipe = recipeList.get(position);
         holder.myRecipeName.setText(selectedRecipe.getName());
         holder.myRecipeCuisine.setText((selectedRecipe.getCuisine()));
         holder.myRecipeRating.setText((selectedRecipe.getRating()));
+        String imgName = selectedRecipe.getRecipeId() + ".jpeg";
+
+        StorageReference imageRef = storage.getReference().child("images").child(imgName);
+
+        Glide.with(context).load(imageRef).into(holder.myRecipeImg);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,12 +97,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
             myRecipeRating = itemView.findViewById(R.id.myRecipeRating);
             myRecipeImg = itemView.findViewById(R.id.myRecipeImg);
         }
-    }
-
-
-    RecipeAdapter(ArrayList<Recipe> recipeList){
-        this.recipeList = recipeList;
-        recipeListFull = new ArrayList<>(recipeList);
     }
 
     @Override
