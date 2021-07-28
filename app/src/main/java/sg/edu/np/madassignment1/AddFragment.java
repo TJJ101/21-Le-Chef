@@ -1,6 +1,7 @@
 package sg.edu.np.madassignment1;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,17 +9,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
@@ -33,9 +37,11 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class AddFragment extends Fragment {
     TextInputLayout nameTxt, descTxt, cuisineTxt;
+    TextView addBtn, ingredientNameTxt, ingredientQtyTxt, ingredientUnitTxt;
     Button uploadBtn;
     ImageView recipeImg;
     LinearLayout titleSection;
@@ -43,12 +49,19 @@ public class AddFragment extends Fragment {
     Uri filePath;
     String[] cuisine = {"Turkish", "Thai", "Japanese", "Indian", "French", "Chinese", "Western"};
     AutoCompleteTextView autoCompleteTextView;
+    ArrayList<Ingredient> ingredientList;
+    ListView listView;
+    Boolean imgIsHidden, titleIsHidden, ingredientIsHidden, stepsIsHidden;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add, container, false);
 
+        //Initialise data
+        imgIsHidden = titleIsHidden = ingredientIsHidden = stepsIsHidden = false;
+
+        //Set autoCompleteTextView input type to text
         autoCompleteTextView = view.findViewById(R.id.cuisineDropdown);
         autoCompleteTextView.setInputType(InputType.TYPE_CLASS_TEXT);
 
@@ -73,16 +86,27 @@ public class AddFragment extends Fragment {
 
         titleSection = view.findViewById(R.id.titleSection);
         recipeImg = view.findViewById(R.id.recipeImg);
-        nameTxt = view.findViewById(R.id.textInputNameLayout);
+        nameTxt = view.findViewById(R.id.ingredientTextView);
         descTxt = view.findViewById(R.id.textInputDescriptionLayout);
         cuisineTxt = view.findViewById(R.id.textInputDropdownLayout);
 
-//        Click on section title to show
-        TextView titleLabel = view.findViewById(R.id.recipeTitle);
-        titleLabel.setOnClickListener(new View.OnClickListener() {
+        ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
+        if (viewTreeObserver.isAlive()) {
+            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    titleSection.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    Log.d("ONLINE PIXELS TO DP", "" + convertPixelsToDp(titleSection.getHeight()));
+                }
+            });
+        }
+
+        // Click on section title to show & hide section
+        TextView imgLabel = view.findViewById(R.id.imgLabel);
+        imgLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideImgSection();
+                HideImgSection();
             }
         });
 
@@ -92,15 +116,44 @@ public class AddFragment extends Fragment {
         cuisineTxt.setThreshold(1);//start when u type first char
         cuisineTxt.setAdapter(cuisineAdapter);
 
-        TextView imgLabel = view.findViewById(R.id.imgLabel);
-        imgLabel.setOnClickListener(new View.OnClickListener() {
+
+
+        //for adding new steps to steps array and list view
+        listView = (ListView) view.findViewById(R.id.stepListView);
+        addBtn = (TextView) view.findViewById(R.id.addIngredientBtn);
+        ingredientNameTxt = (TextView) view.findViewById(R.id.addIngredientTxt);
+        ingredientQtyTxt = (TextView) view.findViewById(R.id.addQtyTxt);
+        ingredientUnitTxt = (TextView) view.findViewById(R.id.addUnitTxt);
+
+        ingredientList = new ArrayList<Ingredient>();
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) listView.getLayoutParams();
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowImgSection();
+                String steps = ingredientNameTxt.getText().toString();
+                if (!steps.isEmpty() && !(steps.trim().length() == 0)){
+                    steps = ingredientNameTxt.getText().toString();
+                    ingredientList.add(new Ingredient(
+                            ingredientNameTxt.getText().toString(),
+                            Double.parseDouble(ingredientQtyTxt.getText().toString()),
+                            ingredientUnitTxt.getText().toString()));
+                    lp.height += DipToPixels(60);
+                    listView.setLayoutParams(lp);
+                    listView.setAdapter(new IngredientAdapter(ingredientList, getContext()));
+                    Log.d("SIZEESE", "" + ingredientList.size());
+                }
+
+                //hide the keyboard
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                ingredientNameTxt.setText("");
             }
         });
-
         return view;
+    }
+
+    public float convertPixelsToDp(float px){
+        return px / ((float) getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     public float DipToPixels(float dp){
@@ -110,17 +163,16 @@ public class AddFragment extends Fragment {
                 getResources().getDisplayMetrics()
         );
     }
-
-    public void hideImgSection(){
+//  Hide image section
+    public void HideImgSection(){
         if(recipeImg.getVisibility() == View.VISIBLE){
-            titleSection.animate().translationY(DipToPixels(-300));
-        }
-    }
-
-    public void ShowImgSection(){
-        if(recipeImg.getVisibility() == View.VISIBLE){
-            titleSection.animate().translationY(DipToPixels(0));
-            cuisineTxt.setVisibility(View.GONE);
+            if(imgIsHidden){
+                titleSection.animate().translationY(DipToPixels(0));
+            }
+            else{
+                titleSection.animate().translationY(DipToPixels(-300));
+            }
+            imgIsHidden = !imgIsHidden;
         }
     }
 

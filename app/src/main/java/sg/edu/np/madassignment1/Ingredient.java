@@ -3,7 +3,7 @@ package sg.edu.np.madassignment1;
 import java.io.Serializable;
 
 public class Ingredient implements Serializable {
-    public String name;
+    private String name;
     public String getName() {
         return name;
     }
@@ -11,19 +11,19 @@ public class Ingredient implements Serializable {
         this.name = n;
     }
 
-    public double quantity;
+    private double quantity;
     public double getQuantity() {return quantity;}
     public void setQuantity(double q) {this.quantity = q;}
 
-    public String measurement;
-    public String getMeasurement(){return measurement;}
-    public void setMeasurement(String m) {this.measurement = m;}
+    private String unit;
+    public String getUnit(){return unit;}
+    public void setUnit(String m) {this.unit = m;}
 
     Ingredient(){}
 
     public Ingredient(String n, double q, String m){
         this.name = n;
         this.quantity = q;
-        this.measurement = m;
+        this.unit = m;
     }
 }

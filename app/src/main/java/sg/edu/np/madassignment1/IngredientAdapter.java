@@ -10,11 +10,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class StepsAdapter extends BaseAdapter implements ListAdapter {
-    private ArrayList<Steps> list = new ArrayList<Steps>();
+public class IngredientAdapter extends BaseAdapter implements ListAdapter {
+    private ArrayList<Ingredient> list = new ArrayList<Ingredient>();
     private Context context;
 
-    public StepsAdapter(ArrayList<Steps> list, Context context) {
+    public IngredientAdapter(ArrayList<Ingredient> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -39,21 +39,21 @@ public class StepsAdapter extends BaseAdapter implements ListAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.steps_viewholder, null);
+            view = inflater.inflate(R.layout.ingredient_viewholder, null);
         }
 
         //Handle TextView and display string from your list
-        TextView stepNum = (TextView)view.findViewById(R.id.stepNum);
-        stepNum.setText(list.get(position).getStepNum());
+        TextView ingredientTxt = (TextView)view.findViewById(R.id.ingredientTextView);
+        ingredientTxt.setText(list.get(position).getName());
 
-        TextView stepsDesc = (TextView)view.findViewById(R.id.stepsTextView);
-        stepsDesc.setText(list.get(position).getStepDescription());
+        TextView qtyTxt = (TextView)view.findViewById(R.id.qtyTextView);
+        qtyTxt.setText(""+list.get(position).getQuantity());
 
-        TextView stepTime = (TextView)view.findViewById(R.id.stepTime);
-        stepTime.setText(list.get(position).getTime());
+        TextView unitTxt = (TextView)view.findViewById(R.id.unitTextView);
+        unitTxt.setText(list.get(position).getUnit());
 
         //Handle buttons and add onClickListeners
-        TextView deleteBtn = (TextView) view.findViewById(R.id.stepsDeleteBtn);
+        TextView deleteBtn = (TextView) view.findViewById(R.id.ingredientDeleteBtn);
 
         deleteBtn.setOnClickListener(new View.OnClickListener(){
             @Override

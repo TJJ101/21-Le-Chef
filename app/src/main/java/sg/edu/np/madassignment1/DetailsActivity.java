@@ -42,7 +42,7 @@ public class DetailsActivity extends AppCompatActivity {
         TextView ingredientTxt = findViewById(R.id.ingredientTxt);
         String ingredients = "";
         for(Ingredient i : recipe.getIngredientList()){
-            ingredients += i.getQuantity() + " " +  i.getMeasurement() + " of " + i.getName() + "\n:";
+            ingredients += i.getQuantity() + " " +  i.getUnit() + " of " + i.getName() + "\n:";
         };
         ingredientTxt.setText(ingredients);
         

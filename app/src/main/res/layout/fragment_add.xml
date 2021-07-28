@@ -22,28 +22,29 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
             <!--    Horizontal Line-->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
                 android:background="@android:color/darker_gray" />
 
             <!--    Start of Upload Picture section    -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="10dp">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -55,6 +56,7 @@
                         android:id="@+id/imgLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:fontFamily="@font/roboto_medium"
                         android:paddingLeft="20dp"
                         android:paddingTop="10dp"
@@ -62,11 +64,6 @@
                         android:text="Upload Picture"
                         android:textSize="20dp" />
 
-                    <View
-                        android:id="@+id/imgLabelView"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/uploadBtn"
@@ -91,7 +88,7 @@
             <LinearLayout
                 android:id="@+id/titleSection"
                 android:layout_width="wrap_content"
-                android:layout_height="800dp"
+                android:layout_height="wrap_content"
                 android:background="#FFFFFF"
                 android:orientation="vertical">
 
@@ -112,7 +109,7 @@
                     android:textSize="20dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputNameLayout"
+                    android:id="@+id/ingredientTextView"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -140,19 +137,19 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="20dp"
                     app:boxStrokeColor="#737373">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/textInputDescriptionText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Description"
                         android:gravity="top"
+                        android:hint="Description"
                         android:inputType="textMultiLine"
                         android:overScrollMode="always"
                         android:scrollbarStyle="insideInset"
                         android:scrollbars="vertical"
-                        android:textColorHint="#c9c9c9"
                         android:textColor="#2C2C2C"
-                        />
+                        android:textColorHint="#c9c9c9" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -169,23 +166,145 @@
                         android:id="@+id/cuisineDropdown"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Cuisine"
                         android:background="#ffffff"
-                        android:inputType="none"
-                        android:textSize="16sp"
                         android:dropDownHeight="100dp"
+                        android:hint="Cuisine"
+                        android:inputType="none"
                         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-                        />
+                        android:textSize="16sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
                     android:background="@android:color/darker_gray" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/ingredientsLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/roboto_medium"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="Ingredients"
+                        android:textSize="20dp" />
+
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/addIngredientBtn"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="3dp"
+                        android:backgroundTint="#404040"
+                        android:text="+"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/addIngredientLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="3dp"
+                        app:boxStrokeColor="#737373"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/addQtyLayout"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/addIngredientTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Ingredient name"
+                            android:inputType="text"
+                            android:textColor="#2C2C2C"
+                            android:textColorHint="#c9c9c9"
+                            android:textSize="14dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/addQtyLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        app:boxStrokeColor="#737373"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/addUnitLayout"
+                        app:layout_constraintStart_toEndOf="@+id/addIngredientLayout"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/addQtyTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Qty"
+                            android:inputType="none"
+                            android:textColor="#2C2C2C"
+                            android:textColorHint="#c9c9c9"
+                            android:textSize="14dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/addUnitLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        app:boxStrokeColor="#737373"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/addUnitTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:hint="Unit"
+                            android:inputType="none"
+                            android:textColor="#2C2C2C"
+                            android:textColorHint="#c9c9c9"
+                            android:textSize="12dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ListView
+                    android:id="@+id/stepListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp">
+
+                </ListView>
 
 
             </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

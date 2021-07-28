@@ -93,7 +93,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHold
             }
         });
 
-        holder.measurement.setText(ingredient.getMeasurement());
+        holder.measurement.setText(ingredient.getUnit());
 
         holder.checkBox.setTag(position);
         holder.checkBox.setOnClickListener(new View.OnClickListener() {
