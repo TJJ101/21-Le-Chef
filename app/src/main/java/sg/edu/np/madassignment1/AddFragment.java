@@ -72,7 +72,7 @@ public class AddFragment extends Fragment {
         recipeImg.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Log.d("LONGGG", "CLICKKKKKKKKK");
+                Log.d("LONGGG", "DICKKKKKKKKK");
                 openDialog();
                 return true;
             }

@@ -1,6 +1,5 @@
 package sg.edu.np.madassignment1;
 
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,8 +39,9 @@ public class HomeFragment extends Fragment {
     private Recipe mRecipe;
     private RecipeAdapter adapter;
     private RecyclerView recyclerView;
-    private ArrayList <Recipe> recipeList = new ArrayList<>();
-    private String[] cuisine = {"All", "Turkish", "Thai", "Japanese", "Indian", "French"};
+    public ArrayList<Recipe> recipeList = new ArrayList<>();
+/*    String[] name = {"Chicken Sandwich", "French Fries", "Chicken Soup", "Fish n Chips", "Eggs Benedict", "Ceasar Salad", "Beef Stew", "Salmon Shushi", "Ramen"};*/
+    String[] cuisine = {"-None-", "Turkish", "Thai", "Japanese", "Indian", "French"};
 
     @Nullable
     @Override
@@ -105,7 +105,7 @@ public class HomeFragment extends Fragment {
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // nothing is selected
+                // I have no idea what to put here, probably noting
             }
         });
 
@@ -139,6 +139,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        //everything for recycler
+/*        recyclerView = view.findViewById(R.id.myRecipeRecycler);
+        adapter = new RecipeAdapter(recipeList);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);*/
 
         return view;
     }

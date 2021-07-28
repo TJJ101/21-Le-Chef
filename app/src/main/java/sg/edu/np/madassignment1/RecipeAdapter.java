@@ -17,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder> implements Filterable {
 
     private List<Recipe> recipeList;
@@ -48,17 +51,23 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
                 extras.putString("cuisine", selectedRecipe.getCuisine());
                 extras.putString("rating", selectedRecipe.getRating());
                 extras.putString("description", selectedRecipe.getDescription());
+                extras.putString("recipeId", selectedRecipe.getRecipeId());
                 extras.putSerializable("IngredientList", selectedRecipe.getIngredientList());
                 Intent in = new Intent(holder.itemView.getContext(), DetailsActivity.class);
                 in.putExtras(extras);
                 holder.itemView.getContext().startActivity(in);
 
-                /*fragment.setArguments(extras);
+/*                fragment.setArguments(extras);
                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                *//*FragmentTransaction transaction = myActivity.getSupportFragmentManager().beginTransaction();*//*
+                FragmentTransaction transaction = myActivity.getSupportFragmentManager().beginTransaction();
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new DetailsFragment()).commit();*/
             }
         });
+    }
+
+    RecipeAdapter(ArrayList<Recipe> recipeList){
+        this.recipeList = recipeList;
+        recipeListFull = new ArrayList<>(recipeList);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -73,11 +82,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
         }
     }
 
-
-    RecipeAdapter(ArrayList<Recipe> recipeList){
-        this.recipeList = recipeList;
-        recipeListFull = new ArrayList<>(recipeList);
-    }
 
     @Override
     public int getItemCount() {

@@ -76,7 +76,6 @@ public class Recipe implements Serializable {
         stepsList.add(new Steps(stepsList.size()+1, stepDescription));
     }
 
-
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
@@ -86,7 +85,6 @@ public class Recipe implements Serializable {
         result.put("description", description);
         result.put("ingredientList", ingredientList);
         result.put("stepsList", stepsList);
-
         return result;
     }
 }
