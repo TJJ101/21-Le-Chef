@@ -29,6 +29,7 @@ public class DetailsActivity extends AppCompatActivity {
         String cuisine = in.getStringExtra("cuisine");
         String rating = in.getStringExtra("rating");
         String description = in.getStringExtra("description");
+        String recipeId = in.getStringExtra("recipeId");
         ArrayList<Ingredient> ingredientList = (ArrayList<Ingredient>) in.getSerializableExtra("IngredientList");
         recipe = new Recipe(name, cuisine, rating, description, ingredientList);
 
@@ -62,7 +63,10 @@ public class DetailsActivity extends AppCompatActivity {
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("recipeId", recipeId);
                 Intent in = new Intent(v.getContext(), StepsActivity.class);
+                in.putExtras(bundle);
                 v.getContext().startActivity(in);
             }
         });

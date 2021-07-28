@@ -34,18 +34,22 @@ public class StepsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_steps, container, false);
-
         //for setting the timer to whatever is the default, set it to 30 for now
         minutes = 30 * 60 * 1000;
 
         TextView stepNumTxt = view.findViewById(R.id.stepNumTxt);
+        TextView stepDesTxt = view.findViewById(R.id.stepDesTxt);
+
         // get the current step information
         if (getArguments() != null){
             Integer stepNum = getArguments().getInt("stepNum");
-            stepNumTxt.setText("Step: " + stepNum);
+            String stepDes = getArguments().getString("stepDes");
+            stepNumTxt.setText("Step: " + (stepNum + 1));
+            stepDesTxt.setText(stepDes);
         }
         else{
-            stepNumTxt.setText("Step: 1");
+            Log.d("Im so this bullshit", "YES");
+            stepDesTxt.setText("I HAVE BO IDEA WHYYYYYYYYYYYY");
         }
 
         //populate arrays

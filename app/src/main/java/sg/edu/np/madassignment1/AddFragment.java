@@ -1,12 +1,9 @@
 package sg.edu.np.madassignment1;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,11 +16,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
@@ -32,19 +26,12 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AddFragment extends Fragment {
     TextInputLayout nameTxt, descTxt;
@@ -53,6 +40,7 @@ public class AddFragment extends Fragment {
     LinearLayout titleSection;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     Uri filePath;
+    String[] cuisine = {"Turkish", "Thai", "Japanese", "Indian", "French", "Chinese", "Western"};
 
     @Nullable
     @Override
@@ -72,7 +60,7 @@ public class AddFragment extends Fragment {
         recipeImg.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Log.d("LONGGG", "CLICKKKKKKKKK");
+                Log.d("LONGGG", "DICKKKKKKKKK");
                 openDialog();
                 return true;
             }
@@ -97,6 +85,12 @@ public class AddFragment extends Fragment {
                 }
             }
         });
+
+        //setup the cuisine dropdown text
+        ArrayAdapter<String> cuisineAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item, cuisine);
+        AutoCompleteTextView cuisineTxt = view.findViewById(R.id.cuisineDropdown);
+        cuisineTxt.setThreshold(1);//start when u type first char
+        cuisineTxt.setAdapter(cuisineAdapter);
 
         TextView imgLabel = view.findViewById(R.id.imgLabel);
         imgLabel.setOnClickListener(new View.OnClickListener() {
@@ -164,7 +158,7 @@ public class AddFragment extends Fragment {
             });
 
     private void openDialog() {
-        //Finally building an AlertDialog
+        //build an AlertDialog
         final AlertDialog builder = new AlertDialog.Builder(getActivity())
                 .setMessage("Upload new image")
                 .setPositiveButton("Upload", null)
