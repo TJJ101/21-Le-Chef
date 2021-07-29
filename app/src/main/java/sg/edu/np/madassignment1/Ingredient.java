@@ -19,8 +19,6 @@ public class Ingredient implements Serializable {
     public String getUnit(){return unit;}
     public void setUnit(String m) {this.unit = m;}
 
-    Ingredient(){}
-
     public Ingredient(String n, double q, String m){
         this.name = n;
         this.quantity = q;

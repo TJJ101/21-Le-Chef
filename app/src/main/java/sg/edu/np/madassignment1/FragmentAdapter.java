@@ -1,5 +1,7 @@
 package sg.edu.np.madassignment1;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -21,6 +23,8 @@ public class FragmentAdapter extends FragmentStateAdapter {
             case 1:
                 return new SavedFragment();
             case 2:
+                return new MyGroceryListFragment();
+            case 3:
                 return new ProfileFragment();
         }
         return new MyRecipeFragment();
@@ -28,6 +32,6 @@ public class FragmentAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 4;
     }
 }
