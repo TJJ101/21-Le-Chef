@@ -40,7 +40,6 @@ public class HomeFragment extends Fragment {
     private RecipeAdapter adapter;
     private RecyclerView recyclerView;
     public ArrayList<Recipe> recipeList = new ArrayList<>();
-/*    String[] name = {"Chicken Sandwich", "French Fries", "Chicken Soup", "Fish n Chips", "Eggs Benedict", "Ceasar Salad", "Beef Stew", "Salmon Shushi", "Ramen"};*/
     String[] cuisine = {"-None-", "Turkish", "Thai", "Japanese", "Indian", "French", "Chinese", "Western"};
 
     @Nullable
@@ -106,7 +105,6 @@ public class HomeFragment extends Fragment {
                     case 7:
                         adapter.getCuisineFilter().filter("Western");
                         break;
-
                 }
             }
             @Override
@@ -150,14 +148,6 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-
-        //everything for recycler
-/*        recyclerView = view.findViewById(R.id.myRecipeRecycler);
-        adapter = new RecipeAdapter(recipeList);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);*/
 
         return view;
     }

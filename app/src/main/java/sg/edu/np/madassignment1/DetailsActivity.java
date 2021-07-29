@@ -2,12 +2,18 @@ package sg.edu.np.madassignment1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,6 +21,7 @@ import java.util.ArrayList;
 public class DetailsActivity extends AppCompatActivity {
 
     Recipe recipe;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +37,14 @@ public class DetailsActivity extends AppCompatActivity {
         String rating = in.getStringExtra("rating");
         String description = in.getStringExtra("description");
         String recipeId = in.getStringExtra("recipeId");
+        String imgName = in.getStringExtra("image");
         ArrayList<Ingredient> ingredientList = (ArrayList<Ingredient>) in.getSerializableExtra("IngredientList");
         recipe = new Recipe(name, cuisine, rating, description, ingredientList);
+
+        //get image data
+        ImageView imgView = findViewById(R.id.detailsImgView);
+        StorageReference imageRef = storage.getReference().child("images").child(imgName);
+        Glide.with(this).load(imageRef).centerCrop().into(imgView);
 
         TextView nameTxt = findViewById(R.id.nameTxt);
         nameTxt.setText(recipe.getName());

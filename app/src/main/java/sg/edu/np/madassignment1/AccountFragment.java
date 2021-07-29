@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class AccountFragment extends Fragment {
 
     public FirebaseAuth mAuth;
@@ -33,6 +35,10 @@ public class AccountFragment extends Fragment {
     TabLayout tabLayout;
     ViewPager2 pager2;
     FragmentStateAdapter adapter;
+
+    Fragment myRecipesFrag = new MyRecipeFragment();
+    ArrayList<String> createdRecipes = new ArrayList<>();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,14 +47,17 @@ public class AccountFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
+        //get arguments sent over by mainactivity
+        if (getArguments() != null){
+            createdRecipes = getArguments().getStringArrayList("createdRecipes");
+        }
+
+        //get user data from database
         TextView username = view.findViewById(R.id.usernameTxt);
-        //database shit
-        mDatabase.child("Users").orderByChild("id").equalTo(user.getUid()).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                    theUser = eventSnapshot.getValue(User.class);
-                }
+                theUser = dataSnapshot.getValue(User.class);
                 username.setText(theUser.getUsername());
             }
             @Override
@@ -60,7 +69,7 @@ public class AccountFragment extends Fragment {
         pager2 = view.findViewById(R.id.view_pager2);
 
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        adapter = new FragmentAdapter(fm, getLifecycle());
+        adapter = new FragmentAdapter(fm, getLifecycle(), createdRecipes);
         pager2.setAdapter(adapter);
 
         tabLayout.addTab(tabLayout.newTab().setText("My Recipes"));
@@ -75,11 +84,9 @@ public class AccountFragment extends Fragment {
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
 
@@ -89,7 +96,6 @@ public class AccountFragment extends Fragment {
                 tabLayout.selectTab(tabLayout.getTabAt(position));
             }
         });
-
         return view;
     }
 }

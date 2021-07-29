@@ -67,7 +67,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         app:boxBackgroundColor="#f7f7f7"
@@ -75,7 +75,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputNameLayout">
+        app:layout_constraintTop_toBottomOf="@+id/nameWrongTxt">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editPasswordText"
@@ -90,6 +90,57 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/passwordWrongTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textAlignment="center"
+        android:textColor="#E46F6F"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputPasswordLayout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputPassword2Layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        app:boxBackgroundColor="#f7f7f7"
+        app:boxStrokeColor="#c9c9c9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordWrongTxt">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editPassword2Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Re-type Password"
+            android:inputType="text"
+            android:textColor="#2C2C2C"
+            android:textColorHint="#c9c9c9"
+            tools:layout_editor_absoluteX="30dp"
+            tools:layout_editor_absoluteY="198dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/rePasswordWrongTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:shadowColor="#00000000"
+        android:textAlignment="center"
+        android:textColor="#E46F6F"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputPassword2Layout" />
+
     <Button
         android:id="@+id/editSubmitBtn"
         android:layout_width="253dp"
@@ -98,6 +149,17 @@
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputPasswordLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/rePasswordWrongTxt" />
+
+    <TextView
+        android:id="@+id/nameWrongTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textAlignment="center"
+        android:textColor="#E46F6F"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputNameLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
