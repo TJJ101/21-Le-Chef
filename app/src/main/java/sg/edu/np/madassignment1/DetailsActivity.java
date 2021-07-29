@@ -55,7 +55,12 @@ public class DetailsActivity extends AppCompatActivity {
         TextView ingredientTxt = findViewById(R.id.ingredientTxt);
         String ingredients = "";
         for(Ingredient i : recipe.getIngredientList()){
-            ingredients += i.getQuantity() + " " +  i.getUnit() + " of " + i.getName() + "\n:";
+            if(i.getUnit().equals("none")){
+                ingredients += i.getQuantity() + " " + i.getName() + "\n:";
+            }
+            else{
+                ingredients += i.getQuantity() + " " +  i.getUnit() + " of " + i.getName() + "\n:";
+            }
         };
         ingredientTxt.setText(ingredients);
         

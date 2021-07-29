@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHolder> {
-    Context context;
     ArrayList<Ingredient> ingredientList = new ArrayList<>();
     ArrayList<Ingredient> selectedIngredientList = new ArrayList<>();
     ArrayList<GroceryListViewHolder> viewList = new ArrayList<>();
@@ -67,9 +66,6 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHold
                             }
                         }
                     }
-                    else{
-                        ingredientList.get(position).setQuantity(Double.parseDouble(temp));
-                    }
                 }
                 else{
                     if(holder.checkBox.isChecked()){
@@ -85,9 +81,6 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHold
                                 selectedIngredientList.get(Integer.parseInt(getSelectedIngredientPos(selectedIngredientList, ingredientList.get(position).getName()))).setQuantity(0);
                             }
                         }
-                    }
-                    else {
-                        ingredientList.get(position).setQuantity(0);
                     }
                 }
             }
