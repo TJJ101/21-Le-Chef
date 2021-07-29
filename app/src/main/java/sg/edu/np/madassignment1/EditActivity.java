@@ -232,7 +232,7 @@ import java.util.List;
                         isValid = false;
                     }
                     else {
-                        password2.setText("");
+                        /*password2.setText("");*/
                         isValid = true;
                     }
                 }
