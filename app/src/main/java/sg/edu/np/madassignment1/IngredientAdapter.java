@@ -50,7 +50,7 @@ public class IngredientAdapter extends BaseAdapter implements ListAdapter {
         qtyTxt.setText(""+list.get(position).getQuantity());
 
         TextView unitTxt = (TextView)view.findViewById(R.id.unitTextView);
-        unitTxt.setText(list.get(position).getUnit());
+        unitTxt.setText(list.get(position).getMeasurement());
 
         //Handle buttons and add onClickListeners
         TextView deleteBtn = (TextView) view.findViewById(R.id.ingredientDeleteBtn);

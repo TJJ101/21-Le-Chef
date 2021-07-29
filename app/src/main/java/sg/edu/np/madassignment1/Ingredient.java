@@ -15,13 +15,16 @@ public class Ingredient implements Serializable {
     public double getQuantity() {return quantity;}
     public void setQuantity(double q) {this.quantity = q;}
 
-    private String unit;
-    public String getUnit(){return unit;}
-    public void setUnit(String m) {this.unit = m;}
+    private String measurement;
+    public String getMeasurement(){return measurement;}
+    public void setMeasurement(String m) {this.measurement = m;}
+
+
+    public Ingredient(){}
 
     public Ingredient(String n, double q, String m){
         this.name = n;
         this.quantity = q;
-        this.unit = m;
+        this.measurement = m;
     }
 }

@@ -34,7 +34,6 @@ public class MyGroceryListFragment extends Fragment {
     public FirebaseAuth mAuth;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
     private DatabaseReference mDatabase = firebaseDatabase.getReference();
-    private RecyclerView recyclerView;
     private MyGroceryListAdapter adapter;
 
     ArrayList<Ingredient> myGroceryList = new ArrayList<>();

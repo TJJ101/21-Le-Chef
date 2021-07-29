@@ -1,6 +1,5 @@
 package sg.edu.np.madassignment1;
 
-import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -86,7 +85,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHold
             }
         });
 
-        holder.measurement.setText(ingredient.getUnit());
+        holder.measurement.setText(ingredient.getMeasurement());
 
         holder.checkBox.setTag(position);
         holder.checkBox.setOnClickListener(new View.OnClickListener() {

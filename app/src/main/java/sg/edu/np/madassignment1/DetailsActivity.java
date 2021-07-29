@@ -42,11 +42,11 @@ public class DetailsActivity extends AppCompatActivity {
         TextView ingredientTxt = findViewById(R.id.ingredientTxt);
         String ingredients = "";
         for(Ingredient i : recipe.getIngredientList()){
-            if(i.getUnit().equals("none")){
+            if(i.getMeasurement().equals("none")){
                 ingredients += i.getQuantity() + " " + i.getName() + "\n:";
             }
             else{
-                ingredients += i.getQuantity() + " " +  i.getUnit() + " of " + i.getName() + "\n:";
+                ingredients += i.getQuantity() + " " +  i.getMeasurement() + " of " + i.getName() + "\n:";
             }
         };
         ingredientTxt.setText(ingredients);
