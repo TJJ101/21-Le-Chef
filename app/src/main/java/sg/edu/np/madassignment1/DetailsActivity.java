@@ -72,7 +72,9 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v){
                 Intent intent = new Intent(DetailsActivity.this, GrocerylistActivity.class);
                 intent.putExtra("IngredientList", (Serializable)recipe.getIngredientList());
+                intent.putExtra("recipeName", recipe.getName());
                 startActivity(intent);
+                overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
 

@@ -114,6 +114,7 @@ import java.util.concurrent.CountDownLatch;
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser == null){
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
         }
     }
 
@@ -129,7 +130,6 @@ import java.util.concurrent.CountDownLatch;
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Recipe recipe = dataSnapshot.getValue(Recipe.class);
-                    Log.d("FUCCCCCCK mu life" , recipe + "");
                     recipeList.add(recipe);
                 }
             }

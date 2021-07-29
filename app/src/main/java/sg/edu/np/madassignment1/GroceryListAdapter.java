@@ -7,13 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.text.InputType;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHolder> {
+public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.GroceryListViewHolder> {
     ArrayList<Ingredient> ingredientList = new ArrayList<>();
     ArrayList<Ingredient> selectedIngredientList = new ArrayList<>();
     ArrayList<GroceryListViewHolder> viewList = new ArrayList<>();
@@ -39,12 +42,10 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHold
         holder.editQty.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -85,7 +86,10 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHold
             }
         });
 
-        holder.measurement.setText(ingredient.getMeasurement());
+        if(!holder.measurement.getText().equals("none")){
+            holder.measurement.setVisibility(View.VISIBLE);
+            holder.measurement.setText(ingredient.getMeasurement());
+        }
 
         holder.checkBox.setTag(position);
         holder.checkBox.setOnClickListener(new View.OnClickListener() {
@@ -174,8 +178,40 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListViewHold
         }
     }
 
+    public boolean validationCheck(){
+        int num = 0;
+        for (Ingredient i : selectedIngredientList){
+            if(i.getQuantity() == 0){
+                num += 1;
+            }
+        }
+        if(selectedIngredientList.size() > 0 && num != selectedIngredientList.size()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     @Override
     public int getItemCount() {
         return ingredientList.size();
+    }
+
+    public class GroceryListViewHolder extends RecyclerView.ViewHolder {
+        public TextView ingredientName;
+        public EditText editQty;
+        public CheckBox checkBox;
+        public TextView measurement;
+        public View view;
+
+        public GroceryListViewHolder(View itemView){
+            super(itemView);
+            ingredientName = itemView.findViewById(R.id.ingredientName);
+            editQty = itemView.findViewById(R.id.editQty);
+            checkBox = itemView.findViewById(R.id.checkBox);
+            measurement = itemView.findViewById(R.id.measurement);
+            view = itemView;
+        }
     }
 }

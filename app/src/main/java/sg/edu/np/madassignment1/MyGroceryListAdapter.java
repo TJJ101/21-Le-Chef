@@ -4,6 +4,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +21,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
-public class MyGroceryListAdapter extends RecyclerView.Adapter<MyGroceryListViewHolder> {
+public class MyGroceryListAdapter extends RecyclerView.Adapter<MyGroceryListAdapter.MyGroceryListViewHolder> {
     ArrayList<Ingredient> myGroceryList = new ArrayList<>();
 
     public FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -40,6 +42,7 @@ public class MyGroceryListAdapter extends RecyclerView.Adapter<MyGroceryListView
 
     @Override
     public void onBindViewHolder(@NonNull MyGroceryListViewHolder holder, int position) {
+        holder.acquiredCheck.setChecked(false);
         Log.d("Debug MGLA", String.valueOf(myGroceryList.size()));
         if(myGroceryList.get(position).getMeasurement().equals("none")){
             String text = myGroceryList.get(position).getQuantity() + " "
@@ -59,15 +62,12 @@ public class MyGroceryListAdapter extends RecyclerView.Adapter<MyGroceryListView
         holder.acquiredCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Add code to remove from database
                 FirebaseUser user = mAuth.getCurrentUser();
-                //mDatabase.child("Users").child(user.getUid()).child("groceryList").child()
                 Log.d("Debug MGLA Delete", GetGroceryListDBNum(myGroceryList.get(position), String.valueOf(position)));
-                mDatabase.child("Users").child(user.getUid()).child("groceyList").child(GetGroceryListDBNum(myGroceryList.get(position), String.valueOf(position))).removeValue();
+                Log.d("Debug MGLA Delete", mDatabase.child("Users").child(user.getUid()).child("groceryList").child(GetGroceryListDBNum(myGroceryList.get(position), String.valueOf(position))).getKey());
+                RemoveFromDB(myGroceryList.get(position));
                 myGroceryList.remove(position);
-                notifyDataSetChanged();
                 notifyItemRemoved(position);
-                //holder.acquiredCheck.setChecked(false);
             }
         });
     }
@@ -77,14 +77,47 @@ public class MyGroceryListAdapter extends RecyclerView.Adapter<MyGroceryListView
     }
 
     public String GetGroceryListDBNum(Ingredient i, String pos){
-        String num = "null";
         FirebaseUser user = mAuth.getCurrentUser();
-        num = mDatabase.child("Users").child(user.getUid()).child("groceryList").child(pos).getKey();
+        String num = mDatabase.child("Users").child(user.getUid()).child("groceryList").child(pos).getKey();
         return num;
+    }
+
+    public void RemoveFromDB(Ingredient i){
+        FirebaseUser user = mAuth.getCurrentUser();
+        mDatabase.child("Users").child(user.getUid()).child("groceryList").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if(task.isSuccessful()){
+                    Log.d("Debug Remove", "Success");
+                    for (DataSnapshot data : task.getResult().getChildren()){
+                        Ingredient test = data.getValue(Ingredient.class);
+                        if(i.getName().equals(test.getName())){
+                            Log.d("Debug Remove",data.getKey());
+                            mDatabase.child("Users").child(user.getUid()).child("groceryList").child(data.getKey()).removeValue();
+                            notifyDataSetChanged();
+                        }
+                    }
+                }
+                else {
+                    Log.d("Debug Remove", "Unsuccessful");
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return myGroceryList.size();
+    }
+
+    public class MyGroceryListViewHolder extends RecyclerView.ViewHolder {
+        public TextView myGroceryItem;
+        public CheckBox acquiredCheck;
+
+        public MyGroceryListViewHolder(@NonNull View itemView) {
+            super(itemView);
+            myGroceryItem = itemView.findViewById(R.id.myGroceryListItem);
+            acquiredCheck = itemView.findViewById(R.id.acquiredCheck);
+        }
     }
 }
