@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,20 +42,43 @@ import java.util.concurrent.CountDownLatch;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
     DatabaseReference mDatabase = firebaseDatabase.getReference();
 
+     ArrayList<String> myRecipeList = new ArrayList<>();
+     User theUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//      Hide the top title bar
+        // Hide the top title bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
-//      Initialize Firebase Auth
+        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        try{
+            //get the list of recipe id that the user has created
+            mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    theUser = dataSnapshot.getValue(User.class);
+                    for (String r : theUser.getCreatedRecipes()){
+                        myRecipeList.add(r);
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
+        catch (Exception e){
+            Log.d("fuck", e + "");
+        }
+
 
         // init bottom nav
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
-
         //this is to open the home fragment when creating
         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment_container, new HomeFragment()).commit();
     }
@@ -64,13 +88,15 @@ import java.util.concurrent.CountDownLatch;
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment selectedFragment = null;
-
+            Bundle bundle = new Bundle();
             switch (item.getItemId()){
                 case R.id.nav_home:
                     selectedFragment = new HomeFragment();
                     break;
                 case R.id.nav_account:
                     selectedFragment = new AccountFragment();
+                    bundle.putStringArrayList("createdRecipes", myRecipeList);
+                    selectedFragment.setArguments(bundle);
                     break;
                 case R.id.nav_add:
                     selectedFragment = new AddFragment();
