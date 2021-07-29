@@ -19,7 +19,6 @@ public class Ingredient implements Serializable {
     public String getMeasurement(){return measurement;}
     public void setMeasurement(String m) {this.measurement = m;}
 
-
     public Ingredient(){}
 
     public Ingredient(String n, double q, String m){
