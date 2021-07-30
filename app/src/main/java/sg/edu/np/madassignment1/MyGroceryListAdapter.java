@@ -67,11 +67,6 @@ public class MyGroceryListAdapter extends RecyclerView.Adapter<MyGroceryListAdap
 
     public MyGroceryListAdapter(ArrayList<Ingredient> iList){ this.myGroceryList = iList; }
 
-    /*public String GetGroceryListDBNum(Ingredient i, String pos){
-        FirebaseUser user = mAuth.getCurrentUser();
-        String num = mDatabase.child("Users").child(user.getUid()).child("groceryList").child(pos).getKey();
-        return num;
-    }*/
 
     public void RemoveFromDB(Ingredient i){
         //Animation anim = AnimationUtils.loadAnimation(,android.R.anim.slide_out_right);

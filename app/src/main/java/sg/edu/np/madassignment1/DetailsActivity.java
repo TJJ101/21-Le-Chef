@@ -2,13 +2,9 @@ package sg.edu.np.madassignment1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.transition.Explode;
-import android.transition.Slide;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -97,7 +93,7 @@ public class DetailsActivity extends AppCompatActivity {
         
 
         //button to go add ingredient to Grocery List
-        Button checklistBtn = findViewById(R.id.detailsChecklistBtn);
+        Button checklistBtn = findViewById(R.id.detailsGroceryListBtn);
         checklistBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){

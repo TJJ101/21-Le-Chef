@@ -87,7 +87,7 @@ public class GrocerylistActivity extends AppCompatActivity {
                         Log.d("Grocery Test Data", String.valueOf(groceryList.get(i).getQuantity()));
                     }
                     finish();
-                    //Fade animation for transition
+                    //Left to Right Transition
                     overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
                 }
                 else{

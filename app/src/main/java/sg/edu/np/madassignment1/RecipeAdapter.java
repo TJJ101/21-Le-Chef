@@ -62,9 +62,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Recipe selectedRecipe = recipeList.get(position);
         holder.myRecipeName.setText(selectedRecipe.getName());
-        holder.myRecipeCuisine.setText((selectedRecipe.getCuisine()));
-        holder.myRecipeRating.setText((selectedRecipe.getRating()));
+        holder.myRecipeCuisine.setText("Cuisine Type: " + selectedRecipe.getCuisine());
+        if(selectedRecipe.getRating() == null){
+           holder.myRecipeRating.setText( "0/5 Rating");
+        }else {
+            holder.myRecipeRating.setText(selectedRecipe.getRating() + "/5 Rating");
 
+        }
         //for getting image
         String imgName = selectedRecipe.getRecipeId() + ".jpeg";
         StorageReference imageRef = storage.getReference().child("images").child(imgName);
