@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -33,23 +31,25 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class AddFragment extends Fragment {
-    TextInputLayout nameTxt, descTxt, cuisineTxt;
-    TextView addBtn, ingredientNameTxt, ingredientQtyTxt, ingredientUnitTxt;
+    TextInputLayout cuisineTxt;
+    TextView recipeName, descText, ingredientNameTxt, ingredientQtyTxt, ingredientUnitTxt, addBtn;
     Button uploadBtn;
     ImageView recipeImg;
     LinearLayout titleSection;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     Uri filePath;
     String[] cuisine = {"Turkish", "Thai", "Japanese", "Indian", "French", "Chinese", "Western"};
+    String[] units = {"n/a", "g", "kg", "ml", "l"};
     AutoCompleteTextView autoCompleteTextView;
-    ArrayList<Ingredient> ingredientList;
+    ArrayList<Ingredient> ingredientList = new ArrayList<Ingredient>();
+    ArrayList<Steps> stepsList = new ArrayList<Steps>();
     ListView listView;
     Boolean imgIsHidden, titleIsHidden, ingredientIsHidden, stepsIsHidden;
 
@@ -59,6 +59,8 @@ public class AddFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add, container, false);
 
         //Initialise data
+        recipeName = view.findViewById(R.id.recipeNameTxt);
+        descText = view.findViewById(R.id.descTxt);
         imgIsHidden = titleIsHidden = ingredientIsHidden = stepsIsHidden = false;
 
         //Set autoCompleteTextView input type to text
@@ -86,8 +88,6 @@ public class AddFragment extends Fragment {
 
         titleSection = view.findViewById(R.id.titleSection);
         recipeImg = view.findViewById(R.id.recipeImg);
-        nameTxt = view.findViewById(R.id.ingredientTextView);
-        descTxt = view.findViewById(R.id.textInputDescriptionLayout);
         cuisineTxt = view.findViewById(R.id.textInputDropdownLayout);
 
         ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
@@ -116,16 +116,19 @@ public class AddFragment extends Fragment {
         cuisineTxt.setThreshold(1);//start when u type first char
         cuisineTxt.setAdapter(cuisineAdapter);
 
-
+        //setup the unit dropdown text
+        ArrayAdapter<String> unitAdapter = new ArrayAdapter<String>(getActivity(), R.layout.dropdown, units);
+        AutoCompleteTextView unitTxt = view.findViewById(R.id.addUnitTxt);
+        unitTxt.setThreshold(1);//start when u type first char
+        unitTxt.setAdapter(unitAdapter);
 
         //for adding new steps to steps array and list view
-        listView = (ListView) view.findViewById(R.id.stepListView);
-        addBtn = (TextView) view.findViewById(R.id.addIngredientBtn);
-        ingredientNameTxt = (TextView) view.findViewById(R.id.addIngredientTxt);
-        ingredientQtyTxt = (TextView) view.findViewById(R.id.addQtyTxt);
-        ingredientUnitTxt = (TextView) view.findViewById(R.id.addUnitTxt);
+        listView = view.findViewById(R.id.stepListView);
+        addBtn = view.findViewById(R.id.addIngredientBtn);
+        ingredientNameTxt = view.findViewById(R.id.addIngredientTxt);
+        ingredientQtyTxt = view.findViewById(R.id.addQtyTxt);
+        ingredientUnitTxt = view.findViewById(R.id.addUnitTxt);
 
-        ingredientList = new ArrayList<Ingredient>();
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) listView.getLayoutParams();
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,23 +196,9 @@ public class AddFragment extends Fragment {
                         Intent data = result.getData();
 //                      Get the Uri of data
                         filePath = data.getData();
-                        try {
-                            // Setting image on image view using Bitmap
-                            Bitmap bitmap = MediaStore
-                                    .Images
-                                    .Media
-                                    .getBitmap(
-                                            getActivity().getContentResolver(),
-                                            filePath);
-                            recipeImg.setImageBitmap(bitmap);
-                            recipeImg.setVisibility(View.VISIBLE);
-                            uploadBtn.setVisibility(View.GONE);
-                        }
-
-                        catch (IOException e) {
-                            // Log the exception
-                            Log.d("Exception: ", e.getMessage());
-                        }
+                        Glide.with(getContext()).load(filePath).into(recipeImg);
+                        recipeImg.setVisibility(View.VISIBLE);
+                        uploadBtn.setVisibility(View.GONE);
                     }
                 }
             });

@@ -1,5 +1,6 @@
 package sg.edu.np.madassignment1;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -34,12 +35,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
     private List<Recipe> recipeList;
     private List<Recipe> recipeListFull;
+    Activity rActivity;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     Context context;
 
-    RecipeAdapter(Context context, ArrayList<Recipe> recipeList){
+    RecipeAdapter(Context context, ArrayList<Recipe> recipeList, Activity rActivity){
         this.recipeList = recipeList;
         this.context = context;
+        this.rActivity = rActivity;
         recipeListFull = new ArrayList<>(recipeList);
     }
 
@@ -80,6 +83,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
                 Intent in = new Intent(holder.itemView.getContext(), DetailsActivity.class);
                 in.putExtras(extras);
                 holder.itemView.getContext().startActivity(in);
+                //Slide from RIght to Left Transition
+                rActivity.overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
+
+                /*fragment.setArguments(extras);
+               FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+                *//*FragmentTransaction transaction = myActivity.getSupportFragmentManager().beginTransaction();*//*
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, new DetailsFragment()).commit();*/
             }
         });
     }

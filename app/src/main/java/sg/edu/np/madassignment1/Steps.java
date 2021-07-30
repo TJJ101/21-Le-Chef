@@ -27,8 +27,9 @@ public class Steps {
 
     public Steps(){}
 
-    public Steps(int stepNum, String stepDescription) {
+    public Steps(int stepNum, String stepDescription, String time) {
         this.stepNum = stepNum;
         this.stepDescription = stepDescription;
+        this.time = time;
     }
 }

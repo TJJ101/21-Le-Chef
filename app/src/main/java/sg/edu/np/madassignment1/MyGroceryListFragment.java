@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,6 +25,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -51,6 +54,10 @@ public class MyGroceryListFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
+        //Text for if there is no item in Grocery List
+        TextView noGroceryListText = view.findViewById(R.id.noGroceryListTxt);
+        noGroceryListText.setText("No item(s) currently in your Grocery List");
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         mDatabase.child("Users").child(user.getUid()).child("groceryList").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -61,6 +68,12 @@ public class MyGroceryListFragment extends Fragment {
                         Ingredient i = data.getValue(Ingredient.class);
                         myGroceryList.add(i);
                         adapter.notifyDataSetChanged();
+                        if(adapter.getItemCount() > 0){
+                            noGroceryListText.setVisibility(View.GONE);
+                        }
+                        else{
+                            noGroceryListText.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
                 else {
@@ -77,6 +90,12 @@ public class MyGroceryListFragment extends Fragment {
                     for (Ingredient i : theUser.getGroceryList()){
                         myGroceryList.add(i);
                         adapter.notifyDataSetChanged();
+                        if(adapter.getItemCount() > 0){
+                            noGroceryListText.setVisibility(View.GONE);
+                        }
+                        else if(adapter.getItemCount() == 0){
+                            noGroceryListText.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
             }

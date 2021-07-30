@@ -72,8 +72,8 @@ public class Recipe implements Serializable {
         this.ingredientList = i;
     }
 
-    public void addSteps(String stepDescription){
-        stepsList.add(new Steps(stepsList.size()+1, stepDescription));
+    public void addSteps(String stepDescription, String time){
+        stepsList.add(new Steps(stepsList.size()+1, stepDescription, time));
     }
 
     @Exclude

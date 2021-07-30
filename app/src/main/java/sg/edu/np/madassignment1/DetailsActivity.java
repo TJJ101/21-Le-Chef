@@ -56,17 +56,17 @@ public class DetailsActivity extends AppCompatActivity {
         TextView ingredientTxt = findViewById(R.id.ingredientTxt);
         String ingredients = "";
         for(Ingredient i : recipe.getIngredientList()){
-            if(i.getMeasurement().equals("none")){
+            if(i.getMeasurement().equals("n/a")){
                 ingredients += i.getQuantity() + " " + i.getName() + "\n:";
             }
             else{
-                ingredients += i.getQuantity() + " " +  i.getMeasurement() + " of " + i.getName() + "\n:";
+                ingredients += i.getQuantity() + i.getMeasurement() + " of " + i.getName() + "\n:";
             }
         };
         ingredientTxt.setText(ingredients);
         
 
-        //button to go ingredient checklist
+        //button to go add ingredient to Grocery List
         Button checklistBtn = findViewById(R.id.detailsChecklistBtn);
         checklistBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,8 +74,10 @@ public class DetailsActivity extends AppCompatActivity {
                 Intent intent = new Intent(DetailsActivity.this, GrocerylistActivity.class);
                 intent.putExtra("IngredientList", (Serializable)recipe.getIngredientList());
                 intent.putExtra("recipeName", recipe.getName());
+                intent.putExtra("recipeImg", imgName);
                 startActivity(intent);
-                overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
+                //Slide right to Left Transition
+                overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
             }
         });
 
@@ -89,6 +91,8 @@ public class DetailsActivity extends AppCompatActivity {
                 Intent in = new Intent(v.getContext(), StepsActivity.class);
                 in.putExtras(bundle);
                 v.getContext().startActivity(in);
+                //Slide right to Left Transition
+                overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
             }
         });
 
@@ -98,6 +102,8 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                //Slide Left to RIght Transition
+                overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
             }
         });
 
@@ -108,6 +114,8 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent in = new Intent(v.getContext(), MainActivity.class);
                 v.getContext().startActivity(in);
+                //Slide right to Left Transition
+                overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
     }
