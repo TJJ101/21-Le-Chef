@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -62,12 +63,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Recipe selectedRecipe = recipeList.get(position);
         holder.myRecipeName.setText(selectedRecipe.getName());
-        holder.myRecipeCuisine.setText((selectedRecipe.getCuisine()));
-        holder.myRecipeRating.setText((selectedRecipe.getRating()));
+        holder.myRecipeCuisine.setText("Cuisine Type: " + selectedRecipe.getCuisine());
+        if(selectedRecipe.getRating() == null){
+           holder.myRecipeRating.setText( "0/5 Rating");
+        }else {
+            holder.myRecipeRating.setText(selectedRecipe.getRating() + "/5 Rating");
+
+        }
+        //for getting image
         String imgName = selectedRecipe.getRecipeId() + ".jpeg";
-
         StorageReference imageRef = storage.getReference().child("images").child(imgName);
-
         Glide.with(context).load(imageRef).diskCacheStrategy(DiskCacheStrategy.DATA).centerCrop().into(holder.myRecipeImg);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -85,13 +90,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
                 Intent in = new Intent(holder.itemView.getContext(), DetailsActivity.class);
                 in.putExtras(extras);
                 holder.itemView.getContext().startActivity(in);
-                //Slide from RIght to Left Transition
+                //Slide from Right to Left Transition
                 rActivity.overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
-
-                /*fragment.setArguments(extras);
-               FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                *//*FragmentTransaction transaction = myActivity.getSupportFragmentManager().beginTransaction();*//*
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, new DetailsFragment()).commit();*/
             }
         });
     }

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -16,10 +17,31 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class StepsFragment extends Fragment {
+
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
+    private DatabaseReference mDatabase = firebaseDatabase.getReference();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+
+    Integer stepNum;
+    String stepDes;
+    String stepTime;
+    String imgName;
+    String recipeId;
+    Recipe recipe;
 
     //Declare timer
     CountDownTimer cTimer = null;
@@ -34,19 +56,45 @@ public class StepsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_steps, container, false);
-        //for setting the timer to whatever is the default, set it to 30 for now
-        minutes = 30 * 60 * 1000;
 
         TextView stepNumTxt = view.findViewById(R.id.stepNumTxt);
         TextView stepDesTxt = view.findViewById(R.id.stepDesTxt);
 
         // get the current step information
         if (getArguments() != null){
-            Integer stepNum = getArguments().getInt("stepNum");
-            String stepDes = getArguments().getString("stepDes");
+            stepNum = getArguments().getInt("stepNum");
+            stepDes = getArguments().getString("stepDes");
+            stepTime = getArguments().getString("stepTime");
+            imgName = getArguments().getString("imgName");
+            recipeId = getArguments().getString("recipeId");
             stepNumTxt.setText("Step: " + (stepNum + 1));
             stepDesTxt.setText(stepDes);
         }
+        else{Log.d("FUCCCCCCCCCCKKKKKK", "KIIIIIIIIIIILLLLLLLLLLLMMMMMMMMMMMMMMEEEEEEEEEEEEEEEEEEEEEE");}
+
+        //getting current recipe object=
+        mDatabase.child("Recipe").orderByChild("recipeId").equalTo(recipeId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("FUCCCCCCCCCCKKKKKK", dataSnapshot.exists() + "");
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    recipe = snapshot.getValue(Recipe.class);
+                }
+
+                //put recipe image into image view
+                String imgName = recipe.getRecipeId() + ".jpeg";
+                StorageReference imageRef = storage.getReference().child("images").child(imgName);
+                Glide.with(getContext()).load(imageRef).centerCrop().into((ImageView) view.findViewById(R.id.stepsImgView));
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        //convert time string into hr min sec
+/*        Log.d("ZAWARUDOOOOOOOO", stepTime);
+        String[] time = stepTime.split(":");
+        Log.d("ZAWARUDOOOOOOOO", time[0] + time[1] + time[2]);*/
 
         //populate arrays
         int i = 0;
@@ -59,10 +107,12 @@ public class StepsFragment extends Fragment {
             sixtyArray.add(String.valueOf(i));
             i++;
         }
+
         //for the hour spinner
         NumberPicker hourPicker = (NumberPicker) view.findViewById(R.id.hoursPicker);
         hourPicker.setMaxValue(24);
         hourPicker.setMinValue(0);
+        //for setting the timer to whatever is the default
         String[] twentyfourArray2 = new String[twentyfourArray.size()];
         twentyfourArray2 = twentyfourArray.toArray(twentyfourArray2);
         hourPicker.setDisplayedValues(twentyfourArray2);
@@ -79,7 +129,7 @@ public class StepsFragment extends Fragment {
         NumberPicker minutePicker = (NumberPicker) view.findViewById(R.id.minutePicker);
         minutePicker.setMaxValue(60);
         minutePicker.setMinValue(0);
-        //for setting the timer to whatever is the default, set it to 30 for now
+        //for setting the timer to whatever is the default
         minutePicker.setValue(30);
         String[] sixtyArray2 = new String[sixtyArray.size()];
         sixtyArray2 = sixtyArray.toArray(sixtyArray2);
@@ -97,6 +147,7 @@ public class StepsFragment extends Fragment {
         NumberPicker secondsPicker = (NumberPicker) view.findViewById(R.id.secondsPicker);
         secondsPicker.setMaxValue(60);
         secondsPicker.setMinValue(0);
+        //for setting the timer to whatever is the default
         secondsPicker.setDisplayedValues(sixtyArray2);
         secondsPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override

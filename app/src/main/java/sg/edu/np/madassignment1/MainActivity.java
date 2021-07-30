@@ -168,4 +168,11 @@ import java.util.ArrayList;
         }
     }
 
+     //Method for Android's back button animation
+     @Override
+     public void onBackPressed(){
+         super.onBackPressed();
+         MainActivity.this.overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
+     }
+
 }

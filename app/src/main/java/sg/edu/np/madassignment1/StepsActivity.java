@@ -11,31 +11,62 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class StepsActivity extends AppCompatActivity {
 
+    NumberPicker hourPicker;
+    NumberPicker minutePicker;
+    NumberPicker secondsPicker;
+
+    TextView stepNumTxt, stepDesTxt, timerTxt, reccoTimeTxt;
+    ImageView recipeImg;
+
     int steps = 0;
     Bundle extra = new Bundle();
+    String imgName;
+    String recipeId;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
     private DatabaseReference mDatabase = firebaseDatabase.getReference();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
     Recipe recipe = new Recipe();
     ArrayList<Steps> stepsList = new ArrayList<>();
     AlertDialog.Builder builder;
+    Context context;
+
+    //Declare timer
+    String[] time;
+    CountDownTimer cTimer = null;
+    ArrayList<String> sixtyArray = new ArrayList<String>();
+    ArrayList<String> twentyfourArray = new ArrayList<String>();
+    int hours;
+    int minutes;
+    int seconds;
+    long millis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +79,14 @@ public class StepsActivity extends AppCompatActivity {
         //setup alert dialog
         builder = new AlertDialog.Builder(this);
 
+        //set views
+        stepNumTxt = findViewById(R.id.stepNumTxt);
+        stepDesTxt = findViewById(R.id.stepDesTxt);
+        reccoTimeTxt = findViewById(R.id.reccomendedTime);
+
         //get the recipe id
         Intent intent = getIntent();
-        String recipeId = intent.getStringExtra("recipeId");
+        recipeId = intent.getStringExtra("recipeId");
 
         //get steps list from the correct recipe
         mDatabase.child("Recipe").orderByChild("recipeId").equalTo(recipeId).addValueEventListener(new ValueEventListener() {
@@ -62,17 +98,114 @@ public class StepsActivity extends AppCompatActivity {
                 for (Steps s : recipe.getStepsList()) {
                     stepsList.add(s);
                 }
+                //for getting image
+                String imgName = recipe.getRecipeId() + ".jpeg";
+                StorageReference imageRef = storage.getReference().child("images").child(imgName);
+                Glide.with(StepsActivity.this).load(imageRef).centerCrop().into((ImageView) findViewById(R.id.stepsImgView));
 
-                Fragment fragment = new StepsFragment();
-                extra.putInt("stepNum", steps);
-                extra.putString("stepDes", stepsList.get(steps).getStepDescription());
-                Log.d("debug", "back" + extra);
-                fragment.setArguments(extra);
-                getSupportFragmentManager().beginTransaction().replace(R.id.stepsFragment_container, fragment).commit();
+                stepNumTxt.setText("Step: " + (steps + 1));
+                stepDesTxt.setText(stepsList.get(steps).getStepDescription());
+                reccoTimeTxt.setText("Recommended time: " + stepsList.get(steps).getTime());
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        //populate arrays
+        int i = 0;
+        while(i < 25){
+            twentyfourArray.add(String.valueOf(i));
+            i++;
+        }
+        i = 0;
+        while(i < 61){
+            sixtyArray.add(String.valueOf(i));
+            i++;
+        }
+        //spinner listeners
+        //for the hour spinner
+        hourPicker = (NumberPicker) findViewById(R.id.hoursPicker);
+        hourPicker.setMaxValue(24);
+        hourPicker.setMinValue(0);
+        //for setting the timer to whatever is the default, set it to 30 for now
+        hourPicker.setValue(hours);
+        String[] twentyfourArray2 = new String[twentyfourArray.size()];
+        twentyfourArray2 = twentyfourArray.toArray(twentyfourArray2);
+        hourPicker.setDisplayedValues(twentyfourArray2);
+        hourPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                millis = 0;
+                hours = hourPicker.getValue();
+                Log.d("hours", hours + "");
+            }
+        });
+
+        //for the minute spinner
+        minutePicker = (NumberPicker) findViewById(R.id.minutePicker);
+        minutePicker.setMaxValue(60);
+        minutePicker.setMinValue(0);
+        //for setting the timer to whatever is the default, set it to 30 for now
+        minutePicker.setValue(minutes);
+        String[] sixtyArray2 = new String[sixtyArray.size()];
+        sixtyArray2 = sixtyArray.toArray(sixtyArray2);
+        minutePicker.setDisplayedValues(sixtyArray2);
+        minutePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                millis = 0;
+                minutes = minutePicker.getValue();
+                Log.d("minutes", minutes + "");
+            }
+        });
+
+        //for the seconds spinner
+        secondsPicker = (NumberPicker) findViewById(R.id.secondsPicker);
+        secondsPicker.setMaxValue(60);
+        secondsPicker.setMinValue(0);
+        //for setting the timer to whatever is the default, set it to 30 for now
+        secondsPicker.setValue(seconds);
+        secondsPicker.setDisplayedValues(sixtyArray2);
+        secondsPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                millis = 0;
+                seconds = secondsPicker.getValue();
+                Log.d("seconds", seconds + "");
+            }
+        });
+
+        // start and stop button listeners
+        Button startBtn = findViewById(R.id.stepsStartBtn);
+        startBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hours = hours * 60 * 60 * 1000;
+                minutes = minutes * 60 * 1000;
+                seconds = seconds * 1000;
+                if (startBtn.getText().equals("Start")){
+                    if (millis != 0){
+                        startTimer((int) millis);
+                    }
+                    else{
+                        startTimer(hours + minutes + seconds);
+                    }
+                    startBtn.setText("Pause");
+                }
+                else if (startBtn.getText().equals("Pause")){
+                    pauseTimer();
+                    startBtn.setText("Start");
+                }
+
+            }
+        });
+        Button stopBtn = findViewById(R.id.stepsStopBtn);
+        stopBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelTimer();
+                startBtn.setText("Start");
             }
         });
 
@@ -84,16 +217,21 @@ public class StepsActivity extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment = new StepsFragment();
             switch (item.getItemId()) {
                 case R.id.nav_back:
                     if (steps > 0) {
                         steps--;
-                        extra.putInt("stepNum", steps);
-                        extra.putString("stepDes", stepsList.get(steps).getStepDescription());
-                        Log.d("debug", "back" + extra);
-                        fragment.setArguments(extra);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.stepsFragment_container, fragment).commit();
+                        stepNumTxt.setText("Step: " + (steps + 1));
+                        stepDesTxt.setText(stepsList.get(steps).getStepDescription());
+                        reccoTimeTxt.setText("Recommended time: " + stepsList.get(steps).getTime());
+
+                        time = stepsList.get(steps).getTime().split(":");
+                        hours = Integer.parseInt(time[0]);
+                        minutes = Integer.parseInt(time[1]);
+                        seconds = Integer.parseInt(time[2]);
+                        hourPicker.setValue(hours);
+                        minutePicker.setValue(minutes);
+                        secondsPicker.setValue(seconds);
                     }
                     else {
                         alertDialog("This is already the first step", "Notice");
@@ -105,11 +243,17 @@ public class StepsActivity extends AppCompatActivity {
                 case R.id.nav_next:
                     if (steps < stepsList.size() - 1) {
                         steps++;
-                        extra.putInt("stepNum", steps);
-                        extra.putString("stepDes", stepsList.get(steps).getStepDescription());
-                        Log.d("debug", "next" + extra);
-                        fragment.setArguments(extra);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.stepsFragment_container, fragment).commit();
+                        stepNumTxt.setText("Step: " + (steps + 1));
+                        stepDesTxt.setText(stepsList.get(steps).getStepDescription());
+                        reccoTimeTxt.setText("Recommended time: " + stepsList.get(steps).getTime());
+
+                        time = stepsList.get(steps).getTime().split(":");
+                        hours = Integer.parseInt(time[0]);
+                        minutes = Integer.parseInt(time[1]);
+                        seconds = Integer.parseInt(time[2]);
+                        hourPicker.setValue(hours);
+                        minutePicker.setValue(minutes);
+                        secondsPicker.setValue(seconds);
                     }
                     else {
                         alertDialog("This is already the last step", "Notice");
@@ -119,6 +263,45 @@ public class StepsActivity extends AppCompatActivity {
             return true;
         }
     };
+
+    //start timer function
+    public void startTimer(int duration) {
+        timerTxt = this.findViewById(R.id.timerTxt);
+        cTimer = new CountDownTimer(duration, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                millis = millisUntilFinished;
+                String hms = String.format("%02d:%02d:%02d",
+                        TimeUnit.MILLISECONDS.toHours(millis),
+                        (TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))),
+                        (TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))));
+                timerTxt.setText(hms);//set text
+            }
+            @Override
+            public void onFinish() {
+                timerTxt.setText("00:00:00");
+            }
+        };
+        cTimer.start();
+    }
+    //cancel timer
+    public void cancelTimer() {
+        TextView timer = this.findViewById(R.id.timerTxt);
+        if(cTimer!=null){
+            hours = 0;
+            minutes = 0;
+            seconds = 0;
+            millis = 0;
+            hourPicker.setValue(0);
+            minutePicker.setValue(0);
+            secondsPicker.setValue(0);
+            timer.setText("00:00:00");
+            cTimer.cancel();}
+    }
+    //pause timer
+    public void pauseTimer(){
+        cTimer.cancel();
+    }
 
     public void alertDialog(String message, String title) {
         //Setting message manually and performing action on button click

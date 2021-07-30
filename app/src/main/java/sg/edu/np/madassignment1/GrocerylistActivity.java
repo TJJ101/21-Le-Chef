@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -84,8 +87,8 @@ public class GrocerylistActivity extends AppCompatActivity {
                         Log.d("Grocery Test Data", String.valueOf(groceryList.get(i).getQuantity()));
                     }
                     finish();
-                    //Fade animation for transition
-                    overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
+                    //Left to Right Transition
+                    overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
                 }
                 else{
                     Toast fail = Toast.makeText(getApplicationContext(), "No item selected/No quantity entered", Toast.LENGTH_LONG);
@@ -118,5 +121,12 @@ public class GrocerylistActivity extends AppCompatActivity {
                 overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
+    }
+
+    //Method for Android's back button animation
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        GrocerylistActivity.this.overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
     }
 }

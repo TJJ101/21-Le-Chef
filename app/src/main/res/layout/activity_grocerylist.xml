@@ -9,9 +9,9 @@
     tools:context=".GrocerylistActivity">
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="326dp"
-        android:layout_height="405dp"
+        android:id="@+id/backgroundBlock"
+        android:layout_width="360dp"
+        android:layout_height="400dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/shadow"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +34,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/heading"
@@ -55,17 +55,19 @@
         app:layout_constraintBottom_toBottomOf="@+id/headerImg"
         app:layout_constraintEnd_toEndOf="@+id/headerImg"
         app:layout_constraintStart_toStartOf="@+id/headerImg"
-        app:layout_constraintTop_toTopOf="@+id/headerImg" />
+        app:layout_constraintTop_toTopOf="@+id/headerImg"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ingredientList"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/backgroundBlock"
+        app:layout_constraintEnd_toEndOf="@+id/backgroundBlock"
+        app:layout_constraintStart_toStartOf="@+id/backgroundBlock"
         app:layout_constraintTop_toBottomOf="@+id/selectAllSwitch" />
 
     <Switch
@@ -73,16 +75,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="18dp"
         android:gravity="center|right"
         android:paddingLeft="20dp"
         android:text="Select All"
         android:textOff="Select All"
         android:textOn="Deselect All"
-        app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        app:layout_constraintEnd_toEndOf="@+id/backgroundBlock"
+        app:layout_constraintStart_toStartOf="@+id/backgroundBlock"
+        app:layout_constraintTop_toTopOf="@+id/backgroundBlock" />
 
     <Button
         android:id="@+id/groceryListHomeBtn"
