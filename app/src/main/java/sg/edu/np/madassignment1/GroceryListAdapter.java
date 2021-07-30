@@ -101,7 +101,8 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             }
         });
 
-        if(holder.measurement.getText().equals("none")){
+        //If the measurement of the ingredient is n/a, dont display anything in the recylerView
+        if(ingredientList.get(position).getMeasurement().equals("n/a")){
             holder.measurement.setVisibility(View.INVISIBLE);
         }
         else{
