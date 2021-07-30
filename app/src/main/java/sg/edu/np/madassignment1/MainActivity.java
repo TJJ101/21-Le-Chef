@@ -114,15 +114,6 @@ import java.util.ArrayList;
         }
     };
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser == null){
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        }
-    }
-
     private void fragmentSwitch(MenuItem item){
         selectedFragment = null;
         Bundle bundle = new Bundle();
@@ -163,6 +154,7 @@ import java.util.ArrayList;
             stepsList.size() > 0){
             return true;
         }
+        return false;
     };
 
     @Override
