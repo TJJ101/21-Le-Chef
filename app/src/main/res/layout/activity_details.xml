@@ -40,9 +40,11 @@
 
     <ImageView
         android:id="@+id/detailsImgView"
-        android:layout_width="409dp"
-        android:layout_height="253dp"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="30dp"
+        android:layout_marginEnd="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

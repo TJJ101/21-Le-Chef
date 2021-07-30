@@ -60,10 +60,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
         holder.myRecipeName.setText(selectedRecipe.getName());
         holder.myRecipeCuisine.setText((selectedRecipe.getCuisine()));
         holder.myRecipeRating.setText((selectedRecipe.getRating()));
+
+        //for getting image
         String imgName = selectedRecipe.getRecipeId() + ".jpeg";
-
         StorageReference imageRef = storage.getReference().child("images").child(imgName);
-
         Glide.with(context).load(imageRef).diskCacheStrategy(DiskCacheStrategy.DATA).centerCrop().into(holder.myRecipeImg);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -80,11 +80,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
                 Intent in = new Intent(holder.itemView.getContext(), DetailsActivity.class);
                 in.putExtras(extras);
                 holder.itemView.getContext().startActivity(in);
-
-                /*fragment.setArguments(extras);
-               FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                *//*FragmentTransaction transaction = myActivity.getSupportFragmentManager().beginTransaction();*//*
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, new DetailsFragment()).commit();*/
             }
         });
     }

@@ -17,12 +17,16 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -30,6 +34,8 @@ public class StepsActivity extends AppCompatActivity {
 
     int steps = 0;
     Bundle extra = new Bundle();
+    String imgName;
+    String recipeId;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
     private DatabaseReference mDatabase = firebaseDatabase.getReference();
@@ -50,7 +56,7 @@ public class StepsActivity extends AppCompatActivity {
 
         //get the recipe id
         Intent intent = getIntent();
-        String recipeId = intent.getStringExtra("recipeId");
+        recipeId = intent.getStringExtra("recipeId");
 
         //get steps list from the correct recipe
         mDatabase.child("Recipe").orderByChild("recipeId").equalTo(recipeId).addValueEventListener(new ValueEventListener() {
@@ -62,15 +68,19 @@ public class StepsActivity extends AppCompatActivity {
                 for (Steps s : recipe.getStepsList()) {
                     stepsList.add(s);
                 }
-
                 Fragment fragment = new StepsFragment();
+                //get the recipe's image
+                imgName = recipe.getRecipeId() + ".jpeg";
+                //send argument
+                extra.putString("recipeId",  recipeId);
                 extra.putInt("stepNum", steps);
                 extra.putString("stepDes", stepsList.get(steps).getStepDescription());
+                extra.putString("stepTime",  stepsList.get(steps).getTime());
+                extra.putString("imgName",  imgName);
                 Log.d("debug", "back" + extra);
                 fragment.setArguments(extra);
                 getSupportFragmentManager().beginTransaction().replace(R.id.stepsFragment_container, fragment).commit();
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
@@ -89,8 +99,11 @@ public class StepsActivity extends AppCompatActivity {
                 case R.id.nav_back:
                     if (steps > 0) {
                         steps--;
+                        extra.putString("recipeId",  recipe.getRecipeId());
                         extra.putInt("stepNum", steps);
                         extra.putString("stepDes", stepsList.get(steps).getStepDescription());
+                        extra.putString("stepTime", stepsList.get(steps).getTime());
+                        extra.putString("imgName",  imgName);
                         Log.d("debug", "back" + extra);
                         fragment.setArguments(extra);
                         getSupportFragmentManager().beginTransaction().replace(R.id.stepsFragment_container, fragment).commit();
@@ -105,8 +118,11 @@ public class StepsActivity extends AppCompatActivity {
                 case R.id.nav_next:
                     if (steps < stepsList.size() - 1) {
                         steps++;
+                        extra.putString("recipeId",  recipe.getRecipeId());
                         extra.putInt("stepNum", steps);
                         extra.putString("stepDes", stepsList.get(steps).getStepDescription());
+                        extra.putString("stepTime", stepsList.get(steps).getTime());
+                        extra.putString("imgName",  imgName);
                         Log.d("debug", "next" + extra);
                         fragment.setArguments(extra);
                         getSupportFragmentManager().beginTransaction().replace(R.id.stepsFragment_container, fragment).commit();

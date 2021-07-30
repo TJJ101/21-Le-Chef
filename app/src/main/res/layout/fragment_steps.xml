@@ -18,41 +18,42 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <NumberPicker
-        android:id="@+id/secondsPicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/timerTxt"
-        app:layout_constraintStart_toEndOf="@+id/minutePicker" />
-
-    <NumberPicker
         android:id="@+id/minutePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/timerTxt"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent" />
 
     <NumberPicker
         android:id="@+id/hoursPicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/timerTxt"
         app:layout_constraintEnd_toStartOf="@+id/minutePicker" />
+
+    <NumberPicker
+        android:id="@+id/secondsPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/timerTxt"
+        app:layout_constraintStart_toEndOf="@+id/minutePicker" />
 
     <TextView
         android:id="@+id/timerTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="25dp"
         android:text="00:00:00"
         app:layout_constraintBottom_toTopOf="@+id/stepsStartBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -79,7 +80,7 @@
         android:id="@+id/stepNumTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,10 +90,23 @@
         android:id="@+id/stepDesTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stepNumTxt" />
+        app:layout_constraintTop_toBottomOf="@+id/stepsImgView" />
+
+    <ImageView
+        android:id="@+id/stepsImgView"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stepNumTxt"
+        app:srcCompat="@drawable/food" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
