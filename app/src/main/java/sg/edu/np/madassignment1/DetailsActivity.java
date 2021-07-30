@@ -74,6 +74,7 @@ public class DetailsActivity extends AppCompatActivity {
                 Intent intent = new Intent(DetailsActivity.this, GrocerylistActivity.class);
                 intent.putExtra("IngredientList", (Serializable)recipe.getIngredientList());
                 intent.putExtra("recipeName", recipe.getName());
+                intent.putExtra("recipeImg", imgName);
                 startActivity(intent);
                 //Fade animation for transition
                 overridePendingTransition(R.transition.fade_in, R.transition.fade_out);

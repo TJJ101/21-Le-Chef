@@ -12,14 +12,18 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
@@ -34,6 +38,7 @@ public class GrocerylistActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
     DatabaseReference mDatabase = firebaseDatabase.getReference();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +51,14 @@ public class GrocerylistActivity extends AppCompatActivity {
 
         Intent in = getIntent();
         ingredientList = (ArrayList<Ingredient>) in.getSerializableExtra("IngredientList");
-
         TextView header = findViewById(R.id.heading);
-        header.setText("Ingredient for " + in.getStringExtra("recipeName"));
+        header.setText("Ingredients for " + in.getStringExtra("recipeName"));
+
+        //To display header background
+        ImageView headerImg = findViewById(R.id.headerImg);
+        String imgName = in.getStringExtra("recipeImg");
+        StorageReference imageRef = storage.getReference().child("images").child(imgName);
+        Glide.with(this).load(imageRef).into(headerImg);
 
         //This is for recyclerView
         RecyclerView recyclerView = findViewById(R.id.ingredientList);

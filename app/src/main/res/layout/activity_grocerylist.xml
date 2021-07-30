@@ -9,10 +9,39 @@
     tools:context=".GrocerylistActivity">
 
     <TextView
-        android:id="@+id/heading"
+        android:id="@+id/textView2"
+        android:layout_width="326dp"
+        android:layout_height="405dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerImg" />
+
+    <ImageView
+        android:id="@+id/headerImg"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="@drawable/food_header"
+        android:gravity="center"
+        android:scaleType="centerCrop"
+        android:shadowColor="#D5FF0000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="6"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/heading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
         android:gravity="center"
         android:shadowColor="#D5FF0000"
         android:shadowDx="2"
@@ -23,31 +52,37 @@
         android:textColor="#FFFFFF"
         android:textSize="25sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/headerImg"
+        app:layout_constraintEnd_toEndOf="@+id/headerImg"
+        app:layout_constraintStart_toStartOf="@+id/headerImg"
+        app:layout_constraintTop_toTopOf="@+id/headerImg" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ingredientList"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@drawable/shadow"
-        app:layout_constraintTop_toBottomOf="@+id/selectAllSwitch"
-        tools:layout_editor_absoluteX="50dp" />
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/selectAllSwitch" />
 
     <Switch
         android:id="@+id/selectAllSwitch"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/shadow"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="18dp"
+        android:gravity="center|right"
         android:paddingLeft="20dp"
         android:text="Select All"
         android:textOff="Select All"
         android:textOn="Deselect All"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/heading" />
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
 
     <Button
         android:id="@+id/groceryListHomeBtn"
@@ -73,7 +108,10 @@
         app:layout_constraintStart_toStartOf="parent" /><![CDATA[
 
 
+
+
     />
+
 
 
 
