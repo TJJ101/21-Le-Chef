@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -75,8 +76,6 @@ import java.util.List;
                     theUser = eventSnapshot.getValue(User.class);
                 }
                 username.setText(theUser.getUsername());
-                password.setText(theUser.getPassword());
-                credential = EmailAuthProvider.getCredential(theUser.getEmail(), theUser.getPassword());
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -100,71 +99,84 @@ import java.util.List;
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!password.getText().toString().equals(theUser.getPassword())){
-                    if (isValid && !password2.getText().toString().equals("")){
-                        checkPass(user);
+                if (checks()){
+                    credential = EmailAuthProvider.getCredential(theUser.getEmail(), password.getText().toString());
+                    user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                checkPass(user);
+                            }
+                            else {
+                                passErr.setText("Wrong Password");
+                            }
+                        }
+                    });
                 }
-                else{pass2Err.setText("Passwords does not match");}
-                }
-
-                if(!username.getText().toString().equals(theUser.getUsername())){
+                else if(!username.getText().toString().equals(theUser.getUsername())){
                     DatabaseReference mDatabase2 = firebaseDatabase.getReference().child("Users").child(user.getUid()).child("username");
                     mDatabase2.setValue(username.getText().toString());
                     finish();
+                }
+                else{
+                    Toast.makeText(context, "No changes",Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
+    public Boolean checks(){
+        if (password2.getText().toString().equals("")){
+            return false;
+        }
+        else if (isValid && password2.getText().toString().equals(theUser.getPassword())){
+            pass2Err.setText("This is the same password");
+            return false;
+        }
+        else if (password.getText().toString().equals("")){
+            passErr.setText("New password detected, please enter current password");
+            return false;
+        }
+        return true;
+    }
+
     public void checkPass(FirebaseUser user){
         //alert dialog to check for password again
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Detected password change").setCancelable(true).setMessage("Please re-enter your current password");
+        View viewInflated = getLayoutInflater().inflate(R.layout.alert_input_view, null, false);
+        builder.setTitle("Detected password change").setCancelable(true).setMessage("Please re-enter your new password");
 
         // Set up the input
-        final EditText input = new EditText(context);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        builder.setView(input);
+        final EditText input = (EditText) viewInflated.findViewById(R.id.alertInput);
+        builder.setView(viewInflated);
 
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 cfmPass = input.getText().toString();
-                if (!cfmPass.equals(theUser.getPassword())){
-                    Toast toast = Toast.makeText(context, "Wrong Password", Toast.LENGTH_LONG);
-                    toast.show();
+                if (!cfmPass.equals(password2.getText().toString())){
+                    Toast.makeText(context, "Passwords do not match",Toast.LENGTH_LONG).show();
                 }
                 else{
                     Log.d("yaaaaaaaaaaaaaay", "MATAFAKAAAAAAAAAAAA");
-                    user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    //Updating of password if password matches new pass
+                    user.updatePassword(password2.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                user.updatePassword(password.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            DatabaseReference mDatabase2 = firebaseDatabase.getReference().child("Users").child(user.getUid()).child("password");
-                                            mDatabase2.setValue(password.getText().toString());
-                                            Log.d("YESSSSSSSSSSSSSSSSSS", "Password updated");
-
-                                            if(!username.getText().toString().equals(theUser.getUsername())){
-                                                DatabaseReference mDatabase3 = firebaseDatabase.getReference().child("Users").child(user.getUid()).child("username");
-                                                mDatabase3.setValue(username.getText().toString());
-                                                finish();
-                                            }
-
-                                            finish();
-                                        } else {
-                                            Log.d("NOOOOOOOOOOOOOOOOOOOO", "Error password not updated");
-                                        }
-                                    }
-                                });
+                                DatabaseReference mDatabase2 = firebaseDatabase.getReference().child("Users").child(user.getUid()).child("password");
+                                mDatabase2.setValue(password2.getText().toString());
+                                Log.d("YESSSSSSS", "Password updated");
+                                if(!username.getText().toString().equals(theUser.getUsername())){
+                                    DatabaseReference mDatabase3 = firebaseDatabase.getReference().child("Users").child(user.getUid()).child("username");
+                                    mDatabase3.setValue(username.getText().toString());
+                                    finish();
+                                }
+                                finish();
                             }
                             else {
-                                Log.d("NOOOOOOOOOOOOOOOOOOOO", "Error auth failed");
+                                Log.d("NOOOOO", "Error password not updated");
                             }
                         }
                     });
@@ -203,27 +215,36 @@ import java.util.List;
                         }
                     }
                 }
+                else{unameErr.setText("");}
             }
         });
 
         password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
-                    if(password.getText().toString().equals("") || password.getText().toString().length() < 6)
-                    {
-                        passErr.setText("Password must have at least 6 characters");
-                        isValid = false;
-                    }
-                    else {
-                        passErr.setText("");
-                        isValid = true;
-                    }
-                }
+                passErr.setText("");
             }
         });
 
         password2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    if(password2.getText().toString().equals("") || password2.getText().toString().length() < 6)
+                    {
+                        pass2Err.setText("Password must have at least 6 characters");
+                        isValid = false;
+                    }
+                    else {
+                        pass2Err.setText("");
+                        isValid = true;
+                    }
+                }
+                else{pass2Err.setText("");}
+            }
+        });
+
+/*        password2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus){
@@ -232,12 +253,12 @@ import java.util.List;
                         isValid = false;
                     }
                     else {
-                        /*password2.setText("");*/
+                        *//*password2.setText("");*//*
                         isValid = true;
                     }
                 }
             }
-        });
+        });*/
     }
 
 }
