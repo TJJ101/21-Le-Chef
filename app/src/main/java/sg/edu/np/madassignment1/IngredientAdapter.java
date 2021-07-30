@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class IngredientAdapter extends BaseAdapter implements ListAdapter {
@@ -47,10 +48,16 @@ public class IngredientAdapter extends BaseAdapter implements ListAdapter {
         ingredientTxt.setText(list.get(position).getName());
 
         TextView qtyTxt = (TextView)view.findViewById(R.id.qtyTextView);
-        qtyTxt.setText(""+list.get(position).getQuantity());
+        Double qty = list.get(position).getQuantity();
+        DecimalFormat format = new DecimalFormat("0.#");
+        qtyTxt.setText(format.format(qty));
 
         TextView unitTxt = (TextView)view.findViewById(R.id.unitTextView);
-        unitTxt.setText(list.get(position).getMeasurement());
+        String unit = list.get(position).getMeasurement();
+        if(unit.equals("n/a")){
+            unit = "";
+        }
+        unitTxt.setText(unit);
 
         //Handle buttons and add onClickListeners
         TextView deleteBtn = (TextView) view.findViewById(R.id.ingredientDeleteBtn);
