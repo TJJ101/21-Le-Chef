@@ -74,6 +74,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
                 extras.putString("cuisine", selectedRecipe.getCuisine());
                 extras.putString("rating", selectedRecipe.getRating());
                 extras.putString("description", selectedRecipe.getDescription());
+                extras.putString("recipeId", selectedRecipe.getRecipeId());
                 extras.putString("image", imgName);
                 extras.putSerializable("IngredientList", selectedRecipe.getIngredientList());
                 Intent in = new Intent(holder.itemView.getContext(), DetailsActivity.class);
