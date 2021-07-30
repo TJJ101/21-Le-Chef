@@ -83,13 +83,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
                 Intent in = new Intent(holder.itemView.getContext(), DetailsActivity.class);
                 in.putExtras(extras);
                 holder.itemView.getContext().startActivity(in);
-                //Slide from RIght to Left Transition
+                //Slide from Right to Left Transition
                 rActivity.overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
-
-                /*fragment.setArguments(extras);
-               FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                *//*FragmentTransaction transaction = myActivity.getSupportFragmentManager().beginTransaction();*//*
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, new DetailsFragment()).commit();*/
             }
         });
     }
