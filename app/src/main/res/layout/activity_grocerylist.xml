@@ -9,7 +9,7 @@
     tools:context=".GrocerylistActivity">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/backgroundBlock"
         android:layout_width="326dp"
         android:layout_height="405dp"
         android:layout_marginTop="20dp"
@@ -34,7 +34,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/heading"
@@ -55,7 +55,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/headerImg"
         app:layout_constraintEnd_toEndOf="@+id/headerImg"
         app:layout_constraintStart_toStartOf="@+id/headerImg"
-        app:layout_constraintTop_toTopOf="@+id/headerImg" />
+        app:layout_constraintTop_toTopOf="@+id/headerImg"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ingredientList"
@@ -63,9 +63,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/backgroundBlock"
+        app:layout_constraintStart_toStartOf="@+id/backgroundBlock"
         app:layout_constraintTop_toBottomOf="@+id/selectAllSwitch" />
 
     <Switch
@@ -80,9 +80,9 @@
         android:text="Select All"
         android:textOff="Select All"
         android:textOn="Deselect All"
-        app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        app:layout_constraintEnd_toEndOf="@+id/backgroundBlock"
+        app:layout_constraintStart_toStartOf="@+id/backgroundBlock"
+        app:layout_constraintTop_toTopOf="@+id/backgroundBlock" />
 
     <Button
         android:id="@+id/groceryListHomeBtn"

@@ -26,7 +26,7 @@
         android:layout_marginTop="10dp"
         android:text="Food"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myRecipeImg" />
+        app:layout_constraintTop_toBottomOf="@+id/myRecipeImg"/>
 
     <TextView
         android:id="@+id/myRecipeCuisine"

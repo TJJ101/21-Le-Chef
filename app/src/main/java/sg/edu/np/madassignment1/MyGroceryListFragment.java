@@ -58,6 +58,7 @@ public class MyGroceryListFragment extends Fragment {
         TextView noGroceryListText = view.findViewById(R.id.noGroceryListTxt);
         noGroceryListText.setText("No item(s) currently in your Grocery List");
 
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         mDatabase.child("Users").child(user.getUid()).child("groceryList").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -68,12 +69,6 @@ public class MyGroceryListFragment extends Fragment {
                         Ingredient i = data.getValue(Ingredient.class);
                         myGroceryList.add(i);
                         adapter.notifyDataSetChanged();
-                        if(adapter.getItemCount() > 0){
-                            noGroceryListText.setVisibility(View.GONE);
-                        }
-                        else{
-                            noGroceryListText.setVisibility(View.VISIBLE);
-                        }
                     }
                 }
                 else {
@@ -90,12 +85,6 @@ public class MyGroceryListFragment extends Fragment {
                     for (Ingredient i : theUser.getGroceryList()){
                         myGroceryList.add(i);
                         adapter.notifyDataSetChanged();
-                        if(adapter.getItemCount() > 0){
-                            noGroceryListText.setVisibility(View.GONE);
-                        }
-                        else if(adapter.getItemCount() == 0){
-                            noGroceryListText.setVisibility(View.VISIBLE);
-                        }
                     }
                 }
             }

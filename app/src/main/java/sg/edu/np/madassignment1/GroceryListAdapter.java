@@ -19,6 +19,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.GroceryListViewHolder> {
@@ -40,12 +41,11 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     @Override
     public void onBindViewHolder(@NonNull GroceryListViewHolder holder, int position) {
         viewList.add(holder);
-        Log.d("Debug GLA", String.valueOf(context));
-        Log.d("Debug GLA", "Testing 123 55");
         Ingredient ingredient = ingredientList.get(position);
         holder.ingredientName.setText(ingredient.getName());
-        //holder.editQty.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         holder.editQty.setHint(String.valueOf(ingredient.getQuantity()));
+
+        holder.editQty.setText(String.valueOf(ingredientList.get(position).getQuantity()));
 
         holder.editQty.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,8 +203,13 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         NumberPicker numberPicker = (NumberPicker) linearLayout.findViewById(R.id.numberPicker);
         NumberPicker numberPickerDec = (NumberPicker) linearLayout.findViewById(R.id.numberPickerDec);
 
+        String decNum = String.valueOf(ingredientList.get(position).getQuantity());
+        int decIndex = decNum.indexOf(".");
+        Log.d("Debug Decimal", decNum);
+        Log.d("Debug Decimal", String.valueOf(decIndex));
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(9999);
+        numberPicker.setValue(Integer.parseInt(decNum.substring(0, decIndex)));
         numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         numberPickerDec.setMinValue(0);

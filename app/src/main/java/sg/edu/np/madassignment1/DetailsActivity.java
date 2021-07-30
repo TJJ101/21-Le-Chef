@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -57,10 +60,10 @@ public class DetailsActivity extends AppCompatActivity {
         String ingredients = "";
         for(Ingredient i : recipe.getIngredientList()){
             if(i.getMeasurement().equals("n/a")){
-                ingredients += i.getQuantity() + " " + i.getName() + "\n:";
+                ingredients += i.getQuantity() + " " + i.getName() + "\n";
             }
             else{
-                ingredients += i.getQuantity() + i.getMeasurement() + " of " + i.getName() + "\n:";
+                ingredients += i.getQuantity() + i.getMeasurement() + " of " + i.getName() + "\n";
             }
         };
         ingredientTxt.setText(ingredients);
@@ -76,8 +79,10 @@ public class DetailsActivity extends AppCompatActivity {
                 intent.putExtra("recipeName", recipe.getName());
                 intent.putExtra("recipeImg", imgName);
                 startActivity(intent);
-                //Slide right to Left Transition
-                overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                    //Slide right to Left Transition
+                    overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
+                }
             }
         });
 
@@ -91,8 +96,11 @@ public class DetailsActivity extends AppCompatActivity {
                 Intent in = new Intent(v.getContext(), StepsActivity.class);
                 in.putExtras(bundle);
                 v.getContext().startActivity(in);
-                //Slide right to Left Transition
-                overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    //Slide right to Left Transition
+                    overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
+                }
+
             }
         });
 
@@ -102,8 +110,10 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                //Slide Left to RIght Transition
-                overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    //Slide Left to Right Transition
+                    overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
+                }
             }
         });
 
@@ -115,8 +125,15 @@ public class DetailsActivity extends AppCompatActivity {
                 Intent in = new Intent(v.getContext(), MainActivity.class);
                 v.getContext().startActivity(in);
                 //Slide right to Left Transition
-                overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
+                //overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
+    }
+
+    //Method for Android's back button animation
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        DetailsActivity.this.overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
     }
 }
