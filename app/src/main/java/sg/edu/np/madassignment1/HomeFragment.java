@@ -48,7 +48,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         //everything for recycler view
         // putting data in to recycler view / recipe object
-        adapter = new RecipeAdapter(getContext(), recipeList);
+        adapter = new RecipeAdapter(getContext(), recipeList, getActivity());
         mDatabase.child("Recipe").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
                 }
 
                 recyclerView = view.findViewById(R.id.recipeRecycler);
-                adapter = new RecipeAdapter(getContext(),recipeList);
+                adapter = new RecipeAdapter(getContext(),recipeList, getActivity());
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -135,13 +135,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    adapter = new RecipeAdapter(getContext(),recipeList);
+                    adapter = new RecipeAdapter(getContext(),recipeList, getActivity());
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
                     gridSwitch.setText("Grid");
                 }
                 else{
-                    adapter = new RecipeAdapter(getContext(),recipeList);
+                    adapter = new RecipeAdapter(getContext(),recipeList, getActivity());
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
                     gridSwitch.setText("Single");

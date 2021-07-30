@@ -32,7 +32,7 @@ public class SavedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_saved, container, false);
-        adapter = new RecipeAdapter(getContext(), recipeList);
+        adapter = new RecipeAdapter(getContext(), recipeList, getActivity());
         mDatabase.child("Recipe").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -42,7 +42,7 @@ public class SavedFragment extends Fragment {
                 }
 
                 recyclerView = view.findViewById(R.id.savedRecipeRecycler);
-                adapter = new RecipeAdapter(getContext(), recipeList);
+                adapter = new RecipeAdapter(getContext(), recipeList, getActivity());
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
                 recyclerView.setItemAnimator(new DefaultItemAnimator());

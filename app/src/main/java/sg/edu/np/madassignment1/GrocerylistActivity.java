@@ -52,7 +52,7 @@ public class GrocerylistActivity extends AppCompatActivity {
 
         //This is for recyclerView
         RecyclerView recyclerView = findViewById(R.id.ingredientList);
-        adapter = new GroceryListAdapter(ingredientList);
+        adapter = new GroceryListAdapter(ingredientList, this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -74,6 +74,8 @@ public class GrocerylistActivity extends AppCompatActivity {
                         Log.d("Grocery Test Data", String.valueOf(groceryList.get(i).getQuantity()));
                     }
                     finish();
+                    //Fade animation for transition
+                    overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
                 }
                 else{
                     Toast fail = Toast.makeText(getApplicationContext(), "No item selected/No quantity entered", Toast.LENGTH_LONG);
@@ -93,6 +95,17 @@ public class GrocerylistActivity extends AppCompatActivity {
                     adapter.deselectAll();
                     selectAll.setText("Select All");
                 }
+            }
+        });
+
+        Button backToHomeBtn = findViewById(R.id.groceryListHomeBtn);
+        backToHomeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                startActivity(intent);
+                //Fade animation for transition
+                overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
     }

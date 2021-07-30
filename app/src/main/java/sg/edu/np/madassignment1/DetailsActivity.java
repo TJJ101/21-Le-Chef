@@ -65,7 +65,7 @@ public class DetailsActivity extends AppCompatActivity {
         ingredientTxt.setText(ingredients);
         
 
-        //button to go ingredient checklist
+        //button to go add ingredient to Grocery List
         Button checklistBtn = findViewById(R.id.detailsChecklistBtn);
         checklistBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +74,7 @@ public class DetailsActivity extends AppCompatActivity {
                 intent.putExtra("IngredientList", (Serializable)recipe.getIngredientList());
                 intent.putExtra("recipeName", recipe.getName());
                 startActivity(intent);
+                //Fade animation for transition
                 overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
@@ -88,6 +89,8 @@ public class DetailsActivity extends AppCompatActivity {
                 Intent in = new Intent(v.getContext(), StepsActivity.class);
                 in.putExtras(bundle);
                 v.getContext().startActivity(in);
+                //Fade animation for transition
+                overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
 
@@ -97,6 +100,8 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                //Fade animation for transition
+                overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
 
@@ -107,6 +112,8 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent in = new Intent(v.getContext(), MainActivity.class);
                 v.getContext().startActivity(in);
+                //Fade animation for Transition
+                overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
     }

@@ -1,5 +1,8 @@
 package sg.edu.np.madassignment1;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -9,6 +12,8 @@ import android.view.ViewGroup;
 import android.text.InputType;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +25,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     ArrayList<Ingredient> ingredientList = new ArrayList<>();
     ArrayList<Ingredient> selectedIngredientList = new ArrayList<>();
     ArrayList<GroceryListViewHolder> viewList = new ArrayList<>();
+    Context context;
 
     @NonNull
     @Override
@@ -34,10 +40,19 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     @Override
     public void onBindViewHolder(@NonNull GroceryListViewHolder holder, int position) {
         viewList.add(holder);
+        Log.d("Debug GLA", String.valueOf(context));
+        Log.d("Debug GLA", "Testing 123 55");
         Ingredient ingredient = ingredientList.get(position);
         holder.ingredientName.setText(ingredient.getName());
-        holder.editQty.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        //holder.editQty.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         holder.editQty.setHint(String.valueOf(ingredient.getQuantity()));
+
+        holder.editQty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog(holder, position);
+            }
+        });
 
         holder.editQty.addTextChangedListener(new TextWatcher() {
             @Override
@@ -86,7 +101,10 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             }
         });
 
-        if(!holder.measurement.getText().equals("none")){
+        if(holder.measurement.getText().equals("none")){
+            holder.measurement.setVisibility(View.INVISIBLE);
+        }
+        else{
             holder.measurement.setVisibility(View.VISIBLE);
             holder.measurement.setText(ingredient.getMeasurement());
         }
@@ -129,8 +147,9 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         });
     }
 
-    public GroceryListAdapter(ArrayList<Ingredient> iList){
+    public GroceryListAdapter(ArrayList<Ingredient> iList, Context context){
         this.ingredientList = iList;
+        this.context = context;
     }
 
     public ArrayList<Ingredient> getSelectedIngredient(){
@@ -178,14 +197,44 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         }
     }
 
+    private void openDialog(GroceryListViewHolder holder, int position){
+        final LinearLayout linearLayout = (LinearLayout) ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.select_num_dialog, null);
+        NumberPicker numberPicker = (NumberPicker) linearLayout.findViewById(R.id.numberPicker);
+        NumberPicker numberPickerDec = (NumberPicker) linearLayout.findViewById(R.id.numberPickerDec);
+
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(9999);
+        numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        numberPickerDec.setMinValue(0);
+        numberPickerDec.setMaxValue(99);
+        numberPickerDec.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        final AlertDialog builder = new AlertDialog.Builder(context)
+                .setPositiveButton("Submit", null)
+                .setNegativeButton("Cancel", null)
+                .setView(linearLayout)
+                .setCancelable(false)
+                .create();
+        builder.show();
+        //Setting up OnClickListener on positive button of AlertDialog
+        builder.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.editQty.setText(String.valueOf(numberPicker.getValue()) + "." + String.valueOf(numberPickerDec.getValue()));
+                builder.dismiss();
+            }
+        });
+    }
+
     public boolean validationCheck(){
         int num = 0;
         for (Ingredient i : selectedIngredientList){
-            if(i.getQuantity() == 0){
+            if(i.getQuantity() > 0){
                 num += 1;
             }
         }
-        if(selectedIngredientList.size() > 0 && num != selectedIngredientList.size()){
+        if(selectedIngredientList.size() > 0 && num == selectedIngredientList.size()){
             return true;
         }
         else{

@@ -72,7 +72,7 @@ import java.util.concurrent.CountDownLatch;
             });
         }
         catch (Exception e){
-            Log.d("fuck", e + "");
+            Log.d("Debug MainActivity", e + "");
         }
 
 
