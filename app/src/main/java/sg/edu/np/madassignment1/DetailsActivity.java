@@ -16,6 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -25,6 +30,10 @@ import java.util.ArrayList;
 public class DetailsActivity extends AppCompatActivity {
 
     Recipe recipe;
+    ArrayList<Steps> stepsList = new ArrayList<>();
+    String step1Time;
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
+    private DatabaseReference mDatabase = firebaseDatabase.getReference();
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
     @Override
@@ -49,6 +58,24 @@ public class DetailsActivity extends AppCompatActivity {
         ImageView imgView = findViewById(R.id.detailsImgView);
         StorageReference imageRef = storage.getReference().child("images").child(imgName);
         Glide.with(this).load(imageRef).centerCrop().into(imgView);
+
+        //get steps list from the correct recipe
+        mDatabase.child("Recipe").orderByChild("recipeId").equalTo(recipeId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    recipe = snapshot.getValue(Recipe.class);
+                }
+                for (Steps s : recipe.getStepsList()) {
+                    stepsList.add(s);
+                }
+                step1Time = stepsList.get(0).getTime();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
 
         TextView nameTxt = findViewById(R.id.nameTxt);
         nameTxt.setText(recipe.getName());
@@ -93,6 +120,7 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putString("recipeId", recipeId);
+                bundle.putString("step1Time", step1Time);
                 Intent in = new Intent(v.getContext(), StepsActivity.class);
                 in.putExtras(bundle);
                 v.getContext().startActivity(in);
