@@ -37,6 +37,8 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -71,6 +73,8 @@ public class AddFragment extends Fragment {
     StorageReference storageReference;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
     DatabaseReference mDatabase = firebaseDatabase.getReference();
+    FirebaseAuth mAuth;
+    FirebaseUser user;
     Recipe mRecipe;
 
     @Nullable
@@ -85,6 +89,8 @@ public class AddFragment extends Fragment {
         imgIsHidden = titleIsHidden = ingredientIsHidden = stepsIsHidden = false;
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
 
         //Set autoCompleteTextView input type to text
         cuisineTxt.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -214,11 +220,13 @@ public class AddFragment extends Fragment {
                 String newRecipeCui = cuisineTxt.getText().toString();
 
                 if(validateRecipeInput(recipeName.getText().toString(), descText.getText().toString(), cuisineTxt.getText().toString(), recipeImg)){
-                    mRecipe = new Recipe(newRecipeName, newRecipeDesc, newRecipeCui, ingredientList, stepsList);
                     key = mDatabase.child("Recipe").push().getKey();
+                    mRecipe = new Recipe(newRecipeName, newRecipeDesc, newRecipeCui, ingredientList, stepsList);
+                    mRecipe.setRecipeId(key);
                     Map<String, Object> childUpdates = new HashMap<>();
                     childUpdates.put("/Recipe/" + key, mRecipe.toMap());
                     mDatabase.updateChildren(childUpdates);
+                    //need do add to user recipe list
                     uploadImage();
                 }
             }
