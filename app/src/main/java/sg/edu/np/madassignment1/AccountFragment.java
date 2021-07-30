@@ -74,7 +74,7 @@ public class AccountFragment extends Fragment {
 
         tabLayout.addTab(tabLayout.newTab().setText("My Recipes"));
         tabLayout.addTab(tabLayout.newTab().setText("Saved"));
-        tabLayout.addTab(tabLayout.newTab().setText("Grocery List"));
+        tabLayout.addTab(tabLayout.newTab().setText("Groceries"));
         tabLayout.addTab(tabLayout.newTab().setText("Profile"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

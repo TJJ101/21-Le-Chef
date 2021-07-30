@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,6 +81,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
                 extras.putString("recipeId", selectedRecipe.getRecipeId());
                 extras.putString("image", imgName);
                 extras.putSerializable("IngredientList", selectedRecipe.getIngredientList());
+                extras.putSerializable("StepsList", (Serializable) selectedRecipe.getStepsList());
                 Intent in = new Intent(holder.itemView.getContext(), DetailsActivity.class);
                 in.putExtras(extras);
                 holder.itemView.getContext().startActivity(in);

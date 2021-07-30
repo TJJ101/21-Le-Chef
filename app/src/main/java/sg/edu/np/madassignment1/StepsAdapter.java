@@ -1,10 +1,12 @@
 package sg.edu.np.madassignment1;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -43,21 +45,30 @@ public class StepsAdapter extends BaseAdapter implements ListAdapter {
         }
 
         //Handle TextView and display string from your list
-        TextView stepNum = (TextView)view.findViewById(R.id.stepNum);
-        stepNum.setText(list.get(position).getStepNum());
+        TextView stepNum = view.findViewById(R.id.stepNum);
+        stepNum.setText("Step " + list.get(position).getStepNum());
 
-        TextView stepsDesc = (TextView)view.findViewById(R.id.stepsTextView);
+        TextView stepsDesc = view.findViewById(R.id.stepsTextView);
         stepsDesc.setText(list.get(position).getStepDescription());
 
-        TextView stepTime = (TextView)view.findViewById(R.id.stepTime);
+        TextView stepTime = view.findViewById(R.id.stepTime);
         stepTime.setText(list.get(position).getTime());
 
         //Handle buttons and add onClickListeners
-        TextView deleteBtn = (TextView) view.findViewById(R.id.stepsDeleteBtn);
+        TextView deleteBtn = view.findViewById(R.id.stepsDeleteBtn);
 
         deleteBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                int i = 0;
+                int stepNumber;
+                while(i < list.size()){
+                    if(i>position){
+                        stepNumber = list.get(i).getStepNum() - 1;
+                        list.get(i).setStepNum(stepNumber);
+                    }
+                    i++;
+                }
                 list.remove(position);
                 notifyDataSetChanged();
             }

@@ -1,6 +1,8 @@
 package sg.edu.np.madassignment1;
 
-public class Steps {
+import java.io.Serializable;
+
+public class Steps  implements Serializable {
     private int stepNum;
     public int getStepNum() {
         return stepNum;

@@ -40,7 +40,8 @@ public class DetailsActivity extends AppCompatActivity {
         String recipeId = in.getStringExtra("recipeId");
         String imgName = in.getStringExtra("image");
         ArrayList<Ingredient> ingredientList = (ArrayList<Ingredient>) in.getSerializableExtra("IngredientList");
-        recipe = new Recipe(name, cuisine, rating, description, ingredientList);
+        ArrayList<Steps> stepsList = (ArrayList<Steps>) in.getSerializableExtra("StepsList");
+        recipe = new Recipe(name, cuisine, description, ingredientList, stepsList);
 
         //get image data
         ImageView imgView = findViewById(R.id.detailsImgView);

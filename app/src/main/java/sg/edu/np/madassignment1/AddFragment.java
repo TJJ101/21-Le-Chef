@@ -1,7 +1,7 @@
 package sg.edu.np.madassignment1;
 
 import android.app.Activity;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,36 +22,56 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class AddFragment extends Fragment {
-    TextInputLayout cuisineTxt;
-    TextView recipeName, descText, ingredientNameTxt, ingredientQtyTxt, ingredientUnitTxt, addBtn;
-    Button uploadBtn;
+    int stepNumber = 0;
+    String key;
+    TextInputLayout cuisinesTxt;
+    TextView recipeName, descText, ingredientNameTxt, ingredientQtyTxt, ingredientUnitTxt, addStepsTxt, addTimerTxt;
+    Button uploadBtn, addIngBtn, addStepsBtn, createRecipeBtn;
     ImageView recipeImg;
     LinearLayout titleSection;
-    FirebaseStorage storage = FirebaseStorage.getInstance();
     Uri filePath;
     String[] cuisine = {"Turkish", "Thai", "Japanese", "Indian", "French", "Chinese", "Western"};
-    String[] units = {"n/a", "g", "kg", "ml", "l"};
-    AutoCompleteTextView autoCompleteTextView;
+    String[] units = {"n/a", "g", "kg", "ml", "l", "tsp", "tbsp", "cup"};
+    AutoCompleteTextView cuisineTxt;
     ArrayList<Ingredient> ingredientList = new ArrayList<Ingredient>();
     ArrayList<Steps> stepsList = new ArrayList<Steps>();
-    ListView listView;
+    ListView ingredientListView, stepsListView;
+    StepsAdapter stepsAdapter;
     Boolean imgIsHidden, titleIsHidden, ingredientIsHidden, stepsIsHidden;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageReference;
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
+    DatabaseReference mDatabase = firebaseDatabase.getReference();
+    Recipe mRecipe;
 
     @Nullable
     @Override
@@ -61,11 +81,13 @@ public class AddFragment extends Fragment {
         //Initialise data
         recipeName = view.findViewById(R.id.recipeNameTxt);
         descText = view.findViewById(R.id.descTxt);
+        cuisineTxt = view.findViewById(R.id.cuisineDropdown);
         imgIsHidden = titleIsHidden = ingredientIsHidden = stepsIsHidden = false;
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         //Set autoCompleteTextView input type to text
-        autoCompleteTextView = view.findViewById(R.id.cuisineDropdown);
-        autoCompleteTextView.setInputType(InputType.TYPE_CLASS_TEXT);
+        cuisineTxt.setInputType(InputType.TYPE_CLASS_TEXT);
 
         uploadBtn = view.findViewById(R.id.uploadBtn);
         recipeImg = view.findViewById(R.id.recipeImg);
@@ -88,7 +110,7 @@ public class AddFragment extends Fragment {
 
         titleSection = view.findViewById(R.id.titleSection);
         recipeImg = view.findViewById(R.id.recipeImg);
-        cuisineTxt = view.findViewById(R.id.textInputDropdownLayout);
+        cuisinesTxt = view.findViewById(R.id.textInputDropdownLayout);
 
         ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
@@ -122,37 +144,130 @@ public class AddFragment extends Fragment {
         unitTxt.setThreshold(1);//start when u type first char
         unitTxt.setAdapter(unitAdapter);
 
-        //for adding new steps to steps array and list view
-        listView = view.findViewById(R.id.stepListView);
-        addBtn = view.findViewById(R.id.addIngredientBtn);
+        //for adding new ingredients to ingredients array and list view
+        ingredientListView = view.findViewById(R.id.ingredientListView);
+        addIngBtn = view.findViewById(R.id.addIngredientBtn);
         ingredientNameTxt = view.findViewById(R.id.addIngredientTxt);
         ingredientQtyTxt = view.findViewById(R.id.addQtyTxt);
         ingredientUnitTxt = view.findViewById(R.id.addUnitTxt);
 
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) listView.getLayoutParams();
-        addBtn.setOnClickListener(new View.OnClickListener() {
+        LinearLayout.LayoutParams ingredientListViewLP = (LinearLayout.LayoutParams) ingredientListView.getLayoutParams();
+        addIngBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String steps = ingredientNameTxt.getText().toString();
-                if (!steps.isEmpty() && !(steps.trim().length() == 0)){
-                    steps = ingredientNameTxt.getText().toString();
+                String ingredients = ingredientNameTxt.getText().toString();
+                String qty = ingredientQtyTxt.getText().toString();
+                String unit = ingredientUnitTxt.getText().toString();
+//              Not able to add when enter invalid inputs
+                if (validateIngredientInput(ingredients, qty, unit)){
                     ingredientList.add(new Ingredient(
-                            ingredientNameTxt.getText().toString(),
-                            Double.parseDouble(ingredientQtyTxt.getText().toString()),
-                            ingredientUnitTxt.getText().toString()));
-                    lp.height += DipToPixels(60);
-                    listView.setLayoutParams(lp);
-                    listView.setAdapter(new IngredientAdapter(ingredientList, getContext()));
-                    Log.d("SIZEESE", "" + ingredientList.size());
+                            ingredients,
+                            Double.parseDouble(qty),
+                            unit));
+                    ingredientListViewLP.height += DipToPixels(60);
+                    ingredientListView.setLayoutParams(ingredientListViewLP);
+                    ingredientListView.setAdapter(new IngredientAdapter(ingredientList, getContext()));
                 }
 
                 //hide the keyboard
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                ingredientNameTxt.setText("");
+                hideKeyboard(getActivity());
             }
         });
+
+        //for adding new steps to steps array and list view
+        stepsListView = view.findViewById(R.id.stepsListView);
+        addStepsBtn = view.findViewById(R.id.addStepsBtn);
+        addStepsTxt = view.findViewById(R.id.addStepsTxt);
+        addTimerTxt = view.findViewById(R.id.addTimerTxt);
+
+        LinearLayout.LayoutParams stepsListViewLP = (LinearLayout.LayoutParams) stepsListView.getLayoutParams();
+        addStepsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String stepsDesc = addStepsTxt.getText().toString();
+                String stepsTimer = addTimerTxt.getText().toString();
+                if (validateStepsInput(stepsDesc, stepsTimer)){
+                    stepNumber = stepsList.size() + 1;
+                    stepsList.add(new Steps(
+                            stepNumber,
+                            stepsDesc,
+                            stepsTimer
+                    ));
+                    //Add 125 which is height of one Steps view holder
+                    stepsListViewLP.height += DipToPixels(125);
+                    stepsListView.setLayoutParams(stepsListViewLP);
+                    stepsAdapter = new StepsAdapter(stepsList, getContext());
+                    stepsListView.setAdapter(stepsAdapter);
+                }
+
+                //hide the keyboard
+                hideKeyboard(getActivity());
+            }
+        });
+
+        createRecipeBtn = view.findViewById(R.id.createRecipeBtn);
+        createRecipeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newRecipeName = recipeName.getText().toString();
+                String newRecipeDesc = descText.getText().toString();
+                String newRecipeCui = cuisineTxt.getText().toString();
+
+                if(validateRecipeInput(recipeName.getText().toString(), descText.getText().toString(), cuisineTxt.getText().toString(), recipeImg)){
+                    mRecipe = new Recipe(newRecipeName, newRecipeDesc, newRecipeCui, ingredientList, stepsList);
+                    key = mDatabase.child("Recipe").push().getKey();
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put("/Recipe/" + key, mRecipe.toMap());
+                    mDatabase.updateChildren(childUpdates);
+                    uploadImage();
+                }
+            }
+        });
+
         return view;
+    }
+
+    public boolean validateRecipeInput(String name, String desc, String cuisine, ImageView recipeImg){
+        if(name.isEmpty() || name.trim().length() == 0 ||
+                desc.isEmpty() || desc.trim().length() == 0 ||
+                cuisine.isEmpty() || cuisine.trim().length() == 0 ||
+                recipeImg.getVisibility() == View.GONE){
+            Log.d("Invalid Inputttt", "Cfm nvr upload img");
+            return false;
+        }
+
+        return true;
+    }
+
+    //  Check if fields for steps section are empty
+    public boolean validateStepsInput(String stepsDesc, String stepsTimer){
+        if (stepsDesc.isEmpty() || stepsDesc.trim().length() == 0 ||
+                stepsTimer.isEmpty() || stepsTimer.trim().length() == 0){
+            return false;
+        }
+        return true;
+    }
+
+
+    //  Check if fields for ingredients section are empty
+    public boolean validateIngredientInput(String ingredients, String qty, String unit){
+        if (ingredients.isEmpty() || ingredients.trim().length() == 0 ||
+                qty.isEmpty() || qty.trim().length() == 0 ||
+                !isNumeric(qty) || Double.parseDouble(qty) <= 0 ||
+                unit.isEmpty() || unit.trim().length() == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    // Check if input string is a proper number
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
     }
 
     public float convertPixelsToDp(float px){
@@ -220,6 +335,88 @@ public class AddFragment extends Fragment {
                 builder.dismiss();
             }
         });
+    }
+
+    // UploadImage method
+    private void uploadImage() {
+        if (filePath != null) {
+
+            // Code for showing progressDialog while uploading
+            ProgressDialog progressDialog
+                    = new ProgressDialog(getActivity());
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            // Defining the child of storageReference
+            StorageReference ref
+                    = storageReference
+                    .child(
+                            "images/"
+                                    + key  + ".jpeg");
+
+            // adding listeners on upload
+            // or failure of image
+            ref.putFile(filePath)
+                    .addOnSuccessListener(
+                            new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(
+                                        UploadTask.TaskSnapshot taskSnapshot) {
+
+                                    // Image uploaded successfully
+                                    // Dismiss dialog
+                                    progressDialog.dismiss();
+                                    Toast
+                                            .makeText(getActivity(),
+                                                    "Recipe Uploaded!!",
+                                                    Toast.LENGTH_SHORT)
+                                            .show();
+                                    Bundle extras = new Bundle();
+                                    extras.putString("name", mRecipe.getName());
+                                    extras.putString("cuisine", mRecipe.getCuisine());
+                                    extras.putString("rating", mRecipe.getRating());
+                                    extras.putString("description", mRecipe.getDescription());
+                                    extras.putString("recipeId", mRecipe.getRecipeId());
+                                    extras.putString("image", key + ".jpeg");
+                                    extras.putSerializable("IngredientList", mRecipe.getIngredientList());
+                                    extras.putSerializable("StepsList", (Serializable) mRecipe.getStepsList());
+                                    Intent in = new Intent(getContext(), DetailsActivity.class);
+                                    in.putExtras(extras);
+                                    startActivity(in);
+                                }
+                            })
+
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                            // Error, Image not uploaded
+                            progressDialog.dismiss();
+                            Toast
+                                    .makeText(getActivity(),
+                                            "Failed " + e.getMessage(),
+                                            Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    })
+                    .addOnProgressListener(
+                            new OnProgressListener<UploadTask.TaskSnapshot>() {
+
+                                // Progress Listener for loading
+                                // percentage on the dialog box
+                                @Override
+                                public void onProgress(
+                                        UploadTask.TaskSnapshot taskSnapshot) {
+                                    double progress
+                                            = (100.0
+                                            * taskSnapshot.getBytesTransferred()
+                                            / taskSnapshot.getTotalByteCount());
+                                    progressDialog.setMessage(
+                                            "Uploaded "
+                                                    + (int) progress + "%");
+                                }
+                            });
+        }
     }
 
     //  Hide keyboard
