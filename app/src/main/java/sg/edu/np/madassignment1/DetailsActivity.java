@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -65,14 +66,17 @@ public class DetailsActivity extends AppCompatActivity {
         ingredientTxt.setText(ingredients);
         
 
-        //button to go ingredient checklist
+        //button to go add ingredient to Grocery List
         Button checklistBtn = findViewById(R.id.detailsChecklistBtn);
         checklistBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(DetailsActivity.this, GrocerylistActivity.class);
                 intent.putExtra("IngredientList", (Serializable)recipe.getIngredientList());
+                intent.putExtra("recipeName", recipe.getName());
                 startActivity(intent);
+                //Fade animation for transition
+                overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
 
@@ -86,6 +90,8 @@ public class DetailsActivity extends AppCompatActivity {
                 Intent in = new Intent(v.getContext(), StepsActivity.class);
                 in.putExtras(bundle);
                 v.getContext().startActivity(in);
+                //Fade animation for transition
+                overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
 
@@ -95,6 +101,8 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                //Fade animation for transition
+                overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
 
@@ -105,6 +113,8 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent in = new Intent(v.getContext(), MainActivity.class);
                 v.getContext().startActivity(in);
+                //Fade animation for Transition
+                overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
     }

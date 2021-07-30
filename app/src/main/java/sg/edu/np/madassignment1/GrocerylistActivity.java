@@ -2,6 +2,7 @@ package sg.edu.np.madassignment1;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,14 +12,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -44,8 +47,12 @@ public class GrocerylistActivity extends AppCompatActivity {
         Intent in = getIntent();
         ingredientList = (ArrayList<Ingredient>) in.getSerializableExtra("IngredientList");
 
+        TextView header = findViewById(R.id.heading);
+        header.setText("Ingredient for " + in.getStringExtra("recipeName"));
+
+        //This is for recyclerView
         RecyclerView recyclerView = findViewById(R.id.ingredientList);
-        adapter = new GroceryListAdapter(ingredientList);
+        adapter = new GroceryListAdapter(ingredientList, this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -55,17 +62,25 @@ public class GrocerylistActivity extends AppCompatActivity {
         checkListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Ingredient> groceryList = adapter.getSelectedIngredient();
-                Toast addedToGroceryList = Toast.makeText(getApplicationContext(), "Added to Grocery List", Toast.LENGTH_LONG);
-                addedToGroceryList.show();
-                FirebaseUser user = mAuth.getCurrentUser();
-                mDatabase.child("Users").child(user.getUid()).child("groceryList").setValue(groceryList);
-                Integer listSize = groceryList.size();
-                for(int i = 0; i < groceryList.size(); i++){
-                    Log.d("Grocery Test Data", groceryList.get(i).getName());
-                    Log.d("Grocery Test Data", String.valueOf(groceryList.get(i).getQuantity()));
+                if(adapter.validationCheck()){
+                    ArrayList<Ingredient> groceryList = adapter.getSelectedIngredient();
+                    Toast addedToGroceryList = Toast.makeText(getApplicationContext(), "Added to Grocery List", Toast.LENGTH_LONG);
+                    addedToGroceryList.show();
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    mDatabase.child("Users").child(user.getUid()).child("groceryList").setValue(groceryList);
+                    Integer listSize = groceryList.size();
+                    for(int i = 0; i < groceryList.size(); i++){
+                        Log.d("Grocery Test Data", groceryList.get(i).getName());
+                        Log.d("Grocery Test Data", String.valueOf(groceryList.get(i).getQuantity()));
+                    }
+                    finish();
+                    //Fade animation for transition
+                    overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
                 }
-                finish();
+                else{
+                    Toast fail = Toast.makeText(getApplicationContext(), "No item selected/No quantity entered", Toast.LENGTH_LONG);
+                    fail.show();
+                }
             }
         });
 
@@ -80,6 +95,17 @@ public class GrocerylistActivity extends AppCompatActivity {
                     adapter.deselectAll();
                     selectAll.setText("Select All");
                 }
+            }
+        });
+
+        Button backToHomeBtn = findViewById(R.id.groceryListHomeBtn);
+        backToHomeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                startActivity(intent);
+                //Fade animation for transition
+                overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
             }
         });
     }

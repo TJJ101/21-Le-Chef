@@ -7,7 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -15,8 +18,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -50,6 +55,7 @@ import java.util.ArrayList;
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
+
         try{
             //get the list of recipe id that the user has created
             mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
@@ -66,8 +72,9 @@ import java.util.ArrayList;
             });
         }
         catch (Exception e){
-            Log.d("fuck", e + "");
+            Log.d("Debug MainActivity", e + "");
         }
+
 
         // init bottom nav
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
@@ -156,6 +163,16 @@ import java.util.ArrayList;
             stepsList.size() > 0){
             return true;
         }
-        return false;
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser == null){
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
+        }
     }
+
 }

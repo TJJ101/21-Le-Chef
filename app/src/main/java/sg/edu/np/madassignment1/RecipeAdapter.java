@@ -1,5 +1,6 @@
 package sg.edu.np.madassignment1;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -34,12 +35,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
     private List<Recipe> recipeList;
     private List<Recipe> recipeListFull;
+    Activity rActivity;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     Context context;
 
-    RecipeAdapter(Context context, ArrayList<Recipe> recipeList){
+    RecipeAdapter(Context context, ArrayList<Recipe> recipeList, Activity rActivity){
         this.recipeList = recipeList;
         this.context = context;
+        this.rActivity = rActivity;
         recipeListFull = new ArrayList<>(recipeList);
     }
 
@@ -74,11 +77,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
                 extras.putString("cuisine", selectedRecipe.getCuisine());
                 extras.putString("rating", selectedRecipe.getRating());
                 extras.putString("description", selectedRecipe.getDescription());
+                extras.putString("recipeId", selectedRecipe.getRecipeId());
                 extras.putString("image", imgName);
                 extras.putSerializable("IngredientList", selectedRecipe.getIngredientList());
                 Intent in = new Intent(holder.itemView.getContext(), DetailsActivity.class);
                 in.putExtras(extras);
                 holder.itemView.getContext().startActivity(in);
+                //Fade animation for transition
+                rActivity.overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
 
                 /*fragment.setArguments(extras);
                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
