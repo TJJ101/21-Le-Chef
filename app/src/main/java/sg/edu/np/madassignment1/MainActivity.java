@@ -163,7 +163,8 @@ import java.util.ArrayList;
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser == null){
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
+            //Slide right to Left Transition
+            overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
         }
     }
 
