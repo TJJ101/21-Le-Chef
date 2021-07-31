@@ -26,10 +26,11 @@ public class Recipe implements Serializable {
     }
 
     private Ratings rating;
-    public double getRating(){ return rating.getOverallRating(); }
-    public void setRating(String r){
-        //idk what to put here
-        this.rating = r;
+    public Ratings getRating() {
+        return rating;
+    }
+    public void setRating(Ratings rating) {
+        this.rating = rating;
     }
 
     private String recipeId;

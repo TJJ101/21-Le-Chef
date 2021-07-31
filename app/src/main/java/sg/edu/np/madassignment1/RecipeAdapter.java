@@ -3,10 +3,7 @@ package sg.edu.np.madassignment1;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -80,7 +71,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
                 Bundle extras = new Bundle();
                 extras.putString("name", selectedRecipe.getName());
                 extras.putString("cuisine", selectedRecipe.getCuisine());
-                extras.putString("rating", selectedRecipe.getRating());
+                extras.putString("rating", "" + selectedRecipe.getRating().getOverallRatings());
                 extras.putString("description", selectedRecipe.getDescription());
                 extras.putString("recipeId", selectedRecipe.getRecipeId());
                 extras.putString("image", imgName);
