@@ -1,61 +1,53 @@
 package sg.edu.np.madassignment1;
 
 public class Ratings {
-    private int fiveStar;
-    private int fourStar;
-    private int threeStar;
-    private int twoStar;
-    private int oneStar;
+    private double fiveStar;
+    private double fourStar;
+    private double threeStar;
+    private double twoStar;
+    private double oneStar;
 
-    public int getFiveStar() {
+    public double getFiveStar() {
         return fiveStar;
     }
 
-    public void setFiveStar(int fiveStar) {
+    public void setFiveStar(double fiveStar) {
         this.fiveStar = fiveStar;
     }
 
-    public int getFourStar() {
+    public double getFourStar() {
         return fourStar;
     }
 
-    public void setFourStar(int fourStar) {
+    public void setFourStar(double fourStar) {
         this.fourStar = fourStar;
     }
 
-    public int getThreeStar() {
+    public double getThreeStar() {
         return threeStar;
     }
 
-    public void setThreeStar(int threeStar) {
+    public void setThreeStar(double threeStar) {
         this.threeStar = threeStar;
     }
 
-    public int getTwoStar() {
+    public double getTwoStar() {
         return twoStar;
     }
 
-    public void setTwoStar(int twoStar) {
+    public void setTwoStar(double twoStar) {
         this.twoStar = twoStar;
     }
 
-    public int getOneStar() {
+    public double getOneStar() {
         return oneStar;
     }
 
-    public void setOneStar(int oneStar) {
+    public void setOneStar(double oneStar) {
         this.oneStar = oneStar;
     }
 
     public Ratings(){};
-
-    public Ratings(int fiveStar, int fourStar, int threeStar, int twoStar, int oneStar) {
-        this.fiveStar = fiveStar;
-        this.fourStar = fourStar;
-        this.threeStar = threeStar;
-        this.twoStar = twoStar;
-        this.oneStar = oneStar;
-    }
 
     public double getOverallRatings(){
         return ((5 * fiveStar) + (4 * fourStar) + (3 * threeStar) + (2 * twoStar) + (1 * oneStar)) / (fiveStar+fourStar+threeStar+twoStar+oneStar);

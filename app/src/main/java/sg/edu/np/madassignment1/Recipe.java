@@ -25,12 +25,12 @@ public class Recipe implements Serializable {
         this.cuisine = c;
     }
 
-    private Ratings rating;
-    public Ratings getRating() {
-        return rating;
+    private Ratings ratings;
+    public Ratings getRatings() {
+        return ratings;
     }
-    public void setRating(Ratings rating) {
-        this.rating = rating;
+    public void setRatings(Ratings ratings) {
+        this.ratings = ratings;
     }
 
     private String recipeId;

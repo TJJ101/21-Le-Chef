@@ -55,11 +55,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
         Recipe selectedRecipe = recipeList.get(position);
         holder.myRecipeName.setText(selectedRecipe.getName());
         holder.myRecipeCuisine.setText("Cuisine Type: " + selectedRecipe.getCuisine());
-        if(selectedRecipe.getRating() == null){
-           holder.myRecipeRating.setText( "0/5 Rating");
-        }else {
-            holder.myRecipeRating.setText(selectedRecipe.getRating() + "/5 Rating");
-        }
+        String ratings = String.format("%.1f", selectedRecipe.getRatings().getOverallRatings()) ;
+        holder.myRecipeRating.setText(ratings + "/5 Rating");
         //for getting image
         String imgName = selectedRecipe.getRecipeId() + ".jpeg";
         StorageReference imageRef = storage.getReference().child("images").child(imgName);
@@ -71,7 +68,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
                 Bundle extras = new Bundle();
                 extras.putString("name", selectedRecipe.getName());
                 extras.putString("cuisine", selectedRecipe.getCuisine());
-//                extras.putString("rating", "" + selectedRecipe.getRating().getOverallRatings());
+                extras.putString("rating", "" + selectedRecipe.getRatings().getOverallRatings());
                 extras.putString("description", selectedRecipe.getDescription());
                 extras.putString("recipeId", selectedRecipe.getRecipeId());
                 extras.putString("image", imgName);
