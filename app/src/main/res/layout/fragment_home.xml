@@ -89,9 +89,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recipeRecycler"
                 android:layout_width="match_parent"
-                android:layout_height="655sp"
+                android:layout_height="620sp"
                 android:paddingLeft="3sp"
-                android:paddingRight="3sp"/>
+                android:paddingRight="3sp" />
 
         </LinearLayout>
 
