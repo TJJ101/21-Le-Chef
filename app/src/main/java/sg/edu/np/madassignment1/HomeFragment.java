@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
     private RecipeAdapter adapter;
     private RecyclerView recyclerView;
     public ArrayList<Recipe> recipeList = new ArrayList<>();
-    String[] cuisine = {"-None-", "Turkish", "Thai", "Japanese", "Indian", "French", "Chinese", "Western"};
+    String[] cuisine = {"All", "Turkish", "Thai", "Japanese", "Indian", "French", "Chinese", "Western"};
 
     @Nullable
     @Override

@@ -58,25 +58,21 @@ public class AddFragment extends Fragment {
     int stepNumber = 0;
     String key;
     TextInputLayout cuisinesTxt;
-    TextView recipeName, descText, ingredientNameTxt, ingredientQtyTxt, ingredientUnitTxt, addStepsTxt, addTimerTxt;
+    TextView recipeName, descText, ingredientNameTxt, ingredientQtyTxt, addStepsTxt, addTimerTxt;
     Button uploadBtn, addIngBtn, addStepsBtn, createRecipeBtn;
     ImageView recipeImg;
-    LinearLayout titleSection;
     Uri filePath;
     String[] cuisine = {"Turkish", "Thai", "Japanese", "Indian", "French", "Chinese", "Western"};
     String[] units = {"n/a", "g", "kg", "ml", "l", "tsp", "tbsp", "cup"};
-    AutoCompleteTextView cuisineTxt;
+    AutoCompleteTextView cuisineTxt, ingredientUnitTxt;
     ArrayList<Ingredient> ingredientList = new ArrayList<Ingredient>();
     ArrayList<Steps> stepsList = new ArrayList<Steps>();
     ListView ingredientListView, stepsListView;
     StepsAdapter stepsAdapter;
-    Boolean imgIsHidden, titleIsHidden, ingredientIsHidden, stepsIsHidden;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageReference;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
     DatabaseReference mDatabase = firebaseDatabase.getReference();
-    FirebaseAuth mAuth;
-    FirebaseUser user;
     Recipe mRecipe;
     Global global = new Global();
     User mUser = new User();
@@ -90,17 +86,29 @@ public class AddFragment extends Fragment {
         recipeName = view.findViewById(R.id.recipeNameTxt);
         descText = view.findViewById(R.id.descTxt);
         cuisineTxt = view.findViewById(R.id.cuisineDropdown);
-        imgIsHidden = titleIsHidden = ingredientIsHidden = stepsIsHidden = false;
+        uploadBtn = view.findViewById(R.id.uploadBtn);
+        recipeImg = view.findViewById(R.id.recipeImg);
+        recipeImg = view.findViewById(R.id.recipeImg);
+        cuisinesTxt = view.findViewById(R.id.textInputDropdownLayout);
+        ingredientListView = view.findViewById(R.id.ingredientListView);
+        addIngBtn = view.findViewById(R.id.addIngredientBtn);
+        ingredientNameTxt = view.findViewById(R.id.addIngredientTxt);
+        ingredientQtyTxt = view.findViewById(R.id.addQtyTxt);
+        ingredientUnitTxt = view.findViewById(R.id.addUnitTxt);
+        stepsListView = view.findViewById(R.id.stepsListView);
+        addStepsBtn = view.findViewById(R.id.addStepsBtn);
+        addStepsTxt = view.findViewById(R.id.addStepsTxt);
+        addTimerTxt = view.findViewById(R.id.addTimerTxt);
+        createRecipeBtn = view.findViewById(R.id.createRecipeBtn);
+
+        //Initialise Firebase db
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
 
         //Set autoCompleteTextView input type to text
         cuisineTxt.setInputType(InputType.TYPE_CLASS_TEXT);
 
-        uploadBtn = view.findViewById(R.id.uploadBtn);
-        recipeImg = view.findViewById(R.id.recipeImg);
+        //Add on click to upload image function
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,37 +116,12 @@ public class AddFragment extends Fragment {
             }
         });
 
-        // Long click on Image to change image
+        //Long click on Image to change image
         recipeImg.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Log.d("LONGGG", "DICKKKKKKKKK");
                 openDialog();
                 return true;
-            }
-        });
-
-        titleSection = view.findViewById(R.id.titleSection);
-        recipeImg = view.findViewById(R.id.recipeImg);
-        cuisinesTxt = view.findViewById(R.id.textInputDropdownLayout);
-
-        ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
-        if (viewTreeObserver.isAlive()) {
-            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    titleSection.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    Log.d("ONLINE PIXELS TO DP", "" + convertPixelsToDp(titleSection.getHeight()));
-                }
-            });
-        }
-
-        // Click on section title to show & hide section
-        TextView imgLabel = view.findViewById(R.id.imgLabel);
-        imgLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HideImgSection();
             }
         });
 
@@ -150,17 +133,10 @@ public class AddFragment extends Fragment {
 
         //setup the unit dropdown text
         ArrayAdapter<String> unitAdapter = new ArrayAdapter<String>(getActivity(), R.layout.dropdown, units);
-        AutoCompleteTextView unitTxt = view.findViewById(R.id.addUnitTxt);
-        unitTxt.setThreshold(1);//start when u type first char
-        unitTxt.setAdapter(unitAdapter);
+        ingredientUnitTxt.setThreshold(1);//start when u type first char
+        ingredientUnitTxt.setAdapter(unitAdapter);
 
         //for adding new ingredients to ingredients array and list view
-        ingredientListView = view.findViewById(R.id.ingredientListView);
-        addIngBtn = view.findViewById(R.id.addIngredientBtn);
-        ingredientNameTxt = view.findViewById(R.id.addIngredientTxt);
-        ingredientQtyTxt = view.findViewById(R.id.addQtyTxt);
-        ingredientUnitTxt = view.findViewById(R.id.addUnitTxt);
-
         LinearLayout.LayoutParams ingredientListViewLP = (LinearLayout.LayoutParams) ingredientListView.getLayoutParams();
         addIngBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,7 +144,7 @@ public class AddFragment extends Fragment {
                 String ingredients = ingredientNameTxt.getText().toString();
                 String qty = ingredientQtyTxt.getText().toString();
                 String unit = ingredientUnitTxt.getText().toString();
-//              Not able to add when enter invalid inputs
+                //Not able to add when enter invalid inputs
                 if (validateIngredientInput(ingredients, qty, unit)){
                     ingredientList.add(new Ingredient(
                             ingredients,
@@ -184,12 +160,6 @@ public class AddFragment extends Fragment {
             }
         });
 
-        //for adding new steps to steps array and list view
-        stepsListView = view.findViewById(R.id.stepsListView);
-        addStepsBtn = view.findViewById(R.id.addStepsBtn);
-        addStepsTxt = view.findViewById(R.id.addStepsTxt);
-        addTimerTxt = view.findViewById(R.id.addTimerTxt);
-
         //Add Step Timer Picker
         addTimerTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,6 +168,7 @@ public class AddFragment extends Fragment {
             }
         });
 
+        //for adding new steps to steps array and list view
         LinearLayout.LayoutParams stepsListViewLP = (LinearLayout.LayoutParams) stepsListView.getLayoutParams();
         addStepsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,7 +194,6 @@ public class AddFragment extends Fragment {
             }
         });
 
-        createRecipeBtn = view.findViewById(R.id.createRecipeBtn);
         createRecipeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -232,13 +202,13 @@ public class AddFragment extends Fragment {
                 String newRecipeCui = cuisineTxt.getText().toString();
 
                 if(validateRecipeInput(recipeName.getText().toString(), descText.getText().toString(), cuisineTxt.getText().toString(), recipeImg)){
+                    mUser = MainActivity.mUser;
                     key = mDatabase.child("Recipe").push().getKey();
                     mRecipe = new Recipe(newRecipeName, newRecipeDesc, newRecipeCui, ingredientList, stepsList);
                     mRecipe.setRecipeId(key);
-                    Map<String, Object> childUpdates = new HashMap<>();
-                    childUpdates.put("/Recipe/" + key, mRecipe.toMap());
-                    mDatabase.updateChildren(childUpdates);
-
+                    mRecipe.setCreatorId(mUser.getUsername());
+                    mRecipe.setRatings(new Ratings());
+                    mDatabase.child("Recipe").child(key).setValue(mRecipe);
                     uploadImage();
                 }
             }
@@ -251,8 +221,9 @@ public class AddFragment extends Fragment {
         if(name.isEmpty() || name.trim().length() == 0 ||
                 desc.isEmpty() || desc.trim().length() == 0 ||
                 cuisine.isEmpty() || cuisine.trim().length() == 0 ||
-                recipeImg.getVisibility() == View.GONE){
-            Log.d("Invalid Inputttt", "Cfm nvr upload img");
+                recipeImg.getVisibility() == View.GONE ||
+                ingredientList.size() == 0 || stepsList.size() == 0){
+            Toast.makeText(getContext(), "Please enter in all the fields", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -262,6 +233,7 @@ public class AddFragment extends Fragment {
     public boolean validateStepsInput(String stepsDesc, String stepsTimer){
         if (stepsDesc.isEmpty() || stepsDesc.trim().length() == 0 ||
                 stepsTimer.isEmpty() || stepsTimer.trim().length() == 0){
+            Toast.makeText(getContext(), "Please enter all field to add steps", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -274,6 +246,7 @@ public class AddFragment extends Fragment {
                 qty.isEmpty() || qty.trim().length() == 0 ||
                 !isNumeric(qty) || Double.parseDouble(qty) <= 0 ||
                 unit.isEmpty() || unit.trim().length() == 0) {
+            Toast.makeText(getContext(), "Please enter valid values for ingredient", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -293,6 +266,7 @@ public class AddFragment extends Fragment {
         return px / ((float) getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
+    //Convert px to dp
     public float DipToPixels(float dp){
         return TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
@@ -300,19 +274,8 @@ public class AddFragment extends Fragment {
                 getResources().getDisplayMetrics()
         );
     }
-//  Hide image section
-    public void HideImgSection(){
-        if(recipeImg.getVisibility() == View.VISIBLE){
-            if(imgIsHidden){
-                titleSection.animate().translationY(DipToPixels(0));
-            }
-            else{
-                titleSection.animate().translationY(DipToPixels(-300));
-            }
-            imgIsHidden = !imgIsHidden;
-        }
-    }
 
+    //Select image from device function
     private void SelectImage()
     {
         // Defining Implicit Intent to mobile gallery
@@ -328,7 +291,7 @@ public class AddFragment extends Fragment {
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
-//                      Get the Uri of data
+                        //Get the Uri of data
                         filePath = data.getData();
                         Glide.with(getContext()).load(filePath).into(recipeImg);
                         recipeImg.setVisibility(View.VISIBLE);
@@ -337,6 +300,7 @@ public class AddFragment extends Fragment {
                 }
             });
 
+    //Open alert
     private void openDialog() {
         //build an AlertDialog
         final AlertDialog builder = new AlertDialog.Builder(getActivity())
@@ -371,11 +335,11 @@ public class AddFragment extends Fragment {
         selectHour.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         selectMin.setMinValue(0);
-        selectMin.setMaxValue(60);
+        selectMin.setMaxValue(59);
         selectMin.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         selectSec.setMinValue(0);
-        selectSec.setMaxValue(60);
+        selectSec.setMaxValue(59);
         selectSec.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         final AlertDialog builder = new AlertDialog.Builder(getContext())
@@ -449,14 +413,8 @@ public class AddFragment extends Fragment {
                                                     Toast.LENGTH_SHORT)
                                             .show();
                                     Bundle extras = new Bundle();
-                                    extras.putString("name", mRecipe.getName());
-                                    extras.putString("cuisine", mRecipe.getCuisine());
-//                                    extras.putString("rating", "" + mRecipe.getRating().getOverallRatings());
-                                    extras.putString("description", mRecipe.getDescription());
-                                    extras.putString("recipeId", mRecipe.getRecipeId());
                                     extras.putString("image", key + ".jpeg");
-                                    extras.putSerializable("IngredientList", mRecipe.getIngredientList());
-                                    extras.putSerializable("StepsList", (Serializable) mRecipe.getStepsList());
+                                    extras.putSerializable("Recipe", (Serializable) mRecipe);
                                     Intent in = new Intent(getContext(), DetailsActivity.class);
                                     in.putExtras(extras);
                                     startActivity(in);

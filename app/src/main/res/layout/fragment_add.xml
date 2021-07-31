@@ -82,7 +82,7 @@
                     android:visibility="gone" />
             </LinearLayout>
             <!--    End of Upload Picture section    -->
-            <!--    Start of Set Title section    -->
+            <!--    Start of title section    -->
             <LinearLayout
                 android:id="@+id/titleSection"
                 android:layout_width="wrap_content"
@@ -174,8 +174,10 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
-
+<!--        End of title section    -->
+<!--        Start of ingredient section    -->
             <LinearLayout
+                android:id="@+id/ingredientSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -300,11 +302,11 @@
                     android:layout_height="120dp">
                 </ListView>
             </LinearLayout>
-            <!--        End of Ingredient Section-->
-
+<!--        End of Ingredient Section-->
 
 <!--        Start of Steps section    -->
             <LinearLayout
+                android:id="@+id/stepsSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">

@@ -26,7 +26,7 @@
                 android:paddingTop="20sp"
                 android:text="Le Chef"
                 android:textAlignment="center"
-                android:textColor="#3BF87F"
+                android:textColor="#424244"
                 android:textSize="50sp" />
 
             <androidx.appcompat.widget.SearchView

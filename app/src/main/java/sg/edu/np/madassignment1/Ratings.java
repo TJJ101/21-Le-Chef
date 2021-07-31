@@ -1,6 +1,8 @@
 package sg.edu.np.madassignment1;
 
-public class Ratings {
+import java.io.Serializable;
+
+public class Ratings implements Serializable {
     private double fiveStar;
     private double fourStar;
     private double threeStar;
@@ -47,9 +49,23 @@ public class Ratings {
         this.oneStar = oneStar;
     }
 
-    public Ratings(){};
+    public Ratings(){
+        this.oneStar = 0;
+        this.twoStar = 0;
+        this.threeStar = 0;
+        this.fourStar = 0;
+        this.fiveStar = 0;
+    };
 
-    public double getOverallRatings(){
+//    public Ratings(double fiveStar, double fourStar, double threeStar, double twoStar, double oneStar) {
+//        this.fiveStar = fiveStar;
+//        this.fourStar = fourStar;
+//        this.threeStar = threeStar;
+//        this.twoStar = twoStar;
+//        this.oneStar = oneStar;
+//    }
+
+    public double calculateOverallRatings(){
         return ((5 * fiveStar) + (4 * fourStar) + (3 * threeStar) + (2 * twoStar) + (1 * oneStar)) / (fiveStar+fourStar+threeStar+twoStar+oneStar);
     }
 

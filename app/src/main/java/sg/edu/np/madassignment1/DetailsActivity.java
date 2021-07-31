@@ -1,13 +1,16 @@
 package sg.edu.np.madassignment1;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -18,6 +21,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.NumberPicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,10 +50,12 @@ public class DetailsActivity extends AppCompatActivity {
     public Animation fromBottom (Context context) {return AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim);}
     public Animation toBottom (Context context) {return AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim);}
     FloatingActionButton expandBtn, startBtn, saveBtn, backBtn, rateBtn;
-    TextView nameTxt, desTxt, ingredientTxt;
+    TextView nameTxt, desTxt, ingredientTxt, creatorTxt;
+    RatingBar ratingBar;
     ListView stepsListView;
     StepsDetailsAdapter stepsDetailsAdapter;
-
+    RadioGroup radioGroup;
+    RadioButton radioBtn;
     ArrayList<String> savedList = new ArrayList<>();
     Boolean clicked = false;
     Recipe recipe;
@@ -66,18 +75,13 @@ public class DetailsActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         Intent in = getIntent();
-        String name = in.getStringExtra("name");
-        String cuisine = in.getStringExtra("cuisine");
-        String description = in.getStringExtra("description");
         String imgName = in.getStringExtra("image");
-        recipeId = in.getStringExtra("recipeId");
-        ArrayList<Ingredient> ingredientList = (ArrayList<Ingredient>) in.getSerializableExtra("IngredientList");
-        ArrayList<Steps> stepsList = (ArrayList<Steps>) in.getSerializableExtra("StepsList");
-        recipe = new Recipe(name, cuisine, description, ingredientList, stepsList);
+        recipe = (Recipe) in.getSerializableExtra("Recipe");
 
         nameTxt = findViewById(R.id.nameTxt);
         desTxt = findViewById(R.id.descriptionTxt);
         ingredientTxt = findViewById(R.id.ingredientTxt);
+        creatorTxt = findViewById(R.id.creatorTxt);
         expandBtn = findViewById(R.id.expandFloatBtn);
         startBtn = findViewById(R.id.startFloatBtn);
         saveBtn = findViewById(R.id.saveFloatButton);
@@ -90,12 +94,13 @@ public class DetailsActivity extends AppCompatActivity {
         StorageReference imageRef = storage.getReference().child("images").child(imgName);
         Glide.with(this).load(imageRef).centerCrop().into(imgView);
 
-        stepsDetailsAdapter = new StepsDetailsAdapter(stepsList, DetailsActivity.this);
+        stepsDetailsAdapter = new StepsDetailsAdapter((ArrayList<Steps>) recipe.getStepsList(), DetailsActivity.this);
         stepsListView.setAdapter(stepsDetailsAdapter);
         setListViewHeightBasedOnChildren(stepsListView);
 
         nameTxt.setText(recipe.getName());
         desTxt.setText(recipe.getDescription());
+        creatorTxt.setText("by " + recipe.getCreatorId());
         String ingredients = "";
         for(Ingredient i : recipe.getIngredientList()){
             if(i.getMeasurement().equals("n/a")){
@@ -137,7 +142,7 @@ public class DetailsActivity extends AppCompatActivity {
 /*                bundle.putString("recipeId", recipeId);
                 bundle.putString("step1Time", step1Time);*/
                 bundle.putString("imgName", imgName);
-                bundle.putSerializable("stepsList", stepsList);
+                bundle.putSerializable("stepsList", (Serializable) recipe.getStepsList());
                 Intent in = new Intent(v.getContext(), StepsActivity.class);
                 in.putExtras(bundle);
                 v.getContext().startActivity(in);
@@ -170,12 +175,15 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //Open rating alert box
         rateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toast.makeText(DetailsActivity.this, "Rating open", Toast.LENGTH_SHORT).show();
+                openRatingDialog();
             }
         });
+
         //backButton
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,6 +211,67 @@ public class DetailsActivity extends AppCompatActivity {
                     //Slide right to Left Transition
                     overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
                 }
+            }
+        });
+    }
+
+    public void openRatingDialog(){
+        LayoutInflater l = getLayoutInflater();
+        final View v = l.inflate(R.layout.select_ratings_dialog, null);
+
+        radioGroup =  v.findViewById(R.id.radioGroup);
+
+        final AlertDialog builder = new AlertDialog.Builder(this)
+                .setPositiveButton("Submit", null)
+                .setNegativeButton("Cancel", null)
+                .setTitle("Select rating")
+                .setView(v)
+                .setCancelable(false)
+                .create();
+        builder.show();
+        //Setting up OnClickListener on positive button of AlertDialog
+        builder.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                double rating;
+                int radioId = radioGroup.getCheckedRadioButtonId();
+                radioBtn = v.findViewById(radioId);
+
+                if(radioBtn.getText().equals("1")){
+                    rating = recipe.getRatings().getTwoStar() + 1;
+                    recipe.getRatings().setOneStar(rating);
+                    mDatabase.child("Recipe").child(recipe.getRecipeId()).child("ratings").setValue(recipe.getRatings());
+                    toast.makeText(DetailsActivity.this, "Thanks for the feedback", Toast.LENGTH_SHORT).show();
+                }
+                else if(radioBtn.getText().equals("2")){
+                    rating = recipe.getRatings().getOneStar() + 1;
+                    recipe.getRatings().setTwoStar(rating);
+                    mDatabase.child("Recipe").child(recipe.getRecipeId()).child("ratings").setValue(recipe.getRatings());
+                    toast.makeText(DetailsActivity.this, "Thanks for the feedback :)", Toast.LENGTH_SHORT).show();
+                }
+                else if(radioBtn.getText().equals("3")){
+                    rating = recipe.getRatings().getThreeStar() + 1;
+                    recipe.getRatings().setThreeStar(rating);
+                    mDatabase.child("Recipe").child(recipe.getRecipeId()).child("ratings").setValue(recipe.getRatings());
+                    toast.makeText(DetailsActivity.this, "Thanks for the rating 😄", Toast.LENGTH_SHORT).show();
+                }
+                else if(radioBtn.getText().equals("4")){
+                    rating = recipe.getRatings().getFourStar() + 1;
+                    recipe.getRatings().setFourStar(rating);
+                    mDatabase.child("Recipe").child(recipe.getRecipeId()).child("ratings").setValue(recipe.getRatings());
+                    toast.makeText(DetailsActivity.this, "Thanks for the good rating 😁", Toast.LENGTH_SHORT).show();
+                }
+                else if(radioBtn.getText().equals("5")){
+                    rating = recipe.getRatings().getFiveStar() + 1;
+                    recipe.getRatings().setFiveStar(rating);
+                    mDatabase.child("Recipe").child(recipe.getRecipeId()).child("ratings").setValue(recipe.getRatings());
+                    toast.makeText(DetailsActivity.this, "Thanks for the perfect rating 🤩", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    toast.makeText(DetailsActivity.this, "No ratings provided", Toast.LENGTH_SHORT).show();
+                }
+
+                builder.dismiss();
             }
         });
     }

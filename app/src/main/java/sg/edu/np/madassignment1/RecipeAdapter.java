@@ -56,7 +56,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
         Recipe selectedRecipe = recipeList.get(position);
         holder.myRecipeName.setText(selectedRecipe.getName());
         holder.myRecipeCuisine.setText(selectedRecipe.getCuisine());
-        String ratings = String.format("%.1f", selectedRecipe.getRatings().getOverallRatings()) ;
+        String ratings = String.format("%.1f", selectedRecipe.getRatings().calculateOverallRatings()) ;
         holder.myRecipeRating.setRating(Float.parseFloat(ratings));
         //for getting image
         String imgName = selectedRecipe.getRecipeId() + ".jpeg";
@@ -67,14 +67,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
             @Override
             public void onClick(View v) {
                 Bundle extras = new Bundle();
-                extras.putString("name", selectedRecipe.getName());
-                extras.putString("cuisine", selectedRecipe.getCuisine());
-                extras.putString("rating", "" + selectedRecipe.getRatings().getOverallRatings());
-                extras.putString("description", selectedRecipe.getDescription());
-                extras.putString("recipeId", selectedRecipe.getRecipeId());
                 extras.putString("image", imgName);
-                extras.putSerializable("IngredientList", selectedRecipe.getIngredientList());
-                extras.putSerializable("StepsList", (Serializable) selectedRecipe.getStepsList());
+                extras.putSerializable("Recipe", (Serializable)selectedRecipe);
                 Intent in = new Intent(holder.itemView.getContext(), DetailsActivity.class);
                 in.putExtras(extras);
                 holder.itemView.getContext().startActivity(in);
