@@ -23,21 +23,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="cursive"
+                android:paddingTop="20sp"
                 android:text="Le Chef"
                 android:textAlignment="center"
                 android:textColor="#3BF87F"
-                android:textSize="50sp"
-                android:paddingTop="10sp"/>
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-thin"
-                android:text="Welcome"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="40sp" />
+                android:textSize="50sp" />
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/searchTxt"
@@ -89,7 +79,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recipeRecycler"
                 android:layout_width="match_parent"
-                android:layout_height="620sp"
+                android:layout_height="625sp"
                 android:paddingLeft="3sp"
                 android:paddingRight="3sp" />
 

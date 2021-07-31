@@ -42,7 +42,7 @@ public class DetailsActivity extends AppCompatActivity {
     public Animation rotateClose (Context context) {return AnimationUtils.loadAnimation(this, R.anim.rotate_close_anim);}
     public Animation fromBottom (Context context) {return AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim);}
     public Animation toBottom (Context context) {return AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim);}
-    FloatingActionButton expandBtn, startBtn, saveBtn, backBtn;
+    FloatingActionButton expandBtn, startBtn, saveBtn, backBtn, rateBtn;
     TextView nameTxt, desTxt, ingredientTxt;
     ListView stepsListView;
     StepsDetailsAdapter stepsDetailsAdapter;
@@ -81,6 +81,7 @@ public class DetailsActivity extends AppCompatActivity {
         expandBtn = findViewById(R.id.expandFloatBtn);
         startBtn = findViewById(R.id.startFloatBtn);
         saveBtn = findViewById(R.id.saveFloatButton);
+        rateBtn = findViewById(R.id.rateFloatBtn);
         backBtn = findViewById(R.id.backFloatBtn);
         stepsListView = findViewById(R.id.detailsStepsList);
 
@@ -169,6 +170,12 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             }
         });
+        rateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toast.makeText(DetailsActivity.this, "Rating open", Toast.LENGTH_SHORT).show();
+            }
+        });
         //backButton
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,11 +251,13 @@ public class DetailsActivity extends AppCompatActivity {
         if (!clicked){
             startBtn.setVisibility(View.VISIBLE);
             saveBtn.setVisibility(View.VISIBLE);
+            rateBtn.setVisibility(View.VISIBLE);
             backBtn.setVisibility(View.VISIBLE);
         }
         else {
             startBtn.setVisibility(View.INVISIBLE);
             saveBtn.setVisibility(View.INVISIBLE);
+            rateBtn.setVisibility(View.INVISIBLE);
             backBtn.setVisibility(View.INVISIBLE);
         }
     }
@@ -258,12 +267,14 @@ public class DetailsActivity extends AppCompatActivity {
             startBtn.startAnimation(fromBottom(DetailsActivity.this));
             saveBtn.startAnimation(fromBottom(DetailsActivity.this));
             backBtn.startAnimation(fromBottom(DetailsActivity.this));
+            rateBtn.startAnimation(fromBottom(DetailsActivity.this));
             expandBtn.startAnimation(rotateOpen(DetailsActivity.this));
         }
         else{
             startBtn.startAnimation(toBottom(DetailsActivity.this));
             saveBtn.startAnimation(toBottom(DetailsActivity.this));
             backBtn.startAnimation(toBottom(DetailsActivity.this));
+            rateBtn.startAnimation(toBottom(DetailsActivity.this));
             expandBtn.startAnimation(rotateClose(DetailsActivity.this));
         }
     }
