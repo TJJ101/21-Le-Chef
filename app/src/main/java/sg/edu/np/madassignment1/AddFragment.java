@@ -78,6 +78,8 @@ public class AddFragment extends Fragment {
     FirebaseAuth mAuth;
     FirebaseUser user;
     Recipe mRecipe;
+    Global global = new Global();
+    User mUser = new User();
 
     @Nullable
     @Override
@@ -178,7 +180,7 @@ public class AddFragment extends Fragment {
                 }
 
                 //hide the keyboard
-                hideKeyboard(getActivity());
+                global.hideKeyboard(getActivity());
             }
         });
 
@@ -217,7 +219,7 @@ public class AddFragment extends Fragment {
                 }
 
                 //hide the keyboard
-                hideKeyboard(getActivity());
+                global.hideKeyboard(getActivity());
             }
         });
 
@@ -236,7 +238,7 @@ public class AddFragment extends Fragment {
                     Map<String, Object> childUpdates = new HashMap<>();
                     childUpdates.put("/Recipe/" + key, mRecipe.toMap());
                     mDatabase.updateChildren(childUpdates);
-                    //need do add to user recipe list
+
                     uploadImage();
                 }
             }
@@ -253,7 +255,6 @@ public class AddFragment extends Fragment {
             Log.d("Invalid Inputttt", "Cfm nvr upload img");
             return false;
         }
-
         return true;
     }
 
@@ -493,17 +494,5 @@ public class AddFragment extends Fragment {
                                 }
                             });
         }
-    }
-
-    //  Hide keyboard
-    public void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = new View(activity);
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
