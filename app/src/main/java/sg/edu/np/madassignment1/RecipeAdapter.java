@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -54,9 +55,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Recipe selectedRecipe = recipeList.get(position);
         holder.myRecipeName.setText(selectedRecipe.getName());
-        holder.myRecipeCuisine.setText("Cuisine Type: " + selectedRecipe.getCuisine());
+        holder.myRecipeCuisine.setText(selectedRecipe.getCuisine());
         String ratings = String.format("%.1f", selectedRecipe.getRatings().getOverallRatings()) ;
-        holder.myRecipeRating.setText(ratings + "/5 Rating");
+        holder.myRecipeRating.setRating(Float.parseFloat(ratings));
         //for getting image
         String imgName = selectedRecipe.getRecipeId() + ".jpeg";
         StorageReference imageRef = storage.getReference().child("images").child(imgName);
@@ -84,8 +85,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView myRecipeName, myRecipeCuisine, myRecipeRating;
+        TextView myRecipeName, myRecipeCuisine;
         ImageView myRecipeImg;
+        RatingBar myRecipeRating;
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
             myRecipeName = itemView.findViewById(R.id.myRecipeName);
