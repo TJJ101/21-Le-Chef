@@ -1,9 +1,10 @@
 package sg.edu.np.madassignment1;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
     private String id;
     public String getId() {
         return id;
@@ -38,8 +39,8 @@ public class User {
 
     private ArrayList<Ingredient> groceryList = new ArrayList<>();
     public ArrayList<Ingredient> getGroceryList() {return groceryList;}
-    public void setGroceryList(List<Ingredient> groceryList){
-        this.groceryList = (ArrayList<Ingredient>) groceryList;
+    public void setGroceryList(ArrayList<Ingredient> groceryList) {
+        this.groceryList = groceryList;
     }
 
     public void addGroceryList(ArrayList<Ingredient> iList){
@@ -48,16 +49,12 @@ public class User {
         }
     }
 
-    private ArrayList<String> createdRecipes = new ArrayList<>();
-    public ArrayList<String> getCreatedRecipes() {return createdRecipes;}
-    public void setCreatedRecipes(List<String> createdRecipes){
-        this.createdRecipes = (ArrayList<String>) createdRecipes;
+    private ArrayList<String> savedRecipes = new ArrayList<>();
+    public ArrayList<String> getSavedRecipes() {
+        return savedRecipes;
     }
-
-    public void addCreatedRecipe(ArrayList<String> list){
-        for(String r : list){
-            createdRecipes.add(r);
-        }
+    public void setSavedRecipes(ArrayList<String> savedRecipes) {
+        this.savedRecipes = savedRecipes;
     }
 
     public User() {}

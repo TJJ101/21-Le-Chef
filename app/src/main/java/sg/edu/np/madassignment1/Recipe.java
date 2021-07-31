@@ -58,6 +58,17 @@ public class Recipe implements Serializable {
     public void setIngredientList(ArrayList<Ingredient> ingredientList) {
         this.ingredientList = ingredientList;
     }
+
+    private String creatorId;
+
+    public String getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
+    }
+
     public void addIngredient(Ingredient i){
         ingredientList.add(i);
     }

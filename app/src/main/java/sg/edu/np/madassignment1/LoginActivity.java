@@ -31,9 +31,9 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
     DatabaseReference mDatabase = firebaseDatabase.getReference();
-    User newUser = new User();
     boolean validInput = true;
     TextView emailTxt, passwordTxt;
+    Global global = new Global();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideKeyboard(LoginActivity.this);
+                global.hideKeyboard(LoginActivity.this);
                 clearAllFocus();
                 EmptyFieldValidation(emailTxt, passwordTxt);
                 if(validInput) {
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                 // If the event is a key-down event on the "enter" button
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
                     // Perform action on key press
-                    hideKeyboard(LoginActivity.this);
+                    global.hideKeyboard(LoginActivity.this);
                     clearAllFocus();
                     EmptyFieldValidation(emailTxt, passwordTxt);
                     if(validInput) {
@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 TextView emailError = findViewById(R.id.eError2);
                 if(!hasFocus){
-                    if(!emailTxt.getText().toString().equals("") && !isValidEmail(emailTxt.getText()))
+                    if(!emailTxt.getText().toString().equals("") && !global.isValidEmail(emailTxt.getText()))
                     {
                         emailError.setText("Please enter a valid email address");
                         validInput = false;
@@ -168,26 +168,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    //  Check email format
-    public static boolean isValidEmail(CharSequence target) {
-        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
-    }
-
     //  Clear all EditText focus
     private void clearAllFocus(){
         emailTxt.clearFocus();
         passwordTxt.clearFocus();
-    }
-
-    //  Hide keyboard
-    public void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = new View(activity);
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

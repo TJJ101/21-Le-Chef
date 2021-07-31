@@ -7,10 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,10 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,7 +34,7 @@ import java.util.ArrayList;
     DatabaseReference mDatabase = firebaseDatabase.getReference();
     Fragment selectedFragment;
     ArrayList<String> myRecipeList = new ArrayList<>();
-    User theUser;
+    User mUser;
     TextView recipeName, recipeDesc, cuisine;
     ArrayList<Ingredient> ingredientList;
     ArrayList<Steps> stepsList;
@@ -56,14 +50,11 @@ import java.util.ArrayList;
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
-        //get the list of recipe id that the user has created
+        //get the logged in user
         mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                theUser = dataSnapshot.getValue(User.class);
-                for (String r : theUser.getCreatedRecipes()){
-                    myRecipeList.add(r);
-                }
+                mUser = dataSnapshot.getValue(User.class);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
