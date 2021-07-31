@@ -25,9 +25,10 @@ public class Recipe implements Serializable {
         this.cuisine = c;
     }
 
-    private String rating;
-    public String getRating(){ return rating; }
+    private Ratings rating;
+    public String getRating(){ return rating.getOverallRating(); }
     public void setRating(String r){
+        //idk what to put here
         this.rating = r;
     }
 

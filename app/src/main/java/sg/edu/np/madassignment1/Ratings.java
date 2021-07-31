@@ -25,6 +25,12 @@ public class Ratings {
     public int getOneStar(){return oneStar;}
     public void addOneStar(int rating){this.oneStar += rating;}
 
+    private double overallRating;
+    public double getOverallRating(){return overallRating;}
+    public void setOverallRating(){
+        this.overallRating = ((5 * fiveStar) + (4 * fourStar) + (3 * threeStar) + (2 * twoStar) + (1 * oneStar)) / (fiveStar+fourStar+threeStar+twoStar+oneStar);
+    }
+
     public Ratings(String recipeId, int fiveStar, int fourStar, int threeStar, int twoStar, int oneStar) {
         this.recipeId = recipeId;
         this.fiveStar = fiveStar;
@@ -34,9 +40,10 @@ public class Ratings {
         this.oneStar = oneStar;
     }
 
+    /*
     public double getRatings(){
         return ((5 * fiveStar) + (4 * fourStar) + (3 * threeStar) + (2 * twoStar) + (1 * oneStar)) / (fiveStar+fourStar+threeStar+twoStar+oneStar);
-    }
+    } */
 
 
 }
