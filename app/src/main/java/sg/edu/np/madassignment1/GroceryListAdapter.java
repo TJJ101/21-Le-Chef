@@ -214,6 +214,10 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
         numberPickerDec.setMinValue(0);
         numberPickerDec.setMaxValue(99);
+        //not working
+        if(Integer.parseInt(decNum.substring(0, decIndex)) == 0){
+            numberPickerDec.setValue(Integer.parseInt(decNum.substring((decIndex + 1))));
+        }
         numberPickerDec.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         final AlertDialog builder = new AlertDialog.Builder(context)
