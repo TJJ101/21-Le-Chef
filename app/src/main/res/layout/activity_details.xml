@@ -45,6 +45,18 @@
         android:tag="save"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/rateFloatBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/saveFloatButton"
+        app:layout_constraintEnd_toEndOf="@+id/saveFloatButton"
+        android:src="@drawable/ic_baseline_star_rate_24" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/backFloatBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,8 +65,8 @@
         android:focusable="true"
         android:src="@drawable/ic_baseline_arrow_back_24_white"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/saveFloatButton"
-        app:layout_constraintEnd_toEndOf="@+id/saveFloatButton" />
+        app:layout_constraintBottom_toTopOf="@+id/rateFloatBtn"
+        app:layout_constraintEnd_toEndOf="@+id/rateFloatBtn" />
 
     <ScrollView
         android:id="@+id/scrollView2"
