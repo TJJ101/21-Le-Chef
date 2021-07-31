@@ -59,7 +59,7 @@ public class HomeFragment extends Fragment {
                 recyclerView = view.findViewById(R.id.recipeRecycler);
                 adapter = new RecipeAdapter(getContext(),recipeList, getActivity());
                 recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
+                recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 adapter.notifyDataSetChanged();
                 Log.d("SIZE", "" + recipeList.size());
@@ -134,14 +134,14 @@ public class HomeFragment extends Fragment {
                 if (isChecked){
                     adapter = new RecipeAdapter(getContext(),recipeList, getActivity());
                     recyclerView.setAdapter(adapter);
-                    recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
-                    gridSwitch.setText("Grid");
+                    recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
+                    gridSwitch.setText("List");
                 }
                 else{
                     adapter = new RecipeAdapter(getContext(),recipeList, getActivity());
                     recyclerView.setAdapter(adapter);
-                    recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
-                    gridSwitch.setText("Single");
+                    recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
+                    gridSwitch.setText("Grid");
                 }
             }
         });
