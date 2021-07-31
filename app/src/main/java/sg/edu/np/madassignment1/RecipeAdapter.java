@@ -71,7 +71,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
                 Bundle extras = new Bundle();
                 extras.putString("name", selectedRecipe.getName());
                 extras.putString("cuisine", selectedRecipe.getCuisine());
-                extras.putString("rating", "" + selectedRecipe.getRating().getOverallRatings());
+//                extras.putString("rating", "" + selectedRecipe.getRating().getOverallRatings());
                 extras.putString("description", selectedRecipe.getDescription());
                 extras.putString("recipeId", selectedRecipe.getRecipeId());
                 extras.putString("image", imgName);

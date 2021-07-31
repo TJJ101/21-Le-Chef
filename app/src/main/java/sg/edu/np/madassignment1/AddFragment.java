@@ -451,7 +451,7 @@ public class AddFragment extends Fragment {
                                     Bundle extras = new Bundle();
                                     extras.putString("name", mRecipe.getName());
                                     extras.putString("cuisine", mRecipe.getCuisine());
-                                    extras.putString("rating", mRecipe.getRating());
+//                                    extras.putString("rating", "" + mRecipe.getRating().getOverallRatings());
                                     extras.putString("description", mRecipe.getDescription());
                                     extras.putString("recipeId", mRecipe.getRecipeId());
                                     extras.putString("image", key + ".jpeg");

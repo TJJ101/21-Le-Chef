@@ -47,6 +47,8 @@ public class Ratings {
         this.oneStar = oneStar;
     }
 
+    public Ratings(){};
+
     public Ratings(int fiveStar, int fourStar, int threeStar, int twoStar, int oneStar) {
         this.fiveStar = fiveStar;
         this.fourStar = fourStar;
