@@ -41,6 +41,7 @@ public class SignUpActivity extends AppCompatActivity {
     List<User> userList = new ArrayList<User>();
     boolean validInput = true;
     TextView usernameTxt, emailTxt, passwordTxt, cfmPasswordTxt;
+    Global global = new Global();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,7 @@ public class SignUpActivity extends AppCompatActivity {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideKeyboard(SignUpActivity.this);
+                global.hideKeyboard(SignUpActivity.this);
                 clearAllFocus();
                 EmptyFieldValidation(usernameTxt, emailTxt, passwordTxt, cfmPasswordTxt);
                 if(validInput){
@@ -91,7 +92,7 @@ public class SignUpActivity extends AppCompatActivity {
                 // If the event is a key-down event on the "enter" button
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
                     // Perform action on key press
-                    hideKeyboard(SignUpActivity.this);
+                    global.hideKeyboard(SignUpActivity.this);
                     clearAllFocus();
                     EmptyFieldValidation(usernameTxt, emailTxt, passwordTxt, cfmPasswordTxt);
                     if(validInput){
@@ -157,17 +158,6 @@ public class SignUpActivity extends AppCompatActivity {
         cfmPasswordTxt.clearFocus();
     }
 
-//  Hide keyboard
-    public void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = new View(activity);
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
 
     private void EmptyFieldValidation(TextView usernameTxt, TextView emailTxt, TextView passwordTxt, TextView cfmPasswordTxt){
         if(usernameTxt.getText().toString().equals("")){
@@ -220,7 +210,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 TextView emailError = findViewById(R.id.eError);
                 if(!hasFocus){
-                    if(!emailTxt.getText().toString().equals("") && !isValidEmail(emailTxt.getText()))
+                    if(!emailTxt.getText().toString().equals("") && !global.isValidEmail(emailTxt.getText()))
                     {
                         emailError.setText("Please enter a valid email address");
                         validInput = false;
@@ -271,10 +261,5 @@ public class SignUpActivity extends AppCompatActivity {
                 cfmPasswordError.setLayoutParams(params);
             }
         });
-    }
-
-//  Check email format
-    public static boolean isValidEmail(CharSequence target) {
-        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
 }

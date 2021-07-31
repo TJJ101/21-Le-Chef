@@ -31,6 +31,7 @@ public class MyRecipeFragment extends Fragment {
     private RecipeAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList <Recipe> recipeList = new ArrayList<>();
+    private User user;
 
     ArrayList<String> myRecipeList = new ArrayList<>();
 
@@ -38,9 +39,7 @@ public class MyRecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_recipe, container, false);
         adapter = new RecipeAdapter(getContext(), recipeList, getActivity());
-
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
+        MainActivity mainActivity = (MainActivity)getActivity();
 
         if (getArguments() != null){
             myRecipeList = getArguments().getStringArrayList("createdRecipes");
@@ -54,10 +53,8 @@ public class MyRecipeFragment extends Fragment {
                 Recipe recipe;
                 for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                     recipe = eventSnapshot.getValue(Recipe.class);
-                    for (String r : myRecipeList){
-                        if (recipe.getRecipeId().equals(r)){
-                            recipeList.add(eventSnapshot.getValue(Recipe.class));
-                        }
+                    if(recipe.getCreatorId().toUpperCase().equals(mainActivity.mUser.getUsername().toUpperCase())){
+                        recipeList.add(eventSnapshot.getValue(Recipe.class));
                     }
                 }
 
