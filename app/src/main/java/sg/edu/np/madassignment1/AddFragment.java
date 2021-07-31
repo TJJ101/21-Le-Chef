@@ -192,7 +192,7 @@ public class AddFragment extends Fragment {
         addTimerTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimerPicker(v);
+                openTimerPicker();
             }
         });
 
@@ -356,12 +356,14 @@ public class AddFragment extends Fragment {
     }
 
     //Dialog for Time picker
-    public void openTimerPicker(View view){
-        final LinearLayout linearLayout = (LinearLayout) ((LayoutInflater) getContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE )).inflate(R.layout.select_time_dialog, null);
+    public void openTimerPicker(){
+        LayoutInflater l = getLayoutInflater();
+        final View v = l.inflate(R.layout.select_time_dialog, null);
+        //final LinearLayout linearLayout = (LinearLayout) ((LayoutInflater) getContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE )).inflate(R.layout.select_time_dialog, null);
 
-        NumberPicker selectHour = linearLayout.findViewById(R.id.selectHour);
-        NumberPicker selectMin = linearLayout.findViewById(R.id.selectMinutes);
-        NumberPicker selectSec = linearLayout.findViewById(R.id.selectSeconds);
+        NumberPicker selectHour = v.findViewById(R.id.selectHour);
+        NumberPicker selectMin = v.findViewById(R.id.selectMinutes);
+        NumberPicker selectSec = v.findViewById(R.id.selectSeconds);
 
         selectHour.setMinValue(0);
         selectHour.setMaxValue(24);
@@ -378,7 +380,7 @@ public class AddFragment extends Fragment {
         final AlertDialog builder = new AlertDialog.Builder(getContext())
                 .setPositiveButton("Submit", null)
                 .setNegativeButton("Cancel", null)
-                .setView(linearLayout)
+                .setView(v)
                 .setCancelable(false)
                 .create();
         builder.show();

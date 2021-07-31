@@ -132,11 +132,11 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (saveBtn.getTag().equals("save")){
-                    saveBtn.setImageResource(R.drawable.ic_baseline_bookmark_24);
+                    //saveBtn.setImageResource(R.drawable.ic_baseline_bookmark_24);
                     saveBtn.setTag("saved");
                 }
                 else{
-                    saveBtn.setImageResource(R.drawable.ic_baseline_bookmark_border_24);
+                    //saveBtn.setImageResource(R.drawable.ic_baseline_bookmark_border_24);
                     saveBtn.setTag("save");
                 }
             }
