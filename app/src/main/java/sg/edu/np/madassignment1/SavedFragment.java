@@ -28,11 +28,13 @@ public class SavedFragment extends Fragment {
     private RecipeAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList <Recipe> recipeList = new ArrayList<>();
+    public MainActivity mainActivity = (MainActivity)getActivity();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_saved, container, false);
         adapter = new RecipeAdapter(getContext(), recipeList, getActivity());
+
         mDatabase.child("Recipe").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

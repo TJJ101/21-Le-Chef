@@ -35,6 +35,8 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.concurrent.TimeUnit.*;
+
 public class StepsActivity extends AppCompatActivity {
 
     NumberPicker hourPicker;
@@ -87,8 +89,6 @@ public class StepsActivity extends AppCompatActivity {
 
         //get the recipe id
         Intent intent = getIntent();
-        String recipeId = intent.getStringExtra("recipeId");
-        String step1Time = intent.getStringExtra("step1Time");
         String imgName = intent.getStringExtra("imgName");
         stepsList = (ArrayList<Steps>) intent.getSerializableExtra("stepsList");
 
@@ -216,21 +216,10 @@ public class StepsActivity extends AppCompatActivity {
                     if (steps > 0) {
                         cancelTimer();
                         steps--;
-                        cancelTimer();
-                        stepNumTxt.setText("Step: " + (steps + 1));
-                        stepDesTxt.setText(stepsList.get(steps).getStepDescription());
-                        reccoTimeTxt.setText("Recommended time: " + stepsList.get(steps).getTime());
-
-                        time = stepsList.get(steps).getTime().split(":");
-                        hours = Integer.parseInt(time[0]);
-                        minutes = Integer.parseInt(time[1]);
-                        seconds = Integer.parseInt(time[2]);
-                        hourPicker.setValue(hours);
-                        minutePicker.setValue(minutes);
-                        secondsPicker.setValue(seconds);
+                        setTimes();
                     }
                     else {
-                        alertDialog("This is already the first step", "Notice");
+                        alertDialog("This is the first step", "Notice");
                     }
                     break;
                 case R.id.nav_home2:
@@ -240,26 +229,30 @@ public class StepsActivity extends AppCompatActivity {
                     if (steps < stepsList.size() - 1) {
                         cancelTimer();
                         steps++;
-                        stepNumTxt.setText("Step: " + (steps + 1));
-                        stepDesTxt.setText(stepsList.get(steps).getStepDescription());
-                        reccoTimeTxt.setText("Recommended time: " + stepsList.get(steps).getTime());
-
-                        time = stepsList.get(steps).getTime().split(":");
-                        hours = Integer.parseInt(time[0]);
-                        minutes = Integer.parseInt(time[1]);
-                        seconds = Integer.parseInt(time[2]);
-                        hourPicker.setValue(hours);
-                        minutePicker.setValue(minutes);
-                        secondsPicker.setValue(seconds);
+                        setTimes();
                     }
                     else {
-                        alertDialog("This is already the last step", "Notice");
+                        alertDialog("This is the last step", "Notice");
                     }
                     break;
             }
             return true;
         }
     };
+
+    //set the timer and time when switching steps
+    public void setTimes(){
+        stepNumTxt.setText("Step: " + (steps + 1));
+        stepDesTxt.setText(stepsList.get(steps).getStepDescription());
+        reccoTimeTxt.setText("Recommended time: " + stepsList.get(steps).getTime());
+        time = stepsList.get(steps).getTime().split(":");
+        hours = Integer.parseInt(time[0]);
+        minutes = Integer.parseInt(time[1]);
+        seconds = Integer.parseInt(time[2]);
+        hourPicker.setValue(hours);
+        minutePicker.setValue(minutes);
+        secondsPicker.setValue(seconds);
+    }
 
     //start timer function
     public void startTimer(int duration) {
@@ -269,9 +262,9 @@ public class StepsActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 millis = millisUntilFinished;
                 String hms = String.format("%02d:%02d:%02d",
-                        TimeUnit.MILLISECONDS.toHours(millis),
-                        (TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))),
-                        (TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))));
+                        MILLISECONDS.toHours(millis),
+                        (MILLISECONDS.toMinutes(millis) - HOURS.toMinutes(MILLISECONDS.toHours(millis))),
+                        (MILLISECONDS.toSeconds(millis) - MINUTES.toSeconds(MILLISECONDS.toMinutes(millis))));
                 timerTxt.setText(hms);//set text
             }
             @Override

@@ -9,17 +9,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,13 +47,15 @@ public class DetailsActivity extends AppCompatActivity {
     ListView stepsListView;
     StepsDetailsAdapter stepsDetailsAdapter;
 
+    ArrayList<String> savedList = new ArrayList<>();
     Boolean clicked = false;
     Recipe recipe;
-    ArrayList<Steps> stepsList = new ArrayList<>();
-    String step1Time;
+    String recipeId;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
     private DatabaseReference mDatabase = firebaseDatabase.getReference();
     FirebaseStorage storage = FirebaseStorage.getInstance();
+    User theUser = MainActivity.mUser;
+    Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,18 +68,12 @@ public class DetailsActivity extends AppCompatActivity {
         Intent in = getIntent();
         String name = in.getStringExtra("name");
         String cuisine = in.getStringExtra("cuisine");
-        String rating = in.getStringExtra("rating");
         String description = in.getStringExtra("description");
-        String recipeId = in.getStringExtra("recipeId");
         String imgName = in.getStringExtra("image");
+        recipeId = in.getStringExtra("recipeId");
         ArrayList<Ingredient> ingredientList = (ArrayList<Ingredient>) in.getSerializableExtra("IngredientList");
         ArrayList<Steps> stepsList = (ArrayList<Steps>) in.getSerializableExtra("StepsList");
         recipe = new Recipe(name, cuisine, description, ingredientList, stepsList);
-
-        //get image data
-        ImageView imgView = findViewById(R.id.detailsImgView);
-        StorageReference imageRef = storage.getReference().child("images").child(imgName);
-        Glide.with(this).load(imageRef).centerCrop().into(imgView);
 
         nameTxt = findViewById(R.id.nameTxt);
         desTxt = findViewById(R.id.descriptionTxt);
@@ -83,9 +84,14 @@ public class DetailsActivity extends AppCompatActivity {
         backBtn = findViewById(R.id.backFloatBtn);
         stepsListView = findViewById(R.id.detailsStepsList);
 
-        step1Time = stepsList.get(0).getTime();
+        //set image to image view
+        ImageView imgView = findViewById(R.id.detailsImgView);
+        StorageReference imageRef = storage.getReference().child("images").child(imgName);
+        Glide.with(this).load(imageRef).centerCrop().into(imgView);
+
         stepsDetailsAdapter = new StepsDetailsAdapter(stepsList, DetailsActivity.this);
         stepsListView.setAdapter(stepsDetailsAdapter);
+        setListViewHeightBasedOnChildren(stepsListView);
 
         nameTxt.setText(recipe.getName());
         desTxt.setText(recipe.getDescription());
@@ -99,6 +105,20 @@ public class DetailsActivity extends AppCompatActivity {
             }
         };
         ingredientTxt.setText(ingredients);
+
+        //add all the current saved recipes to savedList
+        for (String r : theUser.getSavedRecipes()){
+            savedList.add(r);
+        }
+
+        if (checkSaved()){
+            saveBtn.setImageResource(R.drawable.ic_baseline_bookmark_24);
+            saveBtn.setTag("saved");
+        }
+        else{
+            saveBtn.setImageResource(R.drawable.ic_baseline_bookmark_border_24);
+            saveBtn.setTag("save");
+        }
 
         //listeners for floating buttons
         //expand button
@@ -132,12 +152,20 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (saveBtn.getTag().equals("save")){
-                    //saveBtn.setImageResource(R.drawable.ic_baseline_bookmark_24);
+                    savedList.add(recipeId);
+                    DatabaseReference mDatabase2 = firebaseDatabase.getReference().child("Users").child(theUser.getId()).child("savedRecipes");
+                    mDatabase2.setValue(savedList);
+                    saveBtn.setImageResource(R.drawable.ic_baseline_bookmark_24);
                     saveBtn.setTag("saved");
+                    toast.makeText(DetailsActivity.this, "Recipe saved", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    //saveBtn.setImageResource(R.drawable.ic_baseline_bookmark_border_24);
+                    savedList.remove(recipeId);
+                    DatabaseReference mDatabase2 = firebaseDatabase.getReference().child("Users").child(theUser.getId()).child("savedRecipes");
+                    mDatabase2.setValue(savedList);
+                    saveBtn.setImageResource(R.drawable.ic_baseline_bookmark_border_24);
                     saveBtn.setTag("save");
+                    toast.makeText(DetailsActivity.this, "Recipe unsaved", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -170,6 +198,39 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    //checking if recipe is saved
+    public Boolean checkSaved(){
+        if (!savedList.isEmpty()){
+            for (String s : savedList){
+                if (s.equals(recipeId)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //setting the list view to show all rows
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 
     public void onExpandClicked(){
