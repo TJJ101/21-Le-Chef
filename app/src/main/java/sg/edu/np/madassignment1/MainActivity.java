@@ -50,16 +50,18 @@ import java.util.ArrayList;
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
-        //get the logged in user
-        mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mUser = dataSnapshot.getValue(User.class);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+        if(user != null){
+            //get the logged in user
+            mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mUser = dataSnapshot.getValue(User.class);
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
 
         // init bottom nav
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);

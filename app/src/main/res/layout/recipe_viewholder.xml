@@ -21,9 +21,10 @@
 
     <TextView
         android:id="@+id/myRecipeName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginTop="10dp"
         android:text="Food"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,21 +32,22 @@
 
     <TextView
         android:id="@+id/myRecipeCuisine"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginTop="10dp"
         android:text="Cuisine"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/myRecipeName" />
-    <TextView
+
+    <RatingBar
         android:id="@+id/myRecipeRating"
+        style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:numStars="5"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:text="Rating"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myRecipeCuisine" />
+        android:layout_marginEnd="5dp"/>
 
 </LinearLayout>
