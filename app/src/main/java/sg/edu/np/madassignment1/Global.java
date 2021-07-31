@@ -11,6 +11,16 @@ import java.io.Serializable;
 public class Global {
     Global(){};
 
+    // Check if input string is a proper number
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
     //  Check email format
     public static boolean isValidEmail(CharSequence target) {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());

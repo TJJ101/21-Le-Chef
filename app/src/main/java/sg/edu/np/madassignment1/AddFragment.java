@@ -244,22 +244,12 @@ public class AddFragment extends Fragment {
     public boolean validateIngredientInput(String ingredients, String qty, String unit){
         if (ingredients.isEmpty() || ingredients.trim().length() == 0 ||
                 qty.isEmpty() || qty.trim().length() == 0 ||
-                !isNumeric(qty) || Double.parseDouble(qty) <= 0 ||
+                !global.isNumeric(qty) || Double.parseDouble(qty) <= 0 ||
                 unit.isEmpty() || unit.trim().length() == 0) {
             Toast.makeText(getContext(), "Please enter valid values for ingredient", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
-    }
-
-    // Check if input string is a proper number
-    public static boolean isNumeric(String str) {
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch(NumberFormatException e){
-            return false;
-        }
     }
 
     public float convertPixelsToDp(float px){
