@@ -2,6 +2,7 @@ package sg.edu.np.madassignment1;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -186,6 +188,14 @@ public class AddFragment extends Fragment {
         addStepsTxt = view.findViewById(R.id.addStepsTxt);
         addTimerTxt = view.findViewById(R.id.addTimerTxt);
 
+        //Add Step Timer Picker
+        addTimerTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openTimerPicker(v);
+            }
+        });
+
         LinearLayout.LayoutParams stepsListViewLP = (LinearLayout.LayoutParams) stepsListView.getLayoutParams();
         addStepsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -340,6 +350,62 @@ public class AddFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 SelectImage();
+                builder.dismiss();
+            }
+        });
+    }
+
+    //Dialog for Time picker
+    public void openTimerPicker(View view){
+        final LinearLayout linearLayout = (LinearLayout) ((LayoutInflater) getContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE )).inflate(R.layout.select_time_dialog, null);
+
+        NumberPicker selectHour = linearLayout.findViewById(R.id.selectHour);
+        NumberPicker selectMin = linearLayout.findViewById(R.id.selectMinutes);
+        NumberPicker selectSec = linearLayout.findViewById(R.id.selectSeconds);
+
+        selectHour.setMinValue(0);
+        selectHour.setMaxValue(24);
+        selectHour.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        selectMin.setMinValue(0);
+        selectMin.setMaxValue(60);
+        selectMin.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        selectSec.setMinValue(0);
+        selectSec.setMaxValue(60);
+        selectSec.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        final AlertDialog builder = new AlertDialog.Builder(getContext())
+                .setPositiveButton("Submit", null)
+                .setNegativeButton("Cancel", null)
+                .setView(linearLayout)
+                .setCancelable(false)
+                .create();
+        builder.show();
+        //Setting up OnClickListener on positive button of AlertDialog
+        builder.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String time = "";
+                if(selectHour.getValue() > 9){
+                    time += selectHour.getValue()+ ":";
+                }
+                else{
+                    time += "0"+ selectHour.getValue() + ":";
+                }
+                if(selectMin.getValue() > 9){
+                    time += selectMin.getValue() + ":";
+                }
+                else{
+                    time += "0" + selectMin.getValue() + ":";
+                }
+                if (selectSec.getValue() > 9){
+                    time += selectSec.getValue();
+                }
+                else{
+                    time += "0" + selectSec.getValue();
+                }
+                addTimerTxt.setText(time);
                 builder.dismiss();
             }
         });

@@ -47,6 +47,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
         holder.editQty.setText(String.valueOf(ingredientList.get(position).getQuantity()));
 
+        //Number Picker for the Ingredient
         holder.editQty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

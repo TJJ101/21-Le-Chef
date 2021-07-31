@@ -67,9 +67,8 @@ public class DetailsActivity extends AppCompatActivity {
                 for (Steps s : recipe.getStepsList()) {
                     stepsList.add(s);
                 }
-                Log.d("Debug Details", String.valueOf(stepsList.size()));
-                Log.d("Debug Details 1", stepsList.get(0).getStepDescription());
-                //step1Time = stepsList.get(0).getTime();
+                Log.d("Debug Details", stepsList.get(1).getStepDescription());
+                step1Time = stepsList.get(0).getTime();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

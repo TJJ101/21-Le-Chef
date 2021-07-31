@@ -392,6 +392,7 @@
                             android:inputType="none"
                             android:textColor="#2C2C2C"
                             android:textColorHint="#c9c9c9"
+                            android:focusable="false"
                             android:textSize="14dp"
                             tools:layout_editor_absoluteX="97dp"
                             tools:layout_editor_absoluteY="12dp" />
