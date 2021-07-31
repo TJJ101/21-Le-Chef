@@ -68,26 +68,19 @@ import java.util.List;
 
         validate();
 
-        //get current user
-        mDatabase.child("Users").orderByChild("id").equalTo(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                    theUser = eventSnapshot.getValue(User.class);
-                }
-                username.setText(theUser.getUsername());
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
         //get all users
         mDatabase.child("Users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                     userList.add(eventSnapshot.getValue(User.class));
+                }
+                //set some data to be current user
+                for (User u : userList){
+                    if (u.getId().equals(user.getUid())){
+                        theUser = u;
+                        username.setText(u.getUsername());
+                    }
                 }
             }
             @Override

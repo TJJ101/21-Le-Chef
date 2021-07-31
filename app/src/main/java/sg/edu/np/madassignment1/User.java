@@ -57,6 +57,12 @@ public class User implements Serializable {
         this.savedRecipes = savedRecipes;
     }
 
+    public void addSavedRecipes(ArrayList<String> list){
+        for(String s : list){
+            savedRecipes.add(s);
+        }
+    }
+
     public User() {}
 
     public User(String i, String u, String e, String p){

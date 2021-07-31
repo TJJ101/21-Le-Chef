@@ -31,7 +31,6 @@ public class MyRecipeFragment extends Fragment {
     private RecipeAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList <Recipe> recipeList = new ArrayList<>();
-    private User user;
 
     ArrayList<String> myRecipeList = new ArrayList<>();
 

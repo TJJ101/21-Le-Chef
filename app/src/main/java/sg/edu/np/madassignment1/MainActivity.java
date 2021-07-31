@@ -30,11 +30,11 @@ import java.util.ArrayList;
 
  public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    public static User mUser;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
     DatabaseReference mDatabase = firebaseDatabase.getReference();
     Fragment selectedFragment;
     ArrayList<String> myRecipeList = new ArrayList<>();
-    User mUser;
     TextView recipeName, recipeDesc, cuisine;
     ArrayList<Ingredient> ingredientList;
     ArrayList<Steps> stepsList;

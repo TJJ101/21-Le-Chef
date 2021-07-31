@@ -56,7 +56,6 @@ public class HomeFragment extends Fragment {
                 for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                     recipeList.add(eventSnapshot.getValue(Recipe.class));
                 }
-
                 recyclerView = view.findViewById(R.id.recipeRecycler);
                 adapter = new RecipeAdapter(getContext(),recipeList, getActivity());
                 recyclerView.setAdapter(adapter);
@@ -64,7 +63,6 @@ public class HomeFragment extends Fragment {
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 adapter.notifyDataSetChanged();
                 Log.d("SIZE", "" + recipeList.size());
-
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -120,7 +118,6 @@ public class HomeFragment extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 adapter.getFilter().filter(newText);
@@ -148,28 +145,6 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-
         return view;
     }
-/*    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu, menu);
-        super.onCreateOptionsMenu(menu,inflater);
-
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) searchItem.getActionView();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-    }*/
 }
