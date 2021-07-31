@@ -61,6 +61,7 @@ import java.util.ArrayList;
             mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.d("Debug MainActivity", dataSnapshot.getKey());
                     theUser = dataSnapshot.getValue(User.class);
                     for (String r : theUser.getCreatedRecipes()){
                         myRecipeList.add(r);

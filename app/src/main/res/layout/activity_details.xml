@@ -8,12 +8,15 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="104dp"
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/detailsHomeBtn"
@@ -21,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="10dp"
                 android:text="Home"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/detailsStartBtn"
@@ -34,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="15dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="10dp"
                 android:text="Back"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -45,10 +48,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="10dp"
                 android:text="Start!"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.387"
+                app:layout_constraintHorizontal_bias="0.756"
                 app:layout_constraintLeft_toRightOf="@id/detailsHomeBtn"
                 app:layout_constraintRight_toLeftOf="@+id/detailsBackBtn"
                 app:layout_constraintTop_toBottomOf="@+id/detailsGroceryListBtn"
@@ -122,7 +125,7 @@
                 android:id="@+id/detailsGroceryListBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="25dp"
                 android:text="Ingredient Checklist"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

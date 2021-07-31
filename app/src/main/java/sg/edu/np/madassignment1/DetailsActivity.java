@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -66,7 +67,9 @@ public class DetailsActivity extends AppCompatActivity {
                 for (Steps s : recipe.getStepsList()) {
                     stepsList.add(s);
                 }
-                step1Time = stepsList.get(0).getTime();
+                Log.d("Debug Details", String.valueOf(stepsList.size()));
+                Log.d("Debug Details 1", stepsList.get(0).getStepDescription());
+                //step1Time = stepsList.get(0).getTime();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
