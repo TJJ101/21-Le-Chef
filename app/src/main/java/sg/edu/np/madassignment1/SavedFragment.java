@@ -28,13 +28,16 @@ public class SavedFragment extends Fragment {
     private RecipeAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList <Recipe> recipeList = new ArrayList<>();
-    public MainActivity mainActivity = (MainActivity)getActivity();
+    private ArrayList <Recipe> savedList = new ArrayList<>();
+    MainActivity mainActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_saved, container, false);
         adapter = new RecipeAdapter(getContext(), recipeList, getActivity());
 
+        //put saved recipes data into saved list
+        recyclerView = view.findViewById(R.id.savedRecipeRecycler);
         mDatabase.child("Recipe").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -42,21 +45,22 @@ public class SavedFragment extends Fragment {
                 for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                     recipeList.add(eventSnapshot.getValue(Recipe.class));
                 }
+                for (Recipe r : recipeList){
+                    if(MainActivity.mUser.getSavedRecipes().contains(r.getRecipeId())){
+                        savedList.add(r);
+                    }
+                }
 
-                recyclerView = view.findViewById(R.id.savedRecipeRecycler);
-                adapter = new RecipeAdapter(getContext(), recipeList, getActivity());
+                adapter = new RecipeAdapter(getContext(), savedList, getActivity());
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 adapter.notifyDataSetChanged();
-                Log.d("SIZE", "" + recipeList.size());
-
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
         return view;
     }
 }
