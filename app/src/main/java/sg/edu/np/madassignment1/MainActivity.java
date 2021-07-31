@@ -56,25 +56,19 @@ import java.util.ArrayList;
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
-        try{
-            //get the list of recipe id that the user has created
-            mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    theUser = dataSnapshot.getValue(User.class);
-                    for (String r : theUser.getCreatedRecipes()){
-                        myRecipeList.add(r);
-                    }
+        //get the list of recipe id that the user has created
+        mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                theUser = dataSnapshot.getValue(User.class);
+                for (String r : theUser.getCreatedRecipes()){
+                    myRecipeList.add(r);
                 }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
-        catch (Exception e){
-            Log.d("Debug MainActivity", e + "");
-        }
-
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
         // init bottom nav
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);

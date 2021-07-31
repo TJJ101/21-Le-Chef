@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -41,6 +40,8 @@ public class StepsActivity extends AppCompatActivity {
     NumberPicker hourPicker;
     NumberPicker minutePicker;
     NumberPicker secondsPicker;
+    Button stopBtn;
+    Button startBtn;
 
     TextView stepNumTxt, stepDesTxt, timerTxt, reccoTimeTxt;
     ImageView recipeImg;
@@ -86,31 +87,24 @@ public class StepsActivity extends AppCompatActivity {
 
         //get the recipe id
         Intent intent = getIntent();
-        recipeId = intent.getStringExtra("recipeId");
+        String recipeId = intent.getStringExtra("recipeId");
+        String step1Time = intent.getStringExtra("step1Time");
+        String imgName = intent.getStringExtra("imgName");
+        stepsList = (ArrayList<Steps>) intent.getSerializableExtra("stepsList");
 
-        //get steps list from the correct recipe
-        mDatabase.child("Recipe").orderByChild("recipeId").equalTo(recipeId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    recipe = snapshot.getValue(Recipe.class);
-                }
-                for (Steps s : recipe.getStepsList()) {
-                    stepsList.add(s);
-                }
-                //for getting image
-                String imgName = recipe.getRecipeId() + ".jpeg";
-                StorageReference imageRef = storage.getReference().child("images").child(imgName);
-                Glide.with(StepsActivity.this).load(imageRef).centerCrop().into((ImageView) findViewById(R.id.stepsImgView));
+        //convert time into hr min sec
+        time = stepsList.get(0).getTime().split(":");
+        hours = Integer.parseInt(time[0]);
+        minutes = Integer.parseInt(time[1]);
+        seconds = Integer.parseInt(time[2]);
 
-                stepNumTxt.setText("Step: " + (steps + 1));
-                stepDesTxt.setText(stepsList.get(steps).getStepDescription());
-                reccoTimeTxt.setText("Recommended time: " + stepsList.get(steps).getTime());
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+        //for getting image
+        StorageReference imageRef = storage.getReference().child("images").child(imgName);
+        Glide.with(StepsActivity.this).load(imageRef).centerCrop().into((ImageView) findViewById(R.id.stepsImgView));
+
+        stepNumTxt.setText("Step: " + (steps + 1));
+        stepDesTxt.setText(stepsList.get(steps).getStepDescription());
+        reccoTimeTxt.setText("Recommended time: " + stepsList.get(steps).getTime());
 
         //populate arrays
         int i = 0;
@@ -177,7 +171,7 @@ public class StepsActivity extends AppCompatActivity {
         });
 
         // start and stop button listeners
-        Button startBtn = findViewById(R.id.stepsStartBtn);
+        startBtn = findViewById(R.id.stepsStartBtn);
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,7 +194,7 @@ public class StepsActivity extends AppCompatActivity {
 
             }
         });
-        Button stopBtn = findViewById(R.id.stepsStopBtn);
+        stopBtn = findViewById(R.id.stepsStopBtn);
         stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,7 +214,9 @@ public class StepsActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.nav_back:
                     if (steps > 0) {
+                        cancelTimer();
                         steps--;
+                        cancelTimer();
                         stepNumTxt.setText("Step: " + (steps + 1));
                         stepDesTxt.setText(stepsList.get(steps).getStepDescription());
                         reccoTimeTxt.setText("Recommended time: " + stepsList.get(steps).getTime());
@@ -242,6 +238,7 @@ public class StepsActivity extends AppCompatActivity {
                     break;
                 case R.id.nav_next:
                     if (steps < stepsList.size() - 1) {
+                        cancelTimer();
                         steps++;
                         stepNumTxt.setText("Step: " + (steps + 1));
                         stepDesTxt.setText(stepsList.get(steps).getStepDescription());
@@ -296,6 +293,7 @@ public class StepsActivity extends AppCompatActivity {
             minutePicker.setValue(0);
             secondsPicker.setValue(0);
             timer.setText("00:00:00");
+            startBtn.setText("Start");
             cTimer.cancel();}
     }
     //pause timer

@@ -68,7 +68,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
            holder.myRecipeRating.setText( "0/5 Rating");
         }else {
             holder.myRecipeRating.setText(selectedRecipe.getRating() + "/5 Rating");
-
         }
         //for getting image
         String imgName = selectedRecipe.getRecipeId() + ".jpeg";
