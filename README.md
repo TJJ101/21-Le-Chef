@@ -11,7 +11,7 @@ Members: Darius Kong Yi Fei S10207996G, Tan Jun Jie S10194152
 Our app strives to make homemade recipes, no matter how unconventional they are, be able to be shared on an easy-to-use platform. Share and learn different recipes from various cuisines by people around the community.
 
 ## App catering
-My intented users for this app are people who are looking for a place where a variety of simple homemade recipes can be found. The users would be able to browse through and view recipes based on their prefences. The age of the users that may use this website will not be restricted by their age since it wil be easy navigate around. Also, the recipe details and steps will be friendly to all ages as they are quite simple and easy to understand.
+Our intented users for this app are people who are looking for a place where a variety of simple homemade recipes can be found. The users would be able to browse through and view recipes based on their prefences. The age of the users that may use this website will not be restricted by their age since it wil be easy navigate around. Also, the recipe details and steps will be friendly to all ages as they are quite simple and easy to understand.
 
 # Features
 
