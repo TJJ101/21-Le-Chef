@@ -54,4 +54,4 @@ Home, Account & Profile Fragments, Details Activity, Steps Activity, Edit Activi
 ## Marcus
 Home & Account & Add Fragments, Details Activity, Sign Up Activity, Login Activity, SplashScreen Activity, learn and guide teammate on how to use Firebase, Help fixes errors
 ## Jun Jie
-GroceryList Activity, MyGroceryList Activity, Put data into Firebase
+GroceryList Activity, MyGroceryList Activity.
