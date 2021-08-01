@@ -4,7 +4,7 @@ Mobile Application Development (MAD) Assignment 1 done by Darius, Marcus, and Ju
 Repository for Assignment 1
 
 Leader: Marcus Yeong S10208495
-Members: Darius Kong Yi Fei S10207996G, Jun Jie S10194152
+Members: Darius Kong Yi Fei S10207996G, Tan Jun Jie S10194152
 
 # Background
 ## Idea of the app
