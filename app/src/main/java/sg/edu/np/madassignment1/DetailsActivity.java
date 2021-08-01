@@ -116,7 +116,6 @@ public class DetailsActivity extends AppCompatActivity {
         for (String r : theUser.getSavedRecipes()){
             savedList.add(r);
         }
-
         if (checkSaved()){
             saveBtn.setImageResource(R.drawable.ic_baseline_bookmark_24);
             saveBtn.setTag("saved");
@@ -158,7 +157,7 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (saveBtn.getTag().equals("save")){
-                    savedList.add(recipeId);
+                    savedList.add(recipe.getRecipeId());
                     DatabaseReference mDatabase2 = firebaseDatabase.getReference().child("Users").child(theUser.getId()).child("savedRecipes");
                     mDatabase2.setValue(savedList);
                     saveBtn.setImageResource(R.drawable.ic_baseline_bookmark_24);
@@ -166,7 +165,7 @@ public class DetailsActivity extends AppCompatActivity {
                     toast.makeText(DetailsActivity.this, "Recipe saved", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    savedList.remove(recipeId);
+                     savedList.remove(recipe.getRecipeId());
                     DatabaseReference mDatabase2 = firebaseDatabase.getReference().child("Users").child(theUser.getId()).child("savedRecipes");
                     mDatabase2.setValue(savedList);
                     saveBtn.setImageResource(R.drawable.ic_baseline_bookmark_border_24);
@@ -281,7 +280,8 @@ public class DetailsActivity extends AppCompatActivity {
     public Boolean checkSaved(){
         if (!savedList.isEmpty()){
             for (String s : savedList){
-                if (s.equals(recipeId)){
+                if (s.equals(recipe.getRecipeId())){
+                    Log.d("YESYESYESYEYSYES", recipe.getRecipeId());
                     return true;
                 }
             }

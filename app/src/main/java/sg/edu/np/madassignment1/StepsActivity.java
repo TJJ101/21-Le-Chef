@@ -178,7 +178,7 @@ public class StepsActivity extends AppCompatActivity {
                 hours = hours * 60 * 60 * 1000;
                 minutes = minutes * 60 * 1000;
                 seconds = seconds * 1000;
-                if (startBtn.getText().equals("Start")){
+                if (startBtn.getText().equals("Start") && (hours + minutes + seconds) > 0){
                     if (millis != 0){
                         startTimer((int) millis);
                     }
@@ -191,7 +191,6 @@ public class StepsActivity extends AppCompatActivity {
                     pauseTimer();
                     startBtn.setText("Start");
                 }
-
             }
         });
         stopBtn = findViewById(R.id.stepsStopBtn);
