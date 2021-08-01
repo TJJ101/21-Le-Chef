@@ -81,7 +81,7 @@
             android:id="@+id/editPasswordText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="Current Password"
             android:inputType="textPassword"
             android:textColor="#2C2C2C"
             android:textColorHint="#c9c9c9"

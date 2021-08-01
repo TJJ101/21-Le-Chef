@@ -110,24 +110,44 @@ import java.util.List;
                         }
                     });
                 }
-                else if(!username.getText().toString().equals(theUser.getUsername())){
+/*                else if(!username.getText().toString().equals(theUser.getUsername()) || checks()){
                     DatabaseReference mDatabase2 = firebaseDatabase.getReference().child("Users").child(user.getUid()).child("username");
                     mDatabase2.setValue(username.getText().toString());
                     finish();
+                }*/
+                else if (!username.getText().toString().equals(theUser.getUsername()) && !password.getText().toString().equals(theUser.getPassword())){
+                    unameErr.setText("New username detected, please enter current password");
                 }
-                else{
-                    Toast.makeText(context, "No changes",Toast.LENGTH_LONG).show();
+                else if (!username.getText().toString().equals(theUser.getUsername()) && password.getText().toString().equals(theUser.getPassword()) && password2.getText().toString().equals("")){
+                    validate();
+                    if (isValid){
+                        updateUsername(user);
+                    }
+                }
+                else if (username.getText().toString().equals(theUser.getUsername()) && password.getText().toString().equals("") && password2.getText().toString().equals("")){
+                    unameErr.setText("");
+                    passErr.setText("");
+                    pass2Err.setText("");
+                    Toast.makeText(context, "No changes made",Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
     public Boolean checks(){
-        if (password2.getText().toString().equals("")){
+        if (!password.getText().toString().equals("") && !password.getText().toString().equals(theUser.getPassword())){
+            passErr.setText("Wrong Password");
+            return false;
+        }
+        else if (password2.getText().toString().equals("")){
             return false;
         }
         else if (isValid && password2.getText().toString().equals(theUser.getPassword())){
             pass2Err.setText("This is the same password");
+            return false;
+        }
+        else if (password2.getText().toString().length() < 6){
+            pass2Err.setText("Password must have at least 6 characters");
             return false;
         }
         else if (password.getText().toString().equals("")){
@@ -156,7 +176,6 @@ import java.util.List;
                     Toast.makeText(context, "Passwords do not match",Toast.LENGTH_LONG).show();
                 }
                 else{
-                    Log.d("yaaaaaaaaaaaaaay", "MATAFAKAAAAAAAAAAAA");
                     //Updating of password if password matches new pass
                     user.updatePassword(password2.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -164,16 +183,14 @@ import java.util.List;
                             if (task.isSuccessful()) {
                                 DatabaseReference mDatabase2 = firebaseDatabase.getReference().child("Users").child(user.getUid()).child("password");
                                 mDatabase2.setValue(password2.getText().toString());
-                                Log.d("YESSSSSSS", "Password updated");
+                                Log.d("Success", "Password updated");
                                 if(!username.getText().toString().equals(theUser.getUsername())){
-                                    DatabaseReference mDatabase3 = firebaseDatabase.getReference().child("Users").child(user.getUid()).child("username");
-                                    mDatabase3.setValue(username.getText().toString());
-                                    finish();
+                                    updateUsername(user);
                                 }
                                 finish();
                             }
                             else {
-                                Log.d("NOOOOO", "Error password not updated");
+                                Log.d("Failed", "Error password not updated");
                             }
                         }
                     });
@@ -189,27 +206,33 @@ import java.util.List;
         builder.show();
     }
 
+    public void updateUsername(FirebaseUser user){
+        DatabaseReference mDatabase3 = firebaseDatabase.getReference().child("Users").child(user.getUid()).child("username");
+        mDatabase3.setValue(username.getText().toString());
+        finish();
+     }
+
     public void validate(){
         username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus){
                     for(User user : userList){
-                        if (username.getText().toString().equals(theUser.getUsername())){
+                        if (user.getUsername().toLowerCase().equals(theUser.getUsername().toLowerCase())){
                             continue;
                         }
                         else if(user.getUsername().toLowerCase().equals(username.getText().toString().toLowerCase())){
                             unameErr.setText("This username has been taken");
                             isValid = false;
                         }
-                        else if(username.getText().toString().equals("")){
-                            unameErr.setText("Username cannot be empty");
-                            isValid = false;
-                        }
-                        else {
-                            unameErr.setText("");
-                            isValid = true;
-                        }
+                    }
+                    if(username.getText().toString().equals("")){
+                        unameErr.setText("Username cannot be empty");
+                        isValid = false;
+                    }
+                    else {
+                        unameErr.setText("");
+                        isValid = true;
                     }
                 }
                 else{unameErr.setText("");}
@@ -240,22 +263,6 @@ import java.util.List;
                 else{pass2Err.setText("");}
             }
         });
-
-/*        password2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
-                    if(!password.getText().toString().equals(theUser.getPassword()) && (password2.getText().toString().equals("") || !password.getText().toString().equals(password2.getText().toString()))){
-                        pass2Err.setText("Passwords does not match");
-                        isValid = false;
-                    }
-                    else {
-                        *//*password2.setText("");*//*
-                        isValid = true;
-                    }
-                }
-            }
-        });*/
     }
 
 }

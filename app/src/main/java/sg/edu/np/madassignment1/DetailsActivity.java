@@ -175,6 +175,7 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             }
         });
+        //rate button
 
         //Open rating alert box
         rateBtn.setOnClickListener(new View.OnClickListener() {

@@ -77,7 +77,7 @@ public class GrocerylistActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(adapter.validationCheck()){
                     ArrayList<Ingredient> groceryList = adapter.getSelectedIngredient();
-                    Toast addedToGroceryList = Toast.makeText(getApplicationContext(), "Added to Grocery List", Toast.LENGTH_LONG);
+                    Toast addedToGroceryList = Toast.makeText(getApplicationContext(), "Added to Grocery List", Toast.LENGTH_SHORT);
                     addedToGroceryList.show();
                     FirebaseUser user = mAuth.getCurrentUser();
                     mDatabase.child("Users").child(user.getUid()).child("groceryList").setValue(groceryList);
@@ -91,7 +91,7 @@ public class GrocerylistActivity extends AppCompatActivity {
                     overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
                 }
                 else{
-                    Toast fail = Toast.makeText(getApplicationContext(), "No item selected/No quantity entered", Toast.LENGTH_LONG);
+                    Toast fail = Toast.makeText(getApplicationContext(), "No item selected/No quantity entered", Toast.LENGTH_SHORT);
                     fail.show();
                 }
             }
