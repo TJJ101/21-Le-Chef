@@ -153,6 +153,9 @@ public class AddFragment extends Fragment {
                     ingredientListViewLP.height += DipToPixels(60);
                     ingredientListView.setLayoutParams(ingredientListViewLP);
                     ingredientListView.setAdapter(new IngredientAdapter(ingredientList, getContext()));
+                    ingredientNameTxt.setText("");
+                    ingredientQtyTxt.setText("");
+                    ingredientUnitTxt.setText("");
                 }
 
                 //hide the keyboard
@@ -187,6 +190,8 @@ public class AddFragment extends Fragment {
                     stepsListView.setLayoutParams(stepsListViewLP);
                     stepsAdapter = new StepsAdapter(stepsList, getContext());
                     stepsListView.setAdapter(stepsAdapter);
+                    addStepsTxt.setText("");
+                    addTimerTxt.setText("");
                 }
 
                 //hide the keyboard
@@ -210,11 +215,23 @@ public class AddFragment extends Fragment {
                     mRecipe.setRatings(new Ratings());
                     mDatabase.child("Recipe").child(key).setValue(mRecipe);
                     uploadImage();
+                    ClearAllText();
                 }
             }
         });
 
         return view;
+    }
+
+    public void ClearAllText(){
+        recipeName.setText("");
+        descText.setText("");
+        cuisineTxt.setText("");
+        ingredientNameTxt.setText("");
+        ingredientQtyTxt.setText("");
+        ingredientUnitTxt.setText("");
+        addStepsTxt.setText("");
+        addTimerTxt.setText("");
     }
 
     public boolean validateRecipeInput(String name, String desc, String cuisine, ImageView recipeImg){
@@ -233,7 +250,7 @@ public class AddFragment extends Fragment {
     public boolean validateStepsInput(String stepsDesc, String stepsTimer){
         if (stepsDesc.isEmpty() || stepsDesc.trim().length() == 0 ||
                 stepsTimer.isEmpty() || stepsTimer.trim().length() == 0){
-            Toast.makeText(getContext(), "Please enter all field to add steps", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please enter both step description and time to add steps", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
