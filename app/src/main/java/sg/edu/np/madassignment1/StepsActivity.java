@@ -201,7 +201,6 @@ public class StepsActivity extends AppCompatActivity {
                 startBtn.setText("Start");
             }
         });
-
         BottomNavigationView bottomNav = findViewById(R.id.steps_bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
     }

@@ -218,9 +218,7 @@ public class DetailsActivity extends AppCompatActivity {
     public void openRatingDialog(){
         LayoutInflater l = getLayoutInflater();
         final View v = l.inflate(R.layout.select_ratings_dialog, null);
-
         radioGroup =  v.findViewById(R.id.radioGroup);
-
         final AlertDialog builder = new AlertDialog.Builder(this)
                 .setPositiveButton("Submit", null)
                 .setNegativeButton("Cancel", null)

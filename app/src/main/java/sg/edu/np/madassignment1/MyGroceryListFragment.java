@@ -38,7 +38,6 @@ public class MyGroceryListFragment extends Fragment {
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
     private DatabaseReference mDatabase = firebaseDatabase.getReference();
     private MyGroceryListAdapter adapter;
-
     ArrayList<Ingredient> myGroceryList = new ArrayList<>();
 
     User theUser = new User();
@@ -57,7 +56,6 @@ public class MyGroceryListFragment extends Fragment {
         //Text for if there is no item in Grocery List
         TextView noGroceryListText = view.findViewById(R.id.noGroceryListTxt);
         noGroceryListText.setText("No item(s) currently in your Grocery List");
-
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();

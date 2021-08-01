@@ -27,10 +27,8 @@ import java.util.ArrayList;
 public class MyGroceryListAdapter extends RecyclerView.Adapter<MyGroceryListAdapter.MyGroceryListViewHolder> {
     ArrayList<Ingredient> myGroceryList = new ArrayList<>();
 
-    public FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://mad-asg-6df37-default-rtdb.asia-southeast1.firebasedatabase.app/");
     private DatabaseReference mDatabase = firebaseDatabase.getReference();
-    Context context;
 
     @NonNull
     @Override
@@ -67,36 +65,14 @@ public class MyGroceryListAdapter extends RecyclerView.Adapter<MyGroceryListAdap
 
     public MyGroceryListAdapter(ArrayList<Ingredient> iList){ this.myGroceryList = iList; }
 
-
-    public void RemoveFromDB(Ingredient i){
-        //Animation anim = AnimationUtils.loadAnimation(,android.R.anim.slide_out_right);
-        FirebaseUser user = mAuth.getCurrentUser();
-        mDatabase.child("Users").child(user.getUid()).child("groceryList").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if(task.isSuccessful()){
-                    Log.d("Debug Remove", "Success");
-                    for (DataSnapshot data : task.getResult().getChildren()){
-                        Ingredient test = data.getValue(Ingredient.class);
-                        if(i.getName().equals(test.getName())){
-                            Log.d("Debug Remove",data.getKey());
-                            mDatabase.child("Users").child(user.getUid()).child("groceryList").child(data.getKey()).removeValue();
-                        }
-                    }
-                }
-                else {
-                    Log.d("Debug Remove", "Unsuccessful");
-                }
-            }
-        });
-    }
-
     public void Delete(int position){
-        RemoveFromDB(myGroceryList.get(position));
         myGroceryList.remove(position);
+        DatabaseReference mDatabase2 = firebaseDatabase.getReference().child("Users").child(MainActivity.mUser.getId()).child("groceryList");
+        mDatabase2.setValue(myGroceryList);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, myGroceryList.size());
     }
+
     @Override
     public int getItemCount() {
         return myGroceryList.size();
