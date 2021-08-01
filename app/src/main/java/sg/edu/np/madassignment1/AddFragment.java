@@ -209,7 +209,7 @@ public class AddFragment extends Fragment {
                 if(validateRecipeInput(recipeName.getText().toString(), descText.getText().toString(), cuisineTxt.getText().toString(), recipeImg)){
                     mUser = MainActivity.mUser;
                     key = mDatabase.child("Recipe").push().getKey();
-                    mRecipe = new Recipe(newRecipeName, newRecipeDesc, newRecipeCui, ingredientList, stepsList);
+                    mRecipe = new Recipe(newRecipeName, newRecipeCui, newRecipeDesc, ingredientList, stepsList);
                     mRecipe.setRecipeId(key);
                     mRecipe.setCreatorId(mUser.getUsername());
                     mRecipe.setRatings(new Ratings());
