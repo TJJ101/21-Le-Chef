@@ -69,10 +69,23 @@ Our app allows users keep track of recipes’ essentials much more easily with t
 ## Media
 - The photos used in this site were obtained from Google Images.
 
+## Recipes used
+- **Turkey Chicken Sandwich** (https://www.womensweeklyfood.com.au/recipes/turkish-chicken-club-sandwich-10382)
+- **Beef Don/Gyudon** (https://thewoksoflife.com/gyudon-recipe-beef-rice/#recipe)
+- **Fish & Chips** (https://www.allrecipes.com/recipe/16580/classic-fish-and-chips/)
+- **Mapo Tofu** (https://thewoksoflife.com/ma-po-tofu-real-deal/#recipe)
+- **Curry Omurice** (https://jajabakes.com/curry-omurice/)
+- **Tom Yum Soup** (https://www.recipetineats.com/tom-yum-soup-thai/#wprm-recipe-container-39615)
+- **Char Kway Teow** (https://www.recipetineats.com/char-kway-teow/#wprm-recipe-container-30585)
+- **Eggs Benedict** (https://www.simplyrecipes.com/recipes/eggs_benedict/)
+- **Cheeseburger** (https://www.foodrepublic.com/recipes/all-american-cheeseburger-recipe/)
+- **Classic Carbonara** (https://www.bonappetit.com/recipe/traditional-carbonara)
+- **Roti Paratha** (https://rasamalaysia.com/roti-canai-roti-paratha-recipe/#mv-creation-153)
+
 # Individual Contributions
 ## Darius
 Home, Account & Profile Fragments, Details Activity, Steps Activity, Edit Activity, Help fixes errors
 ## Marcus
-Home & Account & Add Fragments, Details Activity, Sign Up Activity, Login Activity, SplashScreen Activity, Learn and guide teammate on how to use Firebase, Help fixes errors
+Home & Account & Add Fragments, Details Activity, Sign Up Activity, Login Activity, SplashScreen Activity, learn and guide teammate on how to use Firebase, Help fixes errors
 ## Jun Jie
-GroceryList Activity, MyGroceryList Activity. Find recipes to put into firebase.
+GroceryList Activity, MyGroceryList Activity, Activity Transition Animation, Help populate the Firebase database, Help fix errors, help test the App
