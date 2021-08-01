@@ -132,7 +132,6 @@ public class SignUpActivity extends AppCompatActivity {
 //                          loadingBar.setVisibility(View.GONE);
                             newUser.setUsername(username);
                             newUser.setEmail(email);
-                            newUser.setPassword(password);
                             newUser.setId(user.getUid());
 
                             //set username and save it to firebase

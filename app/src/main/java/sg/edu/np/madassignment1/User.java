@@ -29,14 +29,6 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    private String password;
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     private ArrayList<Ingredient> groceryList = new ArrayList<>();
     public ArrayList<Ingredient> getGroceryList() {return groceryList;}
     public void setGroceryList(ArrayList<Ingredient> groceryList) {
@@ -65,11 +57,10 @@ public class User implements Serializable {
 
     public User() {}
 
-    public User(String i, String u, String e, String p){
+    public User(String i, String u, String e){
         this.id = i;
         this.username = u;
         this.email = e;
-        this.password = p;
     }
 
 }

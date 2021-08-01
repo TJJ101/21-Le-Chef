@@ -41,14 +41,13 @@ import java.util.List;
     private DatabaseReference mDatabase = firebaseDatabase.getReference();
 
     List<User> userList = new ArrayList<User>();
-    User theUser = new User();
+    User theUser = MainActivity.mUser;
     AuthCredential credential;
 
     EditText username, password, password2;
     TextView unameErr, passErr, pass2Err;
     Boolean isValid = true;
     private String cfmPass = "";
-
     Context context = this;
 
     @Override
@@ -70,8 +69,6 @@ import java.util.List;
         passErr = findViewById(R.id.passwordWrongTxt);
         pass2Err = findViewById(R.id.rePasswordWrongTxt);
 
-        validate();
-
         //get all users
         mDatabase.child("Users").addValueEventListener(new ValueEventListener() {
             @Override
@@ -81,8 +78,7 @@ import java.util.List;
                 }
                 //set some data to be current user
                 for (User u : userList){
-                    if (u.getId().equals(user.getUid())){
-                        theUser = u;
+                    if (u.getId().equals(theUser.getId())){
                         username.setText(u.getUsername());
                     }
                 }
@@ -96,114 +92,87 @@ import java.util.List;
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checks()){
-                    credential = EmailAuthProvider.getCredential(theUser.getEmail(), password.getText().toString());
-                    user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                checkPass(user);
+                validate();
+                if (checks() && isValid){
+                    if (!password.getText().toString().equals("")){
+                        credential = EmailAuthProvider.getCredential(theUser.getEmail(), password.getText().toString());
+                        user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    if (!password2.getText().toString().equals("")){
+                                        checkPass(user);
+                                    }
+                                    else if (!username.getText().toString().equals("")){
+                                        updateUsername(user);
+                                    }
+                                }
+                                else {
+                                    passErr.setText("Wrong Password");
+                                }
                             }
-                            else {
-                                passErr.setText("Wrong Password");
-                            }
-                        }
-                    });
-                }
-/*                else if(!username.getText().toString().equals(theUser.getUsername()) || checks()){
-                    DatabaseReference mDatabase2 = firebaseDatabase.getReference().child("Users").child(user.getUid()).child("username");
-                    mDatabase2.setValue(username.getText().toString());
-                    finish();
-                }*/
-                else if (!username.getText().toString().equals(theUser.getUsername()) && !password.getText().toString().equals(theUser.getPassword())){
-                    unameErr.setText("New username detected, please enter current password");
-                }
-                else if (!username.getText().toString().equals(theUser.getUsername()) && password.getText().toString().equals(theUser.getPassword()) && password2.getText().toString().equals("")){
-                    validate();
-                    if (isValid){
-                        updateUsername(user);
+                        });
+                    }
+                    else if (username.getText().toString().equals(theUser.getUsername()) && password.getText().toString().equals("") && password2.getText().toString().equals("")){
+                        unameErr.setText("");
+                        passErr.setText("");
+                        pass2Err.setText("");
+                        Toast.makeText(context, "No changes made",Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        passErr.setText("Please enter current password");
                     }
                 }
-                else if (username.getText().toString().equals(theUser.getUsername()) && password.getText().toString().equals("") && password2.getText().toString().equals("")){
-                    unameErr.setText("");
-                    passErr.setText("");
-                    pass2Err.setText("");
-                    Toast.makeText(context, "No changes made",Toast.LENGTH_SHORT).show();
-                }
+
             }
         });
     }
 
+     public void checkPass(FirebaseUser user){
+         //alert dialog to check for password again
+         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+         View viewInflated = getLayoutInflater().inflate(R.layout.alert_input_view, null, false);
+         builder.setTitle("Detected password change").setCancelable(true).setMessage("Please re-enter your new password");
+         // Set up the input
+         final EditText input = (EditText) viewInflated.findViewById(R.id.alertInput);
+         builder.setView(viewInflated);
+         // Set up the buttons
+         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+             @Override
+             public void onClick(DialogInterface dialog, int which) {
+                 cfmPass = input.getText().toString();
+                 if (!cfmPass.equals(password2.getText().toString())) {
+                     Toast.makeText(context, "Passwords do not match", Toast.LENGTH_LONG).show();
+                 }
+                 else{
+                     //Updating of password if password matches new pass
+                     user.updatePassword(password2.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                         @Override
+                         public void onComplete(@NonNull Task<Void> task) {
+                             if (task.isSuccessful()) {
+                                 Log.d("Success", "Password updated");
+                             }
+                             else {
+                                 Log.d("Failed", "Error password not updated");
+                             }
+                         }
+                     });
+                     if(!username.getText().toString().equals("")){
+                         updateUsername(user);
+                     }
+                     finish();
+                 }
+             }
+         });
+         builder.show();
+     }
+
     public Boolean checks(){
-        if (!password.getText().toString().equals("") && !password.getText().toString().equals(theUser.getPassword())){
-            passErr.setText("Wrong Password");
-            return false;
-        }
-        else if (password2.getText().toString().equals("")){
-            return false;
-        }
-        else if (isValid && password2.getText().toString().equals(theUser.getPassword())){
-            pass2Err.setText("This is the same password");
-            return false;
-        }
-        else if (password2.getText().toString().length() < 6){
+        if (password2.getText().toString().length() < 6 && !password2.getText().toString().equals("")){
             pass2Err.setText("Password must have at least 6 characters");
             return false;
         }
-        else if (password.getText().toString().equals("")){
-            passErr.setText("New password detected, please enter current password");
-            return false;
-        }
         return true;
-    }
-
-    public void checkPass(FirebaseUser user){
-        //alert dialog to check for password again
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        View viewInflated = getLayoutInflater().inflate(R.layout.alert_input_view, null, false);
-        builder.setTitle("Detected password change").setCancelable(true).setMessage("Please re-enter your new password");
-
-        // Set up the input
-        final EditText input = (EditText) viewInflated.findViewById(R.id.alertInput);
-        builder.setView(viewInflated);
-
-        // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                cfmPass = input.getText().toString();
-                if (!cfmPass.equals(password2.getText().toString())){
-                    Toast.makeText(context, "Passwords do not match",Toast.LENGTH_LONG).show();
-                }
-                else{
-                    //Updating of password if password matches new pass
-                    user.updatePassword(password2.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                DatabaseReference mDatabase2 = firebaseDatabase.getReference().child("Users").child(user.getUid()).child("password");
-                                mDatabase2.setValue(password2.getText().toString());
-                                Log.d("Success", "Password updated");
-                                if(!username.getText().toString().equals(theUser.getUsername())){
-                                    updateUsername(user);
-                                }
-                                finish();
-                            }
-                            else {
-                                Log.d("Failed", "Error password not updated");
-                            }
-                        }
-                    });
-                }
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
     }
 
     public void updateUsername(FirebaseUser user){
@@ -260,9 +229,8 @@ import java.util.List;
                         isValid = true;
                     }
                 }
-                else{pass2Err.setText("");}
+                else{pass2Err.setText("");isValid=true;}
             }
         });
     }
-
 }

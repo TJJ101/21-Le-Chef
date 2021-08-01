@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
     private void EmptyFieldValidation(TextView emailTxt, TextView passwordTxt){
         if(emailTxt.getText().toString().equals("")){
             TextView emailError = findViewById(R.id.eError2);
-            emailError.setText("Please enter your    email address");
+            emailError.setText("Please enter your email address");
             validInput = false;
         }
         if(passwordTxt.getText().toString().equals("")){
