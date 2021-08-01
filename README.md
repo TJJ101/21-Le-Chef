@@ -84,7 +84,7 @@ Our app allows users keep track of recipes’ essentials much more easily with t
 
 # Individual Contributions
 ## Darius
-Home, Account & Profile Fragments, Details Activity, Steps Activity, Edit Activity, Help fixes errors
+Home, Account & Profile Fragments, Details Activity, Steps Activity, Edit Activity, Help fixes errors, Button animations
 ## Marcus
 Home & Account & Add Fragments, Details Activity, Sign Up Activity, Login Activity, SplashScreen Activity, learn and guide teammate on how to use Firebase, Help fixes errors
 ## Jun Jie
